@@ -1,0 +1,11 @@
+compile - generate
+run - split into encrypt/decrypt
+test - cryptanalysis
+stats - performance/benchmarking
+verify
+
+
+second tab is key generation
+
+tabs that pop up when something's double clicked
+can be dragged out and forms it's own window

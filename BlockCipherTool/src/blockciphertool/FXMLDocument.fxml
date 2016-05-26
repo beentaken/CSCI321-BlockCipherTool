@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="828.0" prefWidth="1106.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane id="AnchorPane" prefHeight="828.0" prefWidth="1106.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane layoutY="24.0" prefHeight="804.0" prefWidth="1106.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -27,11 +26,7 @@
                                              <children>
                                                 <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="796.0">
                                                   <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
-                                                         <children>
-                                                            <FlowPane layoutX="29.0" layoutY="39.0" prefHeight="200.0" prefWidth="200.0" />
-                                                         </children>
-                                                      </AnchorPane>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="794.0" />
                                                   </content>
                                                 </ScrollPane>
                                              </children>
