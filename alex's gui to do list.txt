@@ -7,5 +7,11 @@ verify
 
 second tab is key generation
 
-tabs that pop up when something's double clicked
-can be dragged out and forms it's own window
+
+- tabs that pop up when something's double clicked
+- make the guy scalable
+- can be dragged out and forms it's own window
+- change the gui to fit in 5 buttons
+- create powerpoint
+- photoshop in images of drag and drop elements
+- investigate what the hell higs of the deployment environment is
