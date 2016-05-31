@@ -9,7 +9,7 @@ second tab is key generation
 
 
 - tabs that pop up when something's double clicked
-- make the guy scalable
+- make the gui scalable
 - can be dragged out and forms it's own window
 - change the gui to fit in 5 buttons
 - create powerpoint
