@@ -13,6 +13,8 @@
 
 #include <cstdlib>
 
+#include "OutputCode.h"
+
 using namespace std;
 
 /*
@@ -20,6 +22,11 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
+    OutputCode * outs = new OutputCode();
+    
+    string temp = outs->setDefaultLocation();
+    outs->createFile("secret.cpp");
+    
     return 0;
 }
 

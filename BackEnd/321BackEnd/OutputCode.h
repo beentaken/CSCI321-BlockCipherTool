@@ -14,13 +14,17 @@
 #ifndef OUTPUTCODE_H
 #define OUTPUTCODE_H
 
+#include <string>
+using namespace std;
+
 class OutputCode {
 public:
     OutputCode();
     OutputCode(const OutputCode& orig);
     virtual ~OutputCode();
     
-    
+    string setDefaultLocation();
+    void createFile(string);
 private:
 
 };

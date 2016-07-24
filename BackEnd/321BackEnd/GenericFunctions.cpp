@@ -12,6 +12,8 @@
  */
 
 #include "GenericFunctions.h"
+#include <iostream>
+using namespace std;
 
 GenericFunctions::GenericFunctions() {
 }
@@ -59,7 +61,9 @@ int** GenericFunctions::CustomSBoxGeneration(int columns, int rows) {
     for (int i = 0; i < rows; i++) {
         result[i] = new int[columns];
         for (int l = 0; l < columns; l++) {
-            result[i][l] = 0; //INPUT
+            int ins;
+            cin >> ins;
+            result[i][l] = ins; //INPUT
         }
     }
     
@@ -72,7 +76,9 @@ int** GenericFunctions::CustomPBoxGeneration(int columns, int rows) {
     for (int i = 0; i < rows; i++) {
         result[i] = new int[columns];
         for (int l = 0; l < columns; l++) {
-            result[i][l] = 0; //INPUT
+            int ins;
+            cin >> ins;
+            result[i][l] = ins; //INPUT
         }
     }
     
