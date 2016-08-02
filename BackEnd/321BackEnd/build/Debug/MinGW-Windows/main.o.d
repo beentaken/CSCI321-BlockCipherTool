@@ -1,3 +1,3 @@
-build/Debug/MinGW-Windows/main.o: main.cpp OutputCode.h
+build/Debug/MinGW-Windows/main.o: main.cpp OutputFunctions.h
 
-OutputCode.h:
+OutputFunctions.h:

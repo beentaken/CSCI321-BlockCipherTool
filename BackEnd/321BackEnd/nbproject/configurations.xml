@@ -5,7 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>GenericFunctions.h</itemPath>
-      <itemPath>OutputCode.h</itemPath>
+      <itemPath>OutputFunctions.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -15,7 +15,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>GenericFunctions.cpp</itemPath>
-      <itemPath>OutputCode.cpp</itemPath>
+      <itemPath>OutputFunctions.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -44,9 +44,9 @@
       </item>
       <item path="GenericFunctions.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="OutputCode.cpp" ex="false" tool="1" flavor2="0">
+      <item path="OutputFunctions.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="OutputCode.h" ex="false" tool="3" flavor2="0">
+      <item path="OutputFunctions.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -75,9 +75,9 @@
       </item>
       <item path="GenericFunctions.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="OutputCode.cpp" ex="false" tool="1" flavor2="0">
+      <item path="OutputFunctions.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="OutputCode.h" ex="false" tool="3" flavor2="0">
+      <item path="OutputFunctions.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
