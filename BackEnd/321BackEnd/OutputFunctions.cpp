@@ -5,6 +5,7 @@
  */
 #include "OutputFunctions.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,13 +14,58 @@
 
 using namespace std;
 
-void Print(Node* Head) {
+void Print(Node* Head, string pathlocation) {
+    // Checks for the storage location of the c++ files
+    if (pathlocation == NULL) {
+        pathlocation = DefaultLocation();
+    }
     
+    // Gets the current working directory
+    char Current[1024];
+    for (int i = 0; i < 1024; i++) {
+        Current[i] = '\0';
+    }
+    GetFullPathName(Current, 1024, Current, 0);
+    cout << Current << endl;
+    
+    // Write functions to files
+    while (Head != NULL) {
+        ifstream GenericsFile("GenericFunctions.cpp");
+        int func = Head->option;
+        
+        // Open the Generic Functions File
+        if (GenericsFile.is_open()) {
+            // Create and open the c++ file containing all the custom created function code
+            ofstream OutputFile("MyProgram.cpp");
+            if (OutputFile.is_open()) {
+            
+                // XOR Function
+                if (func == 1) {
+
+                }
+
+                // S Box Function
+                if (func == 2) {
+
+                }
+
+                // P Box Function
+                if (func == 3) {
+
+                }
+            }
+            GenericsFile.close();
+        }
+        
+    }
 }
 
 string DefaultLocation() {
     // Gets the current working directory
     char Current[1024];
+    for (int i = 0; i < 1024; i++) {
+        Current[i] = '\0';
+    }
     GetFullPathName(Current, 1024, Current, 0);
     cout << Current << endl;
     
@@ -35,13 +81,6 @@ string DefaultLocation() {
 /*    
     // Checks if the default location exists
     DWORD exists = GetFileAttributes(DefaultPath.c_str());
-    
-    // If it exists
-    if (exists == FILE_ATTRIBUTE_DIRECTORY) {
-        // It Exists
-        
-        
-    }
     
     if (exists == INVALID_FILE_ATTRIBUTES) {
         // It Doesn't Exist
@@ -59,6 +98,8 @@ string DefaultLocation() {
         // Set Directory back to Program Directory
         SetCurrentDirectory(Current);
     }
+
+    return DefaultPath;
 */
 
 }

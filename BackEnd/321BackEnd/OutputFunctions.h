@@ -23,7 +23,7 @@ struct Node {
     Node* Next;
 };
 
-void Print(Node*);
+void Print(Node*, string);
 string DefaultLocation();
 void PrintSBOX(int*);
 void PrintPBOX(int*);

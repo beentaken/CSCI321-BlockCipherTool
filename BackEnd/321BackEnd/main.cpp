@@ -26,6 +26,7 @@ int main(int argc, char** argv) {
 
     // Driver Program
     int choice;
+    string pathlocation = NULL;
     Node * Head = new Node;
     
     DefaultLocation();
@@ -53,8 +54,10 @@ int main(int argc, char** argv) {
             }
             
             if (choice == 4) {
-                Print(Head);
+                Print(Head, pathlocation);
             }
+        } else {
+            cout << "Please input a number between and including 0 and 4!!" << endl;
         }
         
     } while (choice != 0);
