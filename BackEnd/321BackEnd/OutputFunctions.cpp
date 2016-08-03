@@ -15,6 +15,8 @@
 using namespace std;
 
 void Print(Node* Head, string pathlocation) {
+    Node* Temp = Head;
+    
     // Checks for the storage location of the c++ files
     if (pathlocation == NULL) {
         pathlocation = DefaultLocation();
@@ -29,7 +31,7 @@ void Print(Node* Head, string pathlocation) {
     cout << Current << endl;
     
     // Write functions to files
-    while (Head != NULL) {
+    if (Temp != NULL) {
         ifstream GenericsFile("GenericFunctions.cpp");
         int func = Head->option;
         
@@ -38,21 +40,29 @@ void Print(Node* Head, string pathlocation) {
             // Create and open the c++ file containing all the custom created function code
             ofstream OutputFile("MyProgram.cpp");
             if (OutputFile.is_open()) {
-            
-                // XOR Function
-                if (func == 1) {
+                while (Temp != NULL) {
+                    // XOR Function
+                    if (func == 1) {
+                        PrintXOR(Temp->variables, GenericsFile, OutputFile);
+                    }
 
+                    // S Box Function
+                    if (func == 2) {
+                        PrintSBOX(Temp->variables, GenericsFile, OutputFile);
+                    }
+
+                    // P Box Function
+                    if (func == 3) {
+                        PrintPBOX(Temp->variables, GenericsFile, OutputFile);
+                    }
+                    
+                    // Print out newline
+                    OutputFile << endl;
+                    
+                    // Goes to Next Node
+                    Temp = Temp->Next;
                 }
-
-                // S Box Function
-                if (func == 2) {
-
-                }
-
-                // P Box Function
-                if (func == 3) {
-
-                }
+                OutputFile.close();
             }
             GenericsFile.close();
         }
@@ -104,14 +114,16 @@ string DefaultLocation() {
 
 }
 
-void PrintSBOX(int*) {
+void PrintSBOX(int* variables, ifstream& ins, ofstream& outs) {
+    // Seek to SBOX position
+    
+    // At certain positions insert the variables and skip the defaults
+}
+
+void PrintPBOX(int* variables, ifstream& ins, ofstream& outs) {
     
 }
 
-void PrintPBOX(int*) {
-    
-}
-
-void PrintXOR(int*) {
+void PrintXOR(int* variables, ifstream& ins, ofstream& outs) {
     
 }

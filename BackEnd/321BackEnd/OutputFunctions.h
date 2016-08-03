@@ -25,9 +25,9 @@ struct Node {
 
 void Print(Node*, string);
 string DefaultLocation();
-void PrintSBOX(int*);
-void PrintPBOX(int*);
-void PrintXOR(int*);
+void PrintSBOX(int*, ifstream&, ofstream&);
+void PrintPBOX(int*, ifstream&, ofstream&);
+void PrintXOR(int*, ifstream&, ofstream&);
 
 
 #endif /* OUTPUTFUNCTIONS_H */
