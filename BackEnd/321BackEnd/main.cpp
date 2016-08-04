@@ -32,8 +32,6 @@ int main(int argc, char** argv) {
     
     DefaultLocation();
     cout << "Welcome to the Crypto to C++ Program!" << endl;
-    
-    GenericFunctions Gen;
     do {
         cout << "Menu: " << endl;
         cout << "1: Create an S Box" << endl;
@@ -45,15 +43,15 @@ int main(int argc, char** argv) {
         
         if (choice <= 4 && choice >= 0) {
             if (choice == 1) {
-                Gen.CustomPBoxGeneration();
+                CustomPBoxGeneration();
             }
             
             if (choice == 2) {
-                Gen.CustomSBoxGeneration();
+                CustomSBoxGeneration();
             }
             
             if (choice == 3) {
-                Gen.CustomXOR(1, 1, 1);
+                CustomXOR(num1, num2, max_length);
             }
             
             if (choice == 4) {
