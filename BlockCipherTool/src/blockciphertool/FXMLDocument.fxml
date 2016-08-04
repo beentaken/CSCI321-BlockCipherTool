@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<fx:root fx:id="root_pane" minHeight="828.0" minWidth="1374.0" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="828.0" prefWidth="1374.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane layoutY="24.0" prefHeight="804.0" prefWidth="1374.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -21,22 +20,24 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="654.0" prefWidth="1374.0">
                                  <children>
-                                    <SplitPane fx:id="base_pane" dividerPositions="0.7979576951130561" prefHeight="654.0" prefWidth="1373.0">
+                                    <SplitPane dividerPositions="0.7979576951130561" prefHeight="654.0" prefWidth="1373.0">
                                       <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
                                                 <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="1063.0">
-                                                   <content>
-                                                      <AnchorPane fx:id="main_window" prefHeight="624.0" prefWidth="1061.0" />
-                                                   </content></ScrollPane>
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="1061.0" />
+                                                  </content>
+                                                </ScrollPane>
                                              </children>
                                           </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="652.0" prefWidth="226.0">
                                              <children>
                                                 <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="305.0" prefWidth="244.0">
-                                                   <content>
-                                                      <VBox fx:id="node_list" prefHeight="303.0" prefWidth="242.0" />
-                                                   </content></ScrollPane>
+                                                  <content>
+                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="303.0" prefWidth="242.0" />
+                                                  </content>
+                                                </ScrollPane>
                                                 <ScrollPane layoutX="14.0" layoutY="333.0" prefHeight="305.0" prefWidth="244.0">
                                                   <content>
                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="303.0" prefWidth="242.0">
@@ -203,4 +204,4 @@
         </menus>
       </MenuBar>
    </children>
-</fx:root>
+</AnchorPane>
