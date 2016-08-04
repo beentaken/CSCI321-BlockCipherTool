@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
             }
             
             if (choice == 3) {
-                CustomXOR(num1, num2, max length);
+                CustomXOR(num1, num2, max_length);
             }
             
             if (choice == 4) {
