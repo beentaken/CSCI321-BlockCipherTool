@@ -18,7 +18,7 @@ void Print(Node* Head, string pathlocation) {
     Node* Temp = Head;
     
     // Checks for the storage location of the c++ files
-    if (pathlocation == NULL) {
+    if (pathlocation.compare(NULL) == 0) {
         pathlocation = DefaultLocation();
     }
     

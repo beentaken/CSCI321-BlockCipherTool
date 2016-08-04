@@ -13,6 +13,8 @@
 
 #include "GenericFunctions.h"
 #include <iostream>
+#include <limits>
+
 using namespace std;
 
 GenericFunctions::GenericFunctions() {
@@ -64,7 +66,7 @@ int** GenericFunctions::CustomSBoxGeneration() {
         
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>max());
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Please enter a number!!" << endl;
         }
     } while (cin.fail());
@@ -75,7 +77,7 @@ int** GenericFunctions::CustomSBoxGeneration() {
         
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>max());
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Please enter a number!!" << endl;
         }
     } while (cin.fail());
@@ -94,7 +96,7 @@ int** GenericFunctions::CustomSBoxGeneration() {
                 cin >> ins;
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>max());
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "Please enter a number!!" << endl;
                 }
             } while (cin.fail());
@@ -114,7 +116,7 @@ int** GenericFunctions::CustomPBoxGeneration() {
         
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>max());
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Please enter a number!!" << endl;
         }
     } while (cin.fail());
@@ -125,7 +127,7 @@ int** GenericFunctions::CustomPBoxGeneration() {
         
         if (cin.fail()) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>max());
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Please enter a number!!" << endl;
         }
     } while (cin.fail());
@@ -144,7 +146,7 @@ int** GenericFunctions::CustomPBoxGeneration() {
                 cin >> ins;
                 if (cin.fail()) {
                     cin.clear();
-                    cin.ignore(numeric_limits<streamsize>max());
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "Please enter a number!!" << endl;
                 }
             } while (cin.fail());
