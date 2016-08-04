@@ -15,6 +15,7 @@
 #include <cstdlib>
 
 #include "OutputFunctions.h"
+#include "GenericFunctions.h"
 
 using namespace std;
 
@@ -42,15 +43,15 @@ int main(int argc, char** argv) {
         
         if (choice <= 4 && choice >= 0) {
             if (choice == 1) {
-                
+                CustomPBoxGeneration();
             }
             
             if (choice == 2) {
-                
+                CustomSBoxGeneration();
             }
             
             if (choice == 3) {
-                
+                CustomXOR(num1, num2, max length);
             }
             
             if (choice == 4) {

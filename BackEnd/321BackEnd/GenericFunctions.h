@@ -22,8 +22,8 @@ public:
     
     // Generic Functions
     int CustomXOR(int, int, int);    // XOR Function
-    int** CustomPBoxGeneration(int, int);           // Permutation Box Function
-    int** CustomSBoxGeneration(int, int);           // Substitution Box Generation Function
+    int** CustomPBoxGeneration();           // Permutation Box Function
+    int** CustomSBoxGeneration();           // Substitution Box Generation Function
     int CustomSBoxSearch(int**, int);         // Searches the Substitution Box
     int CustomPBoxSearch(int**, int);          // Searches the Permutation Box
     

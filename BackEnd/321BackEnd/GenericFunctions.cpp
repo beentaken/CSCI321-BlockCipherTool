@@ -55,14 +55,49 @@ int GenericFunctions::CustomXOR(int A, int B, int Length) {
     return Result;
 }
 
-int** GenericFunctions::CustomSBoxGeneration(int columns, int rows) {
-    int ** result = new int*[rows];
+int** GenericFunctions::CustomSBoxGeneration() {
+    int rows;
+    int columns;
+    do {
+        cout << "Please input the number of rows of the SBOX" << endl;
+        cin >> rows;
+        
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>max());
+            cout << "Please enter a number!!" << endl;
+        }
+    } while (cin.fail());
     
-    for (int i = 0; i < rows; i++) {
+    do {
+        cout << "Please input the number of columns of the SBOX" << endl;
+        cin >> columns;
+        
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>max());
+            cout << "Please enter a number!!" << endl;
+        }
+    } while (cin.fail());
+    
+    int ** result = new int*[rows+1];
+    
+    result[0] = new int[2];
+    result[0][0] = rows;
+    result[0][1] = columns;
+    for (int i = 1; i < rows; i++) {
         result[i] = new int[columns];
         for (int l = 0; l < columns; l++) {
             int ins;
-            cin >> ins;
+            do {
+                cout << "Please input the bit at position (" << i-1 << ", " << l << ").";
+                cin >> ins;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>max());
+                    cout << "Please enter a number!!" << endl;
+                }
+            } while (cin.fail());
             result[i][l] = ins; //INPUT
         }
     }
@@ -70,14 +105,49 @@ int** GenericFunctions::CustomSBoxGeneration(int columns, int rows) {
     return result;
 }
 
-int** GenericFunctions::CustomPBoxGeneration(int columns, int rows) {
-    int ** result = new int*[rows];
+int** GenericFunctions::CustomPBoxGeneration() {
+    int rows;
+    int columns;
+    do {
+        cout << "Please input the number of rows of the PBOX" << endl;
+        cin >> rows;
+        
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>max());
+            cout << "Please enter a number!!" << endl;
+        }
+    } while (cin.fail());
     
-    for (int i = 0; i < rows; i++) {
+    do {
+        cout << "Please input the number of columns of the PBOX" << endl;
+        cin >> columns;
+        
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>max());
+            cout << "Please enter a number!!" << endl;
+        }
+    } while (cin.fail());
+    
+    int ** result = new int*[rows+1];
+    
+    result[0] = new int[2];
+    result[0][0] = rows;
+    result[0][1] = columns;
+    for (int i = 1; i < rows; i++) {
         result[i] = new int[columns];
         for (int l = 0; l < columns; l++) {
             int ins;
-            cin >> ins;
+            do {
+                cout << "Please input the bit at position (" << i-1 << ", " << l << ").";
+                cin >> ins;
+                if (cin.fail()) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>max());
+                    cout << "Please enter a number!!" << endl;
+                }
+            } while (cin.fail());
             result[i][l] = ins; //INPUT
         }
     }
