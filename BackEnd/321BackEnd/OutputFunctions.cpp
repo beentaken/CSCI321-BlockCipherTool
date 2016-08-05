@@ -18,7 +18,8 @@ void Print(Node* Head, string pathlocation) {
     Node* Temp = Head;
     
     // Checks for the storage location of the c++ files
-    if (pathlocation == NULL) {
+    cout << "P" << pathlocation << endl;
+    if (pathlocation.empty()) {
         pathlocation = DefaultLocation();
     }
     
@@ -71,24 +72,27 @@ void Print(Node* Head, string pathlocation) {
 }
 
 string DefaultLocation() {
-    // Gets the current working directory
-    char Current[1024];
+    // Gets the directory of the file containing all the standard functions
+    char Standard[1024];
+    int counter = 1023;
     for (int i = 0; i < 1024; i++) {
-        Current[i] = '\0';
+        Standard[i] = '\0';
     }
-    GetFullPathName(Current, 1024, Current, 0);
-    cout << Current << endl;
+    GetFullPathName("GenericFunctions.cpp", 1024, Standard, 0);
+    while (counter >= 0 && Standard[counter] != '\\') {
+        Standard[counter] = '\0';
+        counter--;        
+    }
+    Standard[counter] = '\0';
     
     // Gets the home path directory
     char* HomePath = getenv("HOMEPATH");
     char* HomeDrive = getenv("HOMEDRIVE");
     string TempHome = HomePath;
     string HD = HomeDrive;
-    TempHome = HD + "\\" + TempHome + "\\My Documents";
+    TempHome = HD + TempHome + "\\My Documents";
     string DefaultPath = TempHome + "\\Crypto C++ Code";
     
-    cout << TempHome << endl;
-/*    
     // Checks if the default location exists
     DWORD exists = GetFileAttributes(DefaultPath.c_str());
     
@@ -98,7 +102,6 @@ string DefaultLocation() {
         // Change to Documents
         HomePath = new char[TempHome.length() + 1];
         strcpy(HomePath, TempHome.c_str());    
-        cout << HomePath << endl;
 
         SetCurrentDirectory(HomePath);
         
@@ -106,18 +109,19 @@ string DefaultLocation() {
         CreateDirectory("Crypto C++ Code", NULL);
     
         // Set Directory back to Program Directory
-        SetCurrentDirectory(Current);
+        SetCurrentDirectory(Standard);
     }
 
     return DefaultPath;
-*/
-
 }
 
 void PrintSBOX(int* variables, ifstream& ins, ofstream& outs) {
     // Seek to SBOX position
     
+    
     // At certain positions insert the variables and skip the defaults
+    
+    
 }
 
 void PrintPBOX(int* variables, ifstream& ins, ofstream& outs) {
@@ -127,3 +131,9 @@ void PrintPBOX(int* variables, ifstream& ins, ofstream& outs) {
 void PrintXOR(int* variables, ifstream& ins, ofstream& outs) {
     
 }
+
+// ReadXMLFile
+bool ReadXML() {
+    
+}
+

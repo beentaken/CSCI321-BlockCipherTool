@@ -27,10 +27,10 @@ int main(int argc, char** argv) {
 
     // Driver Program
     int choice;
-    string pathlocation = NULL;
+    string pathlocation;
     Node * Head = new Node;
+    GenericFunctions Gen;
     
-    DefaultLocation();
     cout << "Welcome to the Crypto to C++ Program!" << endl;
     do {
         cout << "Menu: " << endl;
@@ -43,15 +43,15 @@ int main(int argc, char** argv) {
         
         if (choice <= 4 && choice >= 0) {
             if (choice == 1) {
-                CustomPBoxGeneration();
+                Gen.CustomPBoxGeneration();
             }
             
             if (choice == 2) {
-                CustomSBoxGeneration();
+                Gen.CustomSBoxGeneration();
             }
             
             if (choice == 3) {
-                CustomXOR(num1, num2, max_length);
+                Gen.CustomXOR(1, 1, 1);
             }
             
             if (choice == 4) {
