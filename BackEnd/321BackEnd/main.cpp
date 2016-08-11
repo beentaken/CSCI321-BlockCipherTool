@@ -41,17 +41,19 @@ int main(int argc, char** argv) {
         cout << "0: Exit" << endl;
         cin >> choice;
         
+        GenericFunctions gen;
+        
         if (choice <= 4 && choice >= 0) {
             if (choice == 1) {
-                CustomPBoxGeneration();
+                gen.CustomPBoxGeneration();
             }
             
             if (choice == 2) {
-                CustomSBoxGeneration();
+                gen.CustomSBoxGeneration();
             }
             
             if (choice == 3) {
-                CustomXOR(num1, num2, max_length);
+                gen.CustomXOR(1, 1, 1);
             }
             
             if (choice == 4) {

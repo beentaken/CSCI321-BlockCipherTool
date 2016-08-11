@@ -6,35 +6,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root fx:id="root_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="96.0" prefWidth="80.0" styleClass="dragicon" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="root_pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" styleClass="dragicon" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <GridPane styleClass="node-overlay">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox fx:id="drag_zone" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="close_button" text="x" GridPane.columnIndex="1">
-                     <padding>
-                        <Insets right="10.0" />
-                     </padding>
-                  </Label>
-                  <Label fx:id="title_bar" text="Label" />
+                  <GridPane prefHeight="22.0" prefWidth="80.0" styleClass="node-overlay">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="close_button" text="x" GridPane.columnIndex="1">
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="title_bar" text="Label" />
+                     </children>
+                  </GridPane>
+                  <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </HBox>
                </children>
-            </GridPane>
-            <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="66.0" prefWidth="200.0">
-               <children>
-                  <AnchorPane fx:id="left_link_handle" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="25.0" styleClass="left-link-handle" />
-                  <AnchorPane fx:id="node_body" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="30.0" />
-                  <AnchorPane fx:id="right_link_handle" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="25.0" styleClass="right-link-handle" />
-               </children>
-            </HBox>
-         </children>
-      </VBox>
+            </VBox>
+         </center>
+         <top>
+            <AnchorPane fx:id="top_link_handle" prefHeight="10.0" styleClass="top-link-handle" BorderPane.alignment="CENTER" />
+         </top>
+         <left>
+            <AnchorPane fx:id="left_link_handle" prefWidth="10.0" styleClass="left-link-handle" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <AnchorPane fx:id="right_link_handle" prefWidth="10.0" styleClass="right-link-handle" BorderPane.alignment="CENTER" />
+         </right>
+         <bottom>
+            <AnchorPane fx:id="bot_link_handle" prefHeight="10.0" styleClass="bot-link-handle" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
    </children>
 </fx:root>

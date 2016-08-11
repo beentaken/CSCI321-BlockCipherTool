@@ -6,26 +6,21 @@
 package blockciphertool;
 
 import java.io.IOException;
-
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-
 /**
  *
- * @author Aloe2020
+ * @author csit321lm01a
  */
-public class DragNode extends AnchorPane{
-    
-    @FXML AnchorPane root_pane;
+public class DragIcon extends AnchorPane{
+    @FXML AnchorPane drag_icon;
     
     private EventHandler mContextDragOver;
     private EventHandler mContextDragDropped;
@@ -34,16 +29,12 @@ public class DragNode extends AnchorPane{
     
     private Point2D mDragOffset = new Point2D(0.0, 0.0);
     
-    @FXML private VBox drag_zone;
-    @FXML private Label title_bar;
-    @FXML private Label close_button;
+    private final DragIcon self;
     
-    private final DragNode self;
-    
-    public DragNode() {
+    public DragIcon() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
-            getClass().getResource("/resources/DragNode.fxml")
+            getClass().getResource("/resources/DragIcon.fxml")
         );
 
         fxmlLoader.setRoot(this);
@@ -59,8 +50,6 @@ public class DragNode extends AnchorPane{
         }
     }
     
-    
-
     @FXML
     private void initialize() {
         buildNodeDragHandlers();
@@ -147,42 +136,6 @@ public class DragNode extends AnchorPane{
                 event.consume();
             }
         };
-        //close button click
-        close_button.setOnMouseClicked( new EventHandler <MouseEvent> () {
-
-            @Override
-            public void handle(MouseEvent event) {
-                AnchorPane parent  = (AnchorPane) self.getParent();
-                parent.getChildren().remove(self);
-            }
-
-        });
-        
-        title_bar.setOnDragDetected(new EventHandler<MouseEvent>() {
-            
-            @Override
-            public void handle(MouseEvent event) {
-                getParent().setOnDragOver(null);
-                getParent().setOnDragDropped(null);
-                
-                getParent().setOnDragOver(mContextDragOver);
-                getParent().setOnDragDropped(mContextDragDropped);
-                
-                
-                mDragOffset = new Point2D(event.getX(), event.getY());
-                
-                relocateToPoint(new Point2D(event.getSceneX(), event.getSceneY()));
-                
-                ClipboardContent content = new ClipboardContent();
-                DragContainer container = new DragContainer();
-                
-                container.addData("type", mType.toString());
-                content.put(DragContainer.DragNode, container);
-                
-                startDragAndDrop(TransferMode.ANY).setContent(content);
-                
-                event.consume();
-            }
-        });
     }
+    
 }

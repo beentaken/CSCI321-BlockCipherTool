@@ -35,6 +35,7 @@ public class MainLayout extends AnchorPane{
     @FXML VBox node_list;
     
     private DragNode mDragOverIcon = null;
+    private DragIcon mDragIcon = null;
     
     private EventHandler<DragEvent> mIconDragOverRoot=null;
     private EventHandler<DragEvent> mIconDragDropped=null;
@@ -65,21 +66,57 @@ public class MainLayout extends AnchorPane{
         mDragOverIcon = new DragNode();
 
         mDragOverIcon.setVisible(false);
-        mDragOverIcon.setOpacity(0.65);
+        mDragOverIcon.setOpacity(0);
         getChildren().add(mDragOverIcon); 
+        
+        mDragIcon = new DragIcon();
+
+        mDragIcon.setVisible(false);
+        mDragIcon.setOpacity(0.65);
+        getChildren().add(mDragIcon); 
 
         //populate left pane with multiple colored icons for testing
         for (int i = 0; i < 7; i++) {
 
-            DragNode nde = new DragNode();
+            DragIcon icn = new DragIcon();
             
-            addDragDetection(nde);
+            addDragDetectionIcon(icn);
 
-            nde.setType(DragNodeType.values()[i]);
-            node_list.getChildren().add(nde);
+            icn.setType(DragNodeType.values()[i]);
+            node_list.getChildren().add(icn);
         }
         
         buildDragHandlers();
+    }
+    
+    private void addDragDetectionIcon(DragIcon dragIcon) {
+        
+        dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event) {
+                
+                base_pane.setOnDragOver(mIconDragOverRoot);
+                main_window.setOnDragOver(mIconDragOverLeftPane);
+                main_window.setOnDragDropped(mIconDragDropped);
+                
+                DragIcon icn = (DragIcon) event.getSource();
+                
+                mDragOverIcon.setType(icn.getType());
+                mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
+                
+                ClipboardContent content = new ClipboardContent();
+                DragContainer container = new DragContainer();
+                
+                container.addData ("type", mDragOverIcon.getType().toString());
+                content.put(DragContainer.AddNode, container);
+                
+                mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
+                mDragOverIcon.setVisible(true);
+                mDragOverIcon.setMouseTransparent(true);
+                event.consume();
+            }
+        });
     }
     
     private void addDragDetection(DragNode dragNode) {

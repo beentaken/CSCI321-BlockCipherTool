@@ -30,6 +30,17 @@ and open the template in the editor.
 	rgba(255, 255, 255, 0.35);
 }
 
+.top-link-handle:hover {
+	-fx-background-radius: 0 0 0 10;
+	-fx-background-color:
+	rgba(255, 255, 255, 0.35);
+}
+
+.bot-link-handle:hover {
+	-fx-background-radius: 0 0 0 10;
+	-fx-background-color:
+	rgba(255, 255, 255, 0.35);
+}
 .node-blue {
     -fx-background-color: blue;
 }
