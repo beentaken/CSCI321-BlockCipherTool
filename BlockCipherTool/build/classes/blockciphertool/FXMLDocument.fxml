@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <fx:root fx:id="root_pane" minHeight="828.0" minWidth="1374.0" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TabPane layoutY="24.0" prefHeight="804.0" prefWidth="1374.0" tabClosingPolicy="UNAVAILABLE">
@@ -56,27 +55,27 @@
                               </AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="113.0" prefWidth="1368.0">
                                  <children>
-                                    <Button layoutX="20.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Encrypt/Decrypt">
+                                    <Button fx:id="encrypt_decrypt" layoutX="20.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Encrypt/Decrypt">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="291.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Generate">
+                                    <Button fx:id="generate" layoutX="291.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Generate">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="562.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Cryptanalysis">
+                                    <Button fx:id="cryptanalysis" layoutX="562.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Cryptanalysis">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="833.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Performance">
+                                    <Button fx:id="performance" layoutX="833.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Performance">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button layoutX="1103.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Verify">
+                                    <Button fx:id="verify" layoutX="1103.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Verify">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
