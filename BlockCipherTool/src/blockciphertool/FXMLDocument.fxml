@@ -77,12 +77,16 @@
                                                                            <content>
                                                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Electronic Codebook" />
-                                                                                    <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" />
-                                                                                    <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" />
-                                                                                    <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" />
-                                                                                    <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" />
-                                                                                    <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" />
+                                                                                    <Group>
+                                                                                       <children>
+                                                                                          <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" />
+                                                                                          <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Electronic Codebook" />
+                                                                                          <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" />
+                                                                                          <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" />
+                                                                                          <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" />
+                                                                                          <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" />
+                                                                                       </children>
+                                                                                    </Group>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
