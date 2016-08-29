@@ -26,9 +26,18 @@ import javafx.scene.layout.VBox;
 public class DragNode extends AnchorPane{
     
     @FXML AnchorPane root_pane;
+    @FXML AnchorPane left_linke_handle;
+    @FXML AnchorPane right_link_handle;
+    @FXML AnchorPane top_link_handle;
+    @FXML AnchorPane bottom_link_handle;
     
     private EventHandler mContextDragOver;
     private EventHandler mContextDragDropped;
+    
+    private EventHandler <MouseEvent> mLinkHandleDragDetected;
+    private EventHandler <DragEvent> mLinkHandleDragDropped;
+    private EventHandler <DragEvent> mContextLinkDragOver;
+    private EventHandler <DragEvent> mContextLinkDragDrop;
     
     private DragNodeType mType = null;
     
@@ -158,7 +167,7 @@ public class DragNode extends AnchorPane{
 
         });
         
-        title_bar.setOnDragDetected(new EventHandler<MouseEvent>() {
+        drag_zone.setOnDragDetected(new EventHandler<MouseEvent>() {
             
             @Override
             public void handle(MouseEvent event) {

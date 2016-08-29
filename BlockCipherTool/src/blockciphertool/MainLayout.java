@@ -34,8 +34,7 @@ public class MainLayout extends AnchorPane{
     @FXML AnchorPane main_window;
     @FXML VBox node_list;
     
-    private DragNode mDragOverIcon = null;
-    private DragIcon mDragIcon = null;
+    private DragIcon mDragOverIcon = null;
     
     private EventHandler<DragEvent> mIconDragOverRoot=null;
     private EventHandler<DragEvent> mIconDragDropped=null;
@@ -63,17 +62,11 @@ public class MainLayout extends AnchorPane{
         //Add one icon that will be used for the drag-drop process
         //This is added as a child to the root AnchorPane so it can be 
         //visible on both sides of the split pane.
-        mDragOverIcon = new DragNode();
+        mDragOverIcon = new DragIcon();
 
         mDragOverIcon.setVisible(false);
-        mDragOverIcon.setOpacity(0);
-        getChildren().add(mDragOverIcon); 
-        
-        mDragIcon = new DragIcon();
-
-        mDragIcon.setVisible(false);
-        mDragIcon.setOpacity(0.65);
-        getChildren().add(mDragIcon); 
+        mDragOverIcon.setOpacity(0.65);
+        getChildren().add(mDragOverIcon);  
 
         //populate left pane with multiple colored icons for testing
         for (int i = 0; i < 7; i++) {

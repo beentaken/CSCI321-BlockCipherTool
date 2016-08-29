@@ -18,26 +18,30 @@ and open the template in the editor.
 	
 }
     
+.link-handle:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.35);
+}
+
 .right-link-handle:hover {
-	-fx-background-radius: 0 0 10 0;
+	-fx-background-radius: 0 0 0 0;
 	-fx-background-color:
 	rgba(255, 255, 255, 0.35);
 }
 
 .left-link-handle:hover {
-	-fx-background-radius: 0 0 0 10;
+	-fx-background-radius: 0 0 0 0;
 	-fx-background-color:
 	rgba(255, 255, 255, 0.35);
 }
 
 .top-link-handle:hover {
-	-fx-background-radius: 0 0 0 10;
+	-fx-background-radius: 0 0 0 0;
 	-fx-background-color:
 	rgba(255, 255, 255, 0.35);
 }
 
 .bot-link-handle:hover {
-	-fx-background-radius: 0 0 0 10;
+	-fx-background-radius: 0 0 0 0;
 	-fx-background-color:
 	rgba(255, 255, 255, 0.35);
 }
