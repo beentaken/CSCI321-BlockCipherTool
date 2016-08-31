@@ -37,7 +37,7 @@ public class DragNode extends AnchorPane{
     private EventHandler <MouseEvent> mLinkHandleDragDetected;
     private EventHandler <DragEvent> mLinkHandleDragDropped;
     private EventHandler <DragEvent> mContextLinkDragOver;
-    private EventHandler <DragEvent> mContextLinkDragDrop;
+    private EventHandler <DragEvent> mContextLinkDragDropped;
     
     private DragNodeType mType = null;
     
@@ -193,5 +193,54 @@ public class DragNode extends AnchorPane{
                 event.consume();
             }
         });
+    }
+    
+    private void buildLinkDragHandlers() {
+        
+        mLinkHandleDragDetected = new EventHandler <MouseEvent> () {
+            
+            @Override
+            public void handle(MouseEvent event) {
+                
+                getParent().setOnDragOver(null);
+                getParent().setOnDragDropped(null);
+                
+                getParent().setOnDragOver(mContextLinkDragOver);
+                getParent().setOnDragDropped(mContextLinkDragDropped);
+                
+                event.consume();
+            }
+        };
+        
+        mLinkHandleDragDropped = new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                getParent().setOnDragOver(null);
+                getParent().setOnDragDropped(null);
+                
+                event.setDropCompleted(true);
+                
+                event.consume();
+            }
+        };
+        
+        mContextLinkDragOver = new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                event.acceptTransferModes(TransferMode.ANY);
+                event.consume();
+            }
+        };
+        
+        mContextLinkDragDropped = new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                getParent().setOnDragOver(null);
+                getParent().setOnDragDropped(null);
+                
+                event.setDropCompleted(true);
+                event.consume();
+            }
+        };
     }
 }
