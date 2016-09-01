@@ -1,0 +1,126 @@
+<cipher>
+	<pbox ID=1>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+		<inputs num=1>
+			<input  connectorID=8 size=64/>
+		</inputs>
+		<outputs num=2>
+			<output connectorID=1 size=32>
+				58,50,42,34,26,18,10,2,60,52,44,36,28,20,12,4,62,54,46,38,30,22,14,6,64,56,48,40,32,24,16,8
+			</output>
+			<output connectorID=2 size=32>
+				57,49,41,33,25,17,9,1,59,51,43,35,27,19,11,3,61,53,45,37,29,21,13,5,63,55,47,39,31,23,15,7
+			</output>
+		</outputs>
+	</pbox>
+	<sbox ID=7>
+		<X>240</X>
+		<Y>468</Y>
+		<inputs num=1>
+			<input connectorID=2 size=4>
+		</inputs>
+
+		<outputs num=1>
+			<output connectorID=13 size=4>
+				1, 2, 3, 4
+			</output>
+		</outputs>
+	</sbox>
+
+	<xor ID=8>
+	    <inputs num=2>
+            <input1 ConnectorID=1 size=8>
+                12345678
+            </input1>
+            <input2 ConnectionID=2 size=8>
+                13578642
+            </input2>
+        </inputs>
+		<X>240</X>
+		<Y>468</Y>
+	</xor>
+
+	<connection ID=9>
+		<X1>240</X1>
+		<Y1>468</Y1>
+		<X2>240</X2>
+		<Y2>468</Y2>
+		<from>1<from>
+		<to>7<to>
+	</connection>
+
+	<f ID=1>
+		<X>240</X>
+		<Y>468</Y>
+		<pbox ID=3>
+			<X>
+                240
+            </X>
+			<Y>
+                468
+            </Y>
+			<inputs num=1>
+				<input  connectorID=5 size=32/>
+			</inputs>
+			<outputs num=1>
+				<output connectorID=4 size=48>
+					32,1,2,3,4,5,4,5,6,7,8,9,8,9,10,11,12,13,12,13,14,15,16,17,16,17,18,19,20,21,20,21,22,23,24,25,24,25,26,27,28,29,28,29,30,31,32,1
+				</output>
+			</outputs>
+		</pbox>
+
+		<pbox ID=4>
+			<X>
+                240
+            </X>
+			<Y>
+                468
+            </Y>
+			<inputs num=1>
+				<input size=48/>
+			</inputs>
+			<outputs num=8>
+				<output connectorID=5 size=6>
+					1,2,3,4,5,6
+				</output>
+				<output connectorID=6 size=6>
+					7,8,9,10,11,12
+				</output>
+				<output connectorID=7 size=6>
+					13,14,15,16,17,18
+				</output>
+				<output connectorID=8 size=6>
+					19,20,21,22,23,24
+				</output>
+				<output connectorID=9 size=6>
+					25,26,27,28,29,30
+				</output>
+				<output connectorID=10 size=6>
+					31,32,33,34,35,36
+				</output>
+				<output connectorID=11 size=6>
+					37,38,39,40,41,42
+				</output>
+			</outputs>
+		</pbox>
+
+		<xor ID=5 size=48>
+			<X>240</X>
+			<Y>468</Y>
+		</xor>
+
+		<sbox ID=6>
+			<X>240</X>
+			<Y>468</Y>
+			<input  connectorID=4 size=6/>
+			<output  connectorID=12 size=4/>
+		</sbox>
+
+	</f>
+
+</cipher>

@@ -1,0 +1,47 @@
+# depslib dependency file v1.0
+1472561312 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\main.cpp
+	<iostream>
+	<cstdlib>
+	"OutputFunctions.h"
+	"GenericFunctions.h"
+
+1472466009 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputfunctions.h
+	<string>
+	"XMLParser.h"
+
+1472346998 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\genericfunctions.h
+
+1472349607 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputcode.cpp
+	"OutputCode.h"
+	<iostream>
+	<fstream>
+	<string>
+	<stdlib.h>
+	<unistd.h>
+	<windows.h>
+
+1472349292 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputcode.h
+	<string>
+
+1472466372 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputfunctions.cpp
+	"OutputFunctions.h"
+	<iostream>
+	<fstream>
+	<string>
+	<stdlib.h>
+	<stdio.h>
+	<Shlwapi.h>
+	<windows.h>
+
+1472723510 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\xmlparser.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<sstream>
+	<algorithm>
+	"XMLParser.h"
+
+1472724507 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\xmlparser.h
+	<iostream>
+	<string>
+
