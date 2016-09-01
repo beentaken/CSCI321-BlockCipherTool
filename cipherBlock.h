@@ -9,6 +9,7 @@ class cipherBlock
     public:
         cipherBlock();
         string encryptBlock(string plain, int blocksize);
+        string decryptBlock(string plain, int blocksize);
 
 };
 

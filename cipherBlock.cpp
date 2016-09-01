@@ -15,3 +15,9 @@ string cipherBlock::encryptBlock(string plain, int blocksize)
 {
     return plain;
 };
+
+
+string cipherBlock::decryptBlock(string plain, int blocksize)
+{
+    return plain;
+};

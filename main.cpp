@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 #include <random>
 #include <time.h>
@@ -26,7 +27,7 @@ using namespace std;
 
 
 
-string ECB(string s, int bl, cipherBlock cipher)
+string ECB_Encrypt(string s, int bl, cipherBlock cipher)
 {
     /** \fn ECB
      *  \brief  electronic codebook
@@ -35,7 +36,22 @@ string ECB(string s, int bl, cipherBlock cipher)
      */
     return cipher.encryptBlock(s, bl);
 }
-string CBC(string s, int bl, unsigned char* iv, cipherBlock cipher)
+
+string ECB_Decrypt(string s, int bl, cipherBlock cipher)
+{
+    /** \fn ECB
+     *  \brief  electronic codebook
+     *  Does nothing, just decrypts each block
+     *
+     */
+    return cipher.decryptBlock(s, bl);
+}
+
+
+
+
+
+string CBC_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
 {
 
     /** \fn CBC
@@ -59,7 +75,44 @@ string CBC(string s, int bl, unsigned char* iv, cipherBlock cipher)
 
     return ctb;
 }
-string CFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
+
+string CBC_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+{
+
+    /** \fn CBC
+     *  \brief  cipher block chaining
+     *  each block of ciphertext is XORed into the
+     *  next block of plaintext after decryption
+     *
+     */
+
+
+    string ctb = cipher.decryptBlock(s, bl); //send to cipher
+
+    for (int j=0; j<bl; j++)
+    {
+        ctb[j] = ctb[j]^iv[j]; //XOR byte with IV (or last blocks ciphertext)
+    }
+
+
+    for (int j=0; j<bl; j++) //write ciphertext into iv variable
+    {
+        iv[j] = s[j];
+    }
+
+    return ctb;
+}
+
+
+
+
+
+
+
+
+
+
+string CFB_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
 {
 
     /** \fn CFB
@@ -89,6 +142,42 @@ string CFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
 
     return ctb;
 }
+
+string CFB_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+{
+
+    /** \fn CFB
+     *  \brief  cipher feedback
+     *  the ciphertext of the previous block is encrypted
+     *  then the ciphertext is XORed in
+     *
+     */
+
+    string ivString;
+    ivString.resize(bl);
+    for (int j=0; j<bl; j++)
+    {
+        ivString[j] = iv[j];
+    }
+    string ctb = cipher.encryptBlock(ivString, bl);
+
+    for (int j=0; j<bl; j++)
+    {
+        //XORing in the plaintext
+        ctb[j] = ctb[j]^s[j];
+
+        //write ciphertext into iv variable
+        iv[j] = s[j];
+    }
+
+
+    return ctb;
+}
+
+
+
+
+
 string OFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
 {
     /** \fn OFB
@@ -151,49 +240,77 @@ string CTR(string s, int bl, unsigned char* iv, cipherBlock cipher)
 
 
 
+string paddingEncrypt(int pad, int blocksize, int paddingMode)
+{
+    string block;
+    block.clear();
+    for (int k=pad; k<blocksize; k++)
+    {
+        if (paddingMode==1)
+        {///ANSI X.923
+            if (k==(blocksize-1))
+            {
+                unsigned char c = (blocksize-pad); //how many bytes were added
+                block.push_back(c);
+            }
+            else
+            {
+                block.push_back('\0');
+            }
+        }
+        else if (paddingMode==2)
+        {///ISO 10126
+            if (k==(blocksize-1))
+            {
+                unsigned char c = (blocksize-pad); //how many bytes were added
+                block.push_back(c);
+            }
+            else
+            {
+                unsigned char c = rand()%255; //random byte
+                block.push_back(c);
+            }
+        }
+        else if (paddingMode==3)
+        {///PKCS7
+            unsigned char c = (blocksize-pad); //how many bytes were added
+            block.push_back(c);
+        }
+        else if (paddingMode==4)
+        {///ISO/IEC 7816-4
+            if (k==pad)
+            {
+                unsigned char c = 128;
+                block.push_back(c);
+            }
+            else
+            {
+                block.push_back('\0');
+            }
+        }
+        else if (paddingMode==5)
+        {///Zero padding
+            block.push_back('\0');
+        }
+    }
+    return block;
+}
 
 
 
 
 
-int main()
+
+
+
+
+
+int encrypt(string filename, int blocksize, int mode, int paddingMode)
 {
 
-    int blocksize = 0; ///< used to store the size of each block in bytes
-    cout << "block size: ";
-    cin >> blocksize;
     string block; ///< used to store plaintext blocks
 
     block.resize(blocksize);
-
-
-
-    int mode=0; ///< selects mode of operation
-    int paddingMode=0; ///< selects mode of padding
-
-    //open file
-    string filename;
-    cout << "Enter filename: ";
-    cin >> filename;
-
-    //select chaining mode
-    cout << "1) ECB" << endl;
-    cout << "2) CBC" << endl;
-    cout << "3) CFB" << endl;
-    cout << "4) OFB" << endl;
-    cout << "5) CTR" << endl;
-    cout << "Mode: ";
-    cin >> mode;
-
-
-    cout << "1) ANSI X.923" << endl;
-    cout << "2) ISO 10126" << endl;
-    cout << "3) PKCS7" << endl;
-    cout << "4) ISO/IEC 7816-4" << endl;
-    cout << "5) Zero padding" << endl;
-    cout << "Padding mode: ";
-    cin >> paddingMode;
-
 
     unsigned char * iv = NULL; ///< used to store Initialization Vector
     if (mode != 1)
@@ -276,17 +393,18 @@ int main()
             block.push_back(infile.get());
         }
 
+
         if (mode==1)
         {///ECB
-            cipherTextBlock = ECB(block, blocksize, cipher);
+            cipherTextBlock = ECB_Encrypt(block, blocksize, cipher);
         }
         else if (mode==2)
         {///CBC
-            cipherTextBlock = CBC(block, blocksize, iv, cipher);
+            cipherTextBlock = CBC_Encrypt(block, blocksize, iv, cipher);
         }
         else if (mode==3)
         {///CFB
-            cipherTextBlock = CFB(block, blocksize, iv, cipher);
+            cipherTextBlock = CFB_Encrypt(block, blocksize, iv, cipher);
         }
         else if (mode==4)
         {///OFB
@@ -326,63 +444,18 @@ int main()
     }
 
 
-    for (int k=pad; k<blocksize; k++)
-    {
-        if (paddingMode==1)
-        {///ANSI X.923
-            if (k==(blocksize-1))
-            {
-                unsigned char c = (blocksize-pad); //how many bytes were added
-                block.push_back(c);
-            }
-            else
-            {
-                block.push_back('\0');
-            }
-        }
-        else if (paddingMode==2)
-        {///ISO 10126
-            if (k==(blocksize-1))
-            {
-                unsigned char c = (blocksize-pad); //how many bytes were added
-                block.push_back(c);
-            }
-            else
-            {
-                unsigned char c = rand()%255; //random byte
-                block.push_back(c);
-            }
-        }
-        else if (paddingMode==3)
-        {///PKCS7
-            unsigned char c = (blocksize-pad); //how many bytes were added
-            block.push_back(c);
-        }
-        else if (paddingMode==4)
-        {///ISO/IEC 7816-4
-            if (k==pad)
-            {
-                unsigned char c = 128;
-                block.push_back(c);
-            }
-            else
-            {
-                block.push_back('\0');
-            }
-        }
-        else if (paddingMode==5)
-        {///Zero padding
-            block.push_back('\0');
-        }
-    }
+
+    block.append(paddingEncrypt(pad, blocksize, paddingMode));
+
     string lastCipherBlock = block;
 
+
     if (mode==1)
-        block = ECB(lastCipherBlock, blocksize, cipher);
+        block = ECB_Encrypt(lastCipherBlock, blocksize, cipher);
     else if (mode==2)
-        block = CBC(lastCipherBlock, blocksize, iv, cipher);
+        block = CBC_Encrypt(lastCipherBlock, blocksize, iv, cipher);
     else if (mode==3)
-        block = CFB(lastCipherBlock, blocksize, iv, cipher);
+        block = CFB_Encrypt(lastCipherBlock, blocksize, iv, cipher);
     else if (mode==4)
         block = OFB(lastCipherBlock, blocksize, iv, cipher);
     else if (mode==5)
@@ -392,18 +465,203 @@ int main()
         memcpy(ivCounter, iv, blocksize);
         ivCounter[(blocksize-1)] = ivCounter[(blocksize-1)]^counter;
 
-        lastCipherBlock = CTR(block, blocksize, ivCounter, cipher);
+        block = CTR(lastCipherBlock, blocksize, ivCounter, cipher);
     }
 
     for (int k=0; k<blocksize; k++)
     {
-        out.push_back(lastCipherBlock[k]);
+        out.push_back(block[k]);
     }
 
     ///write ciphertext to file
     ofstream outfile;
-    outfile.open("out.txt", ios::trunc | ios::binary);
+    outfile.open("out.bin", ios::trunc | ios::binary);
     outfile << out;
+
+}
+
+
+
+
+
+
+int decrypt(string filename, int blocksize, int mode, int paddingMode)
+{
+
+    string block; ///< used to store ciphertext blocks
+
+    block.resize(blocksize);
+
+    unsigned char * iv = NULL; ///< used to store Initialization Vector
+    if (mode != 1)
+    {
+        iv = new unsigned char[blocksize];
+        cout << "IV file: ";
+        string ivfilename;
+        cin >> ivfilename;
+        ifstream ivFile; ///< file for storing the IV
+        ivFile.open(ivfilename, ios::binary);
+        for (int i=0; i<blocksize; i++)
+        {
+            char c;
+            ivFile.get(c);
+            iv[i] = c;
+        }
+
+        ivFile.close();
+    }
+
+    //open file with ciphertext
+    ifstream infile;
+    infile.open(filename.c_str(), ios::binary);
+
+    //check infile is valid
+    if (!infile.good())
+    {
+        cerr << "Error opening file" << endl;
+        return -1;
+    }
+
+    int fileLen=0;
+    infile.seekg(0, ios::end);
+    fileLen = infile.tellg();
+    infile.seekg(0, ios::beg);
+
+    string out = ""; ///< string for output
+
+    cipherBlock cipher; ///< a single block of a cipher
+
+    ///process each full sized block
+    unsigned int i=0;
+    for (i; i<(fileLen/blocksize); i++)
+    {
+        string plainTextBlock; ///< stores a single block of plaintext
+        block.clear();
+        for (int j=0; j<blocksize; j++)
+        {
+            block.push_back(infile.get());
+        }
+
+
+        if (mode==1)
+        {///ECB
+            plainTextBlock = ECB_Decrypt(block, blocksize, cipher);
+        }
+        else if (mode==2)
+        {///CBC
+            plainTextBlock = CBC_Decrypt(block, blocksize, iv, cipher);
+        }
+        else if (mode==3)
+        {///CFB
+            plainTextBlock = CFB_Decrypt(block, blocksize, iv, cipher);
+        }
+        else if (mode==4)
+        {///OFB
+            plainTextBlock = OFB(block, blocksize, iv, cipher);
+        }
+        else if (mode==5)
+        {///CTR
+            //XOR a counter into the rightmost bit of the IV
+            //downside: only supports up to 255 blocks
+            //shit
+            unsigned char counter = i;
+            unsigned char* ivCounter = new unsigned char[blocksize];
+            memcpy(ivCounter, iv, blocksize);
+            ivCounter[(blocksize-1)] = ivCounter[(blocksize-1)]^counter;
+
+            plainTextBlock = CTR(block, blocksize, ivCounter, cipher);
+        }
+
+        //add the encrypted block to the out string
+        for (int k=0; k<blocksize; k++)
+        {
+            out.push_back(plainTextBlock[k]);
+        }
+    }
+
+
+
+
+
+
+
+    ///write ciphertext to file
+    ofstream outfile;
+    outfile.open("plaintext_out.txt", ios::trunc | ios::binary);
+    outfile << out;
+
+}
+
+
+
+
+
+
+int main(int argc, char** argv)
+{
+
+    int blocksize = 0; ///< used to store the size of each block in bytes
+    int mode=0; ///< selects mode of operation
+    int paddingMode=0; ///< selects mode of padding
+    int ED;
+    string filename;
+
+    if (argc==1)
+    {
+        cout << "1) Encrypt" << endl;
+        cout << "2) Decrypt" << endl;
+        cout << ">> ";
+        cin >> ED;
+
+        cout << "block size: ";
+        cin >> blocksize;
+
+        //open file
+        cout << "Enter filename: ";
+        cin >> filename;
+
+
+        //select chaining mode
+        cout << "1) ECB" << endl;
+        cout << "2) CBC" << endl;
+        cout << "3) CFB" << endl;
+        cout << "4) OFB" << endl;
+        cout << "5) CTR" << endl;
+        cout << "Mode: ";
+        cin >> mode;
+
+
+        cout << "1) ANSI X.923" << endl;
+        cout << "2) ISO 10126" << endl;
+        cout << "3) PKCS7" << endl;
+        cout << "4) ISO/IEC 7816-4" << endl;
+        cout << "5) Zero padding" << endl;
+        cout << "Padding mode: ";
+        cin >> paddingMode;
+    }
+    else if (argc == 6)
+    {
+        stringstream ss;
+        string sString;
+        for (int i=1; i<6; i++)
+        {
+            sString.append(argv[i]);
+            ss << sString << " ";
+            sString.clear();
+        }
+        ss >> ED >> blocksize >> filename >> mode >> paddingMode;
+
+    }
+
+    if (ED==1)
+    {
+        encrypt(filename, blocksize, mode, paddingMode);
+    }
+    else if (ED==2)
+    {
+        decrypt(filename, blocksize, mode, paddingMode);
+    }
+
 
     return 0;
 }
