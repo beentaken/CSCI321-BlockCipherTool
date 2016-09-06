@@ -26,7 +26,7 @@ import javafx.scene.layout.VBox;
 public class DragNode extends AnchorPane{
     
     @FXML AnchorPane root_pane;
-    @FXML AnchorPane left_linke_handle;
+    @FXML AnchorPane left_link_handle;
     @FXML AnchorPane right_link_handle;
     @FXML AnchorPane top_link_handle;
     @FXML AnchorPane bottom_link_handle;
@@ -73,6 +73,17 @@ public class DragNode extends AnchorPane{
     @FXML
     private void initialize() {
         buildNodeDragHandlers();
+        buildLinkDragHandlers();
+        
+        left_link_handle.setOnDragDetected(mLinkHandleDragDetected);
+        right_link_handle.setOnDragDetected(mLinkHandleDragDetected);
+        top_link_handle.setOnDragDetected(mLinkHandleDragDetected);
+        bottom_link_handle.setOnDragDetected(mLinkHandleDragDetected);
+        
+        left_link_handle.setOnDragDropped(mLinkHandleDragDropped);
+        right_link_handle.setOnDragDropped(mLinkHandleDragDropped);
+        top_link_handle.setOnDragDropped(mLinkHandleDragDropped);
+        bottom_link_handle.setOnDragDropped(mLinkHandleDragDropped);
     }
     
     public void relocateToPoint (Point2D p) {
@@ -217,6 +228,22 @@ public class DragNode extends AnchorPane{
             public void handle(DragEvent event) {
                 getParent().setOnDragOver(null);
                 getParent().setOnDragDropped(null);
+                
+                DragContainer container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
+                
+                if (container == null)
+                    return;
+                
+                AnchorPane link_handle = (AnchorPane) event.getSource();
+                DragNode parent = (DragNode) link_handle.getParent().getParent().getParent();
+                
+                ClipboardContent content = new ClipboardContent();
+                
+                container.addData("target", parent.getType().toString());
+                
+                content.put(DragContainer.AddLink, container);
+                
+                event.getDragboard().setContent(content);
                 
                 event.setDropCompleted(true);
                 

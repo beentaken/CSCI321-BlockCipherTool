@@ -35,6 +35,9 @@ public class DragContainer implements Serializable{
     public static final DataFormat Node =
             new DataFormat("com.buddyware.treefrog.filesystem.view.FileSystemNode");
     
+    public static final DataFormat AddLink =
+            new DataFormat("blockciphertool.NodeLink.add");
+    
     public DragContainer () {
         
     }

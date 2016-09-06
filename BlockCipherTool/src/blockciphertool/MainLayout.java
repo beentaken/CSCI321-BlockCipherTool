@@ -225,6 +225,12 @@ public class MainLayout extends AnchorPane{
                     if (container.getValue("type") != null)
                         System.out.println("Moved node " + container.getValue("type"));
                 }
+                
+                container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
+                
+                if (container != null) {
+                    System.out.println(container.getData());
+                }
 
                 event.consume();
             }
