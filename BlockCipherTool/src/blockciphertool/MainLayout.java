@@ -9,12 +9,17 @@ package blockciphertool;
  *
  * @author Aloe2020
  */import java.io.IOException;
+import javafx.event.ActionEvent;
+import javafx.event.EventDispatchChain;
 
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.ClipboardContent;
@@ -23,6 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -235,6 +242,17 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         });
+    }
+    
+    public void runConfirm() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOpacity(1);
+        stage.setTitle("Encrypt or Decrypt");
+        stage.setScene(new Scene(root, 450, 450));
+        stage.showAndWait();
     }
     
 }
