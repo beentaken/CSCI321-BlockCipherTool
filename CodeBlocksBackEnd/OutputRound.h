@@ -12,7 +12,11 @@
  */
 
 #include <string>
+#include "OutputFunctions.h"
+
 using namespace std;
 
-string setDefaultLocation();
+bool OutputRound(vector<Node>);
+void OutputMain(bool[], vector<Node>);
+void OutputGenerics(bool[], vector<Node>);
 void createFile(string);

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 /** \brief
@@ -38,10 +39,10 @@ struct Node {
     int from;           /**< The From Node connection */
     int to;             /**< The To Node connection */
 
-    Node * Next;        /**< This is for the F Function to specify all parts of the F Function */
+    vector<Node> Next;        /**< This is for the F Function to specify all parts of the F Function */
 };
 
-Node* ReadXML(string);                      /**< This function reads the XML Parser */
+vector<Node> ReadXML(string);                      /**< This function reads the XML Parser */
 int StringToNumber(string);                 /**< The function converts the String to a number(int) */
 int* StringToIntArr(string, char);          /**< This function converts the String to an integer array */
 Node ParseSPBox(ifstream&, string, int);    /**< This function parses in a P Box or an S Box */

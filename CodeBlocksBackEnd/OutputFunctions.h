@@ -15,13 +15,6 @@
 using namespace std;
 
 #include "XMLParser.h"
-/*
-struct Node {
-    int option;
-    int* variables;
-    Node* Next;
-};
-*/
 
 void Print(Node*, string);
 string DefaultLocation();

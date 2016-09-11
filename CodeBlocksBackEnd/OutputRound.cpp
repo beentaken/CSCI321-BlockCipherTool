@@ -11,7 +11,7 @@
  * Created on 23 July 2016, 12:48 PM
  */
 
-#include "OutputCode.h"
+#include "OutputRound.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -20,36 +20,26 @@
 #include <windows.h>
 using namespace std;
 
-string setDefaultLocation() {
-    /* WINDOWS ONLY!!!!!!!! */
+bool OutputRound(vector<Node> Head) {
+    bool NodeTypes[5];  /**< Finds out which cipher node blocks have been used */
 
-    // Gets the home path of the directory
-    char* path = getenv ("HOMEPATH");
+    for (int i = 0; i < 5; i++) {
+        NodeTypes[i] = false;
+    }
 
-    // Appends the drive id and the my documents folder
-    string temp = path;
-    temp = "C:" + temp + "\\My Documents";
-
-    //Print Check
-    //cout << temp << endl;
-
-    // Converts the concatenated string back to char *
-    const char * sets = temp.c_str();
-
-    // Sets the current directory
-    SetCurrentDirectory(sets);
-
-    // Gets the current working directory
-    const int cwdbuff = 1024;
-    char cwd[cwdbuff];
-    GetCurrentDirectory(cwdbuff, cwd);
-
-    // Print Check
-    // cout << cwd << endl;
-
-    return temp;
+    string DefLocation = DefaultLocation();
+    OutputMain(NodeTypes, Head);
+    OutputGenerics(NodeTypes, Head);
 }
-/*
+
+void OutputMain(bool NodeTypes[], vector<Node> Head) {
+
+}
+
+void OutputGenerics(bool NodeTypes[], vector<Node> Head) {
+
+}
+
 void createFile(string filename) {
     // Gets the current working directory
     const int cwdbuff = 1024;
@@ -65,4 +55,3 @@ void createFile(string filename) {
 
 
 }
-*/

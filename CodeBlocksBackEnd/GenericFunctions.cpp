@@ -14,35 +14,19 @@
 #include "GenericFunctions.h"
 #include <iostream>
 #include <limits>
+#include <string>
+#include <sstream>
 using namespace std;
 
 
-int CustomXOR(int A, int B, int Length) {
-    int Result = (-1);
-    int RDigit;
+string CustomXOR(string A, string B) {
+    string Result("");
+    int length = A.length();
+    stringstream ss;
 
-    int ALastDigit;
-    int BLastDigit;
-    int tens = 1;
-    int position = 0;
-
-    while (position < Length) {
-        ALastDigit = A % 10;
-        A = A / 10;
-
-        BLastDigit = B % 10;
-        B = B / 10;
-
-        RDigit = (ALastDigit + BLastDigit) % 2;
-
-        if (Result == (-1)) {
-            Result = RDigit;
-        } else {
-            Result = Result + (RDigit * tens);
-        }
-
-        tens = tens * 10;
-        position++;
+    for (int i = 0; i < length; ++i) {
+        ss << (A[i] ^ B[i]);
+        Result = ss.str();
     }
 
     return Result;
@@ -165,7 +149,7 @@ int CustomSBoxSearch(int** Sbox, int input) {
     while (true) {
         if (Sbox[rowcount][0] == row) {
             while (true) {
-                if (Sbox[0][colcount]) {
+                if (Sbox[0][colcount] == col) {
                     return Sbox[rowcount][colcount];
                 }
                 colcount++;

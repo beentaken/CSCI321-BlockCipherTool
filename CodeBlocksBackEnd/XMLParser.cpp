@@ -3,6 +3,7 @@
 #include <string>       /**< strings */
 #include <sstream>      /**< stringstreams */
 #include <algorithm>    /**< remove */
+#include <vector>
 
 #include "XMLParser.h"  /**< Header file */
 
@@ -17,7 +18,9 @@ using namespace std;    /**< Namespace standard */
  * \return
  * Returns all the data gathered in a vector
  */
-Node* ReadXML(string filename) {
+vector<Node> ReadXML(string filename) {
+    vector<Node> result;
+
     /**< File input stream for the xml */
     ifstream XMLfile;
     XMLfile.open(filename.c_str());
@@ -45,18 +48,23 @@ Node* ReadXML(string filename) {
                     if (line.find("<pbox") != string::npos) {
                         /**< Parses a PBox if the pbox tag is found */
                         Node temp = ParseSPBox(XMLfile, line, 0);
+                        result.push_back(temp);
                     } else if (line.find("<sbox") != string::npos) {
                         /**< Parses a SBox if the sbox tag is found */
                         Node temp = ParseSPBox(XMLfile, line, 1);
+                        result.push_back(temp);
                     } else if (line.find("<xor") != string::npos) {
                         /**< Parses an XOR is the xor tag is found */
                         Node temp = ParseXOR(XMLfile, line, 2);
+                        result.push_back(temp);
                     } else if (line.find("f") != string::npos) {
                         /**< Parses an F function if the f tag is found */
                         Node temp = ParseFFunc(XMLfile, line, 3);
+                        result.push_back(temp);
                     } else if (line.find("<connection") != string::npos) {
                         /**< Parses a connection is the connection tag is found */
                         Node temp = ParseConn(XMLfile, line, 4);
+                        result.push_back(temp);
                     }
                 }
             }
@@ -65,6 +73,8 @@ Node* ReadXML(string filename) {
             XMLfile.close();
         }
     }
+
+    return result;
 }
 
 /** \brief
@@ -93,7 +103,6 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
         N.ID = StringToNumber(line);
         N.inputs = NULL;
         N.outputs = NULL;
-        N.Next = NULL;
 
         /**< Continues to cycle until the end of the F function */
         while(line.compare("</f>") != 0) {
@@ -105,18 +114,23 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
             if (line.find("<pbox") != string::npos) {
                 /**< Parses in a p box and adds it to the end of the linked list */
                 Node temp = ParseSPBox(XMLfile, line, 0);
+                N.Next.push_back(temp);
             } else if (line.find("<sbox") != string::npos) {
                 /**< Parses in a s box and adds it to the end of the linked list */
                 Node temp = ParseSPBox(XMLfile, line, 1);
+                N.Next.push_back(temp);
             } else if (line.find("<xor") != string::npos) {
                 /**< Parses in an xor and adds it to the end of the linked list */
                 Node temp = ParseXOR(XMLfile, line, 2);
+                N.Next.push_back(temp);
             } else if (line.find("f") != string::npos) {
                 /**< Parses in an f function and adds it to the end of the linked list */
                 Node temp = ParseFFunc(XMLfile, line, 3);
+                N.Next.push_back(temp);
             } else if (line.find("<connection") != string::npos) {
                 /**< Parses in a connection and adds it to the end of the linked list */
                 Node temp = ParseConn(XMLfile, line, 4);
+                N.Next.push_back(temp);
             }
         }
     }
@@ -151,7 +165,6 @@ Node ParseConn(ifstream& XMLfile, string line, int type) {
         N.ID = StringToNumber(line);
         N.inputs = NULL;
         N.outputs = NULL;
-        N.Next = NULL;
 
         /**< Continues to cycle until it has read all of the connection node properties */
         while(line.compare("</connection>") != 0) {
@@ -212,7 +225,6 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
         N.ID = StringToNumber(line);
         N.inputs = NULL;
         N.outputs = NULL;
-        N.Next = NULL;
 
         /**< Continues to cycle until the end of the xor block */
         while (line.compare("</xor>") != 0) {
@@ -300,7 +312,6 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
         N.ID = StringToNumber(temp);
         N.inputs = NULL;
         N.outputs = NULL;
-        N.Next = NULL;
 
         /**< Cycles until the end of the box */
         while ((line.compare("</pbox>") != 0) && (line.compare("</sbox>"))) {
@@ -480,8 +491,9 @@ int* StringToIntArr(string input, char delimeter) {
     }
 
     /**< Creates an integer array */
-    result = new int[realcount];
-    int realcounter = 0;
+    result = new int[realcount+1];
+    result[0] = realcount;
+    int realcounter = 1;
     for (int i = 0; i < counter; i++) {
         /**< Stores the integers accordingly */
         if (res[i] != (-1)) {

@@ -14,6 +14,47 @@
 
 using namespace std;
 
+void PrintNodeList(vector<Node> Head) {
+    for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
+        Node temp = *it;
+
+        if (temp.type == 1 || temp.type == 0) {
+            if (temp.type == 0) {
+                cout << "PBOX: " << temp.ID << endl;
+            } else if (temp.type == 1) {
+                cout << "SBOX: " << temp.ID << endl;
+            }
+            cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
+            if (temp.NumInputs != (-1)) {
+                cout << temp.NumInputs << "Inputs: " << endl;
+                for (int i = 0; i < temp.NumInputs; i++) {
+                    cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
+                }
+            }
+
+            if (temp.NumOutputs != (-1)) {
+                cout << temp.NumOutputs << "Outputs: " << endl;
+                for (int i = 0; i < temp.NumOutputs; i++) {
+                    cout << "\tOutput" << i+1 << " size: " << temp.outputs->InputSizes << ", Connection ID: " << temp.outputs->InputConID << endl;
+                    cout << "\t\t" << temp.outputs->values[0] << "Values: ";
+                    for (int l = 1; l < temp.outputs->values[0]; l++) {
+                        cout << temp.outputs->values[l] << ", ";
+                    }
+                    cout << endl;
+                }
+            }
+
+        } else if (temp.type == 2) {
+
+        } else if (temp.type == 3) {
+
+        } else if (temp.type == 4) {
+
+        }
+
+        cout << endl;
+    }
+}
 /*
 void Print(Node* Head, string pathlocation) {
     Node* Temp = Head;

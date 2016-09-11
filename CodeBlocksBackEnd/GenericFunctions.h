@@ -13,7 +13,10 @@
 
 
 // Generic Functions
-int CustomXOR(int, int, int);           // XOR Function
+#include <string>
+using namespace std;
+
+string CustomXOR(string, string);           // XOR Function
 int** CustomPBoxGeneration();           // Permutation Box Function
 int** CustomSBoxGeneration();           // Substitution Box Generation Function
 int CustomSBoxSearch(int**, int);       // Searches the Substitution Box
