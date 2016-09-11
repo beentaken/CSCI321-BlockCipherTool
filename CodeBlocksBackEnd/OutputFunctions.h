@@ -18,6 +18,7 @@ using namespace std;
 
 void Print(Node*, string);
 string DefaultLocation();
-void PrintSBOX(int*, ifstream&, ofstream&);
-void PrintPBOX(int*, ifstream&, ofstream&);
-void PrintXOR(int*, ifstream&, ofstream&);
+void PrintNodeList(vector<Node>);
+void PrintSPBox(Node);
+void PrintXOR(Node);
+void PrintConnection(Node);

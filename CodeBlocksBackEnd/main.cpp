@@ -16,10 +16,11 @@ int main(int argc, char** argv) {
         cout << "Menu: " << endl;
         cout << "1: Read in XML file store" << endl;
         cout << "2: Output all nodes into runnable C++ code" << endl;
+        cout << "3: Print Node List" << endl;
         cout << "0: Exit" << endl;
         cin >> choice;
 
-        if (choice <= 2 && choice >= 0) {
+        if (choice <= 3 && choice >= 0) {
             if (choice == 1) {
                 Head = ReadXML("test.xml");
             }
@@ -33,7 +34,11 @@ int main(int argc, char** argv) {
             }
 
             if (choice == 3) {
-
+                if (Head.empty()) {
+                    cout << "There are no crypto nodes to output!" << endl;
+                } else {
+                    PrintNodeList(Head);
+                }
             }
         } else {
             cout << "Please input a number between and including 0 and 2!!" << endl;

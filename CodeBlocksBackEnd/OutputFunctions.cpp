@@ -19,40 +19,74 @@ void PrintNodeList(vector<Node> Head) {
         Node temp = *it;
 
         if (temp.type == 1 || temp.type == 0) {
-            if (temp.type == 0) {
-                cout << "PBOX: " << temp.ID << endl;
-            } else if (temp.type == 1) {
-                cout << "SBOX: " << temp.ID << endl;
-            }
-            cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
-            if (temp.NumInputs != (-1)) {
-                cout << temp.NumInputs << "Inputs: " << endl;
-                for (int i = 0; i < temp.NumInputs; i++) {
-                    cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
-                }
-            }
-
-            if (temp.NumOutputs != (-1)) {
-                cout << temp.NumOutputs << "Outputs: " << endl;
-                for (int i = 0; i < temp.NumOutputs; i++) {
-                    cout << "\tOutput" << i+1 << " size: " << temp.outputs->InputSizes << ", Connection ID: " << temp.outputs->InputConID << endl;
-                    cout << "\t\t" << temp.outputs->values[0] << "Values: ";
-                    for (int l = 1; l < temp.outputs->values[0]; l++) {
-                        cout << temp.outputs->values[l] << ", ";
-                    }
-                    cout << endl;
-                }
-            }
+            PrintSPBox(temp);
 
         } else if (temp.type == 2) {
+            PrintXOR(temp);
 
         } else if (temp.type == 3) {
+            PrintConnection(temp);
 
         } else if (temp.type == 4) {
+            cout << "F Function: " << temp.ID << endl;
+            cout << "---------------------------------------------------------------------------------------" << endl;
+            PrintNodeList(temp.Next);
+            cout << "---------------------------------------------------------------------------------------" << endl;
 
         }
 
         cout << endl;
+    }
+}
+
+void PrintConnection(Node temp) {
+    cout << "Connection: " << temp.ID << endl;
+    cout << "Coordinates1: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
+    cout << "Coordinates2: (" << temp.XPos2 << ", " << temp.YPos2 << ")" << endl;
+    cout << "From ID: " << temp.from << ", To ID: " << temp.to << endl;
+}
+
+void PrintXOR(Node temp) {
+    cout << "XOR: " << temp.ID << endl;
+    cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
+    if (temp.NumInputs != (-1)) {
+        cout << temp.NumInputs << "Inputs: " << endl;
+        for (int i = 0; i < temp.NumInputs; i++) {
+            cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
+
+            cout << "\t\t" << temp.inputs->values[0] << "Values: ";
+            for (int l = 1; l < temp.inputs->values[0]; l++) {
+                cout << temp.inputs->values[l] << ", ";
+            }
+            cout << endl;
+        }
+    }
+}
+
+void PrintSPBox(Node temp) {
+    if (temp.type == 0) {
+        cout << "PBOX: " << temp.ID << endl;
+    } else if (temp.type == 1) {
+        cout << "SBOX: " << temp.ID << endl;
+    }
+    cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
+    if (temp.NumInputs != (-1)) {
+        cout << temp.NumInputs << "Inputs: " << endl;
+        for (int i = 0; i < temp.NumInputs; i++) {
+            cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
+        }
+    }
+
+    if (temp.NumOutputs != (-1)) {
+        cout << temp.NumOutputs << "Outputs: " << endl;
+        for (int i = 0; i < temp.NumOutputs; i++) {
+            cout << "\tOutput" << i+1 << " size: " << temp.outputs->InputSizes << ", Connection ID: " << temp.outputs->InputConID << endl;
+            cout << "\t\t" << temp.outputs->values[0] << "Values: ";
+            for (int l = 1; l < temp.outputs->values[0]; l++) {
+                cout << temp.outputs->values[l] << ", ";
+            }
+            cout << endl;
+        }
     }
 }
 /*
@@ -149,18 +183,4 @@ string DefaultLocation() {
     }
 
     return DefaultPath;
-}
-
-void PrintSBOX(int* variables, ifstream& ins, ofstream& outs) {
-    // Seek to SBOX position
-
-    // At certain positions insert the variables and skip the defaults
-}
-
-void PrintPBOX(int* variables, ifstream& ins, ofstream& outs) {
-
-}
-
-void PrintXOR(int* variables, ifstream& ins, ofstream& outs) {
-
 }
