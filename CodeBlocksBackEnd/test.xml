@@ -19,8 +19,12 @@
 		</outputs>
 	</pbox>
 	<sbox ID=7>
-		<X>240</X>
-		<Y>468</Y>
+		<X>
+            240
+		</X>
+		<Y>
+            468
+		</Y>
 		<inputs num=1>
 			<input connectorID=2 size=4>
 		</inputs>
@@ -37,21 +41,37 @@
             <input1 ConnectorID=1 size=8>
                 12345678
             </input1>
-            <input2 ConnectionID=2 size=8>
+            <input2 ConnectorID=2 size=8>
                 13578642
             </input2>
         </inputs>
-		<X>240</X>
-		<Y>468</Y>
+		<X>
+            240
+		</X>
+		<Y>
+            468
+		</Y>
 	</xor>
 
 	<connection ID=9>
-		<X1>240</X1>
-		<Y1>468</Y1>
-		<X2>240</X2>
-		<Y2>468</Y2>
-		<from>1<from>
-		<to>7<to>
+		<X1>
+            240
+        </X1>
+		<Y1>
+            468
+        </Y1>
+		<X2>
+            240
+		</X2>
+		<Y2>
+            468
+		</Y2>
+		<from>
+		    1
+        </from>
+		<to>
+		    7
+        </to>
 	</connection>
 
 	<f ID=1>
@@ -84,7 +104,7 @@
 			<inputs num=1>
 				<input size=48/>
 			</inputs>
-			<outputs num=8>
+			<outputs num=7>
 				<output connectorID=5 size=6>
 					1,2,3,4,5,6
 				</output>
@@ -110,13 +130,21 @@
 		</pbox>
 
 		<xor ID=5 size=48>
-			<X>240</X>
-			<Y>468</Y>
+			<X>
+                240
+            </X>
+			<Y>
+                468
+            </Y>
 		</xor>
 
 		<sbox ID=6>
-			<X>240</X>
-			<Y>468</Y>
+			<X>
+                240
+			</X>
+			<Y>
+                468
+			</Y>
 			<input  connectorID=4 size=6/>
 			<output  connectorID=12 size=4/>
 		</sbox>

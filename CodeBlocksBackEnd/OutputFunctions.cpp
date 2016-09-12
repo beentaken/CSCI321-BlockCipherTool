@@ -25,14 +25,13 @@ void PrintNodeList(vector<Node> Head) {
             PrintXOR(temp);
 
         } else if (temp.type == 3) {
-            PrintConnection(temp);
-
-        } else if (temp.type == 4) {
             cout << "F Function: " << temp.ID << endl;
             cout << "---------------------------------------------------------------------------------------" << endl;
             PrintNodeList(temp.Next);
             cout << "---------------------------------------------------------------------------------------" << endl;
 
+        } else if (temp.type == 4) {
+            PrintConnection(temp);
         }
 
         cout << endl;
@@ -52,13 +51,9 @@ void PrintXOR(Node temp) {
     if (temp.NumInputs != (-1)) {
         cout << temp.NumInputs << "Inputs: " << endl;
         for (int i = 0; i < temp.NumInputs; i++) {
-            cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
+            cout << "\tInput" << i+1 << " size: " << temp.inputs[i].InputSizes << ", Connection ID: " << temp.inputs[i].InputConID << endl;
 
-            cout << "\t\t" << temp.inputs->values[0] << "Values: ";
-            for (int l = 1; l < temp.inputs->values[0]; l++) {
-                cout << temp.inputs->values[l] << ", ";
-            }
-            cout << endl;
+            cout << "\t\tValue: " << temp.inputs[i].values[0] << endl;
         }
     }
 }
@@ -73,17 +68,20 @@ void PrintSPBox(Node temp) {
     if (temp.NumInputs != (-1)) {
         cout << temp.NumInputs << "Inputs: " << endl;
         for (int i = 0; i < temp.NumInputs; i++) {
-            cout << "\tInput" << i+1 << " size: " << temp.inputs->InputSizes << ", Connection ID: " << temp.inputs->InputConID << endl;
+            cout << "\tInput" << i+1 << " size: " << temp.inputs[i].InputSizes << ", Connection ID: " << temp.inputs[i].InputConID << endl;
         }
     }
 
     if (temp.NumOutputs != (-1)) {
         cout << temp.NumOutputs << "Outputs: " << endl;
         for (int i = 0; i < temp.NumOutputs; i++) {
-            cout << "\tOutput" << i+1 << " size: " << temp.outputs->InputSizes << ", Connection ID: " << temp.outputs->InputConID << endl;
-            cout << "\t\t" << temp.outputs->values[0] << "Values: ";
-            for (int l = 1; l < temp.outputs->values[0]; l++) {
-                cout << temp.outputs->values[l] << ", ";
+            cout << "\tOutput" << i+1 << " size: " << temp.outputs[i].InputSizes << ", Connection ID: " << temp.outputs[i].InputConID << endl;
+            cout << "\t\t" << temp.outputs[i].values[0] << "Values: ";
+            for (int l = 1; l < temp.outputs[i].values[0]+1; l++) {
+                cout << temp.outputs[i].values[l];
+                if (l != temp.outputs[i].values[0]) {
+                    cout << ", ";
+                }
             }
             cout << endl;
         }

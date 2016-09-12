@@ -30,6 +30,8 @@ bool OutputRound(vector<Node> Head) {
     string DefLocation = DefaultLocation();
     OutputMain(NodeTypes, Head);
     OutputGenerics(NodeTypes, Head);
+
+    return true;
 }
 
 void OutputMain(bool NodeTypes[], vector<Node> Head) {
