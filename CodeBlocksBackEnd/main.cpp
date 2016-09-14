@@ -10,6 +10,7 @@ int main(int argc, char** argv) {
     // Driver Program
     int choice;
     vector<Node> Head;
+    OutputRound OR;
 
     cout << "Welcome to the Crypto to C++ Program!" << endl;
     do {
@@ -29,7 +30,7 @@ int main(int argc, char** argv) {
                 if (Head.empty()) {
                     cout << "There are no crypto nodes to output!" << endl;
                 } else {
-                    OutputRound(Head);
+                    OR.OutputToFile(Head);
                 }
             }
 

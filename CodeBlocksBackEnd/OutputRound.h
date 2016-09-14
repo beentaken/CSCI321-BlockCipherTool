@@ -16,7 +16,18 @@
 
 using namespace std;
 
-bool OutputRound(vector<Node>);
-void OutputMain(bool[], vector<Node>);
-void OutputGenerics(bool[], vector<Node>);
-void createFile(string);
+class OutputRound {
+    public:
+        OutputRound();
+        ~OutputRound();
+        bool ReadSource(string);
+        bool ReadDest(string);
+        bool OutputToFile(vector<Node>);
+        void OutputMain(bool[], vector<Node>);
+        void OutputGenerics(bool[]);
+        void createFile(string);
+
+    private:
+        string SourceLocale;
+        string DestLocale;
+};
