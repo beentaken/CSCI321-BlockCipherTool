@@ -31,6 +31,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import blockciphertool.wrappers.SaveLoadTool;
+
 /**
  *
  * @author Aloe2020
@@ -66,11 +68,19 @@ public class MainLayout extends AnchorPane{
 
     @FXML
     private void initialize() {
+	//nicks code for save/load
+	
+	
+	
+	SaveLoadTool saveController = new SaveLoadTool();
+	saveController.saveAsXml("save.xml");
+	
+	
         //Add one icon that will be used for the drag-drop process
         //This is added as a child to the root AnchorPane so it can be 
         //visible on both sides of the split pane.
         mDragOverIcon = new DragIcon();
-
+	
         mDragOverIcon.setVisible(false);
         mDragOverIcon.setOpacity(0.65);
         getChildren().add(mDragOverIcon);  
