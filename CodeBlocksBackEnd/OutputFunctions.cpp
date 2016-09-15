@@ -145,6 +145,17 @@ void Print(Node* Head, string pathlocation) {
 }
 */
 
+string SourceLocale() {
+    // Gets the current working directory
+    char Current[1024];
+    for (int i = 0; i < 1024; i++) {
+        Current[i] = '\0';
+    }
+    GetFullPathName(Current, 1024, Current, 0);
+cout << Current << endl;
+    return string (Current);
+}
+
 string DefaultLocation() {
     // Gets the current working directory
     char Current[1024];

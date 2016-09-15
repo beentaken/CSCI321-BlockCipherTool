@@ -92,7 +92,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
     headerfile.open("GenericFunctions.h");
     codefile.open("GenericFunctions.h");
 
-    headfile << "#include <iostream>\nusing namespace std;\n";
+    headerfile << "#include <iostream>\nusing namespace std;\n";
 
     codefile << "#include <iostream>\n#include \"GenericFunctions.h\"\nusing namespace std;\nint main() {\n";
 

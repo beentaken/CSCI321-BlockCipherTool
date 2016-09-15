@@ -1,3 +1,6 @@
+#ifndef XMLPARSE
+#define XMLPARSE
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -49,3 +52,5 @@ Node ParseSPBox(ifstream&, string, int);    /**< This function parses in a P Box
 Node ParseXOR(ifstream&, string, int);      /**< This function parses in an xor block */
 Node ParseFFunc(ifstream&, string, int);    /**< This function parses in an F Function */
 Node ParseConn(ifstream&, string, int);     /**< This function parses in a connection */
+
+#endif // XMLPARSE

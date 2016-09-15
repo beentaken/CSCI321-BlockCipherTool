@@ -30,7 +30,19 @@ int main(int argc, char** argv) {
                 if (Head.empty()) {
                     cout << "There are no crypto nodes to output!" << endl;
                 } else {
-                    OR.OutputToFile(Head);
+                    string filelocation;
+                    cout << "Enter filelocation to store output: (Leave empty for default location)" << endl;
+                    getline(cin, filelocation);
+                    cin.ignore(5, '\n');
+cout << "S: " << SourceLocale() << endl;
+                    OR.ReadDest(SourceLocale());
+                    if (filelocation.empty()) {
+                        filelocation = DefaultLocation();
+                        cout << "Using default location: " << filelocation << endl;
+                    }
+                    OR.ReadSource(filelocation);
+
+                    //OR.OutputToFile(Head);
                 }
             }
 
