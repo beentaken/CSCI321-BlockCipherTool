@@ -207,10 +207,10 @@ public class DragNode extends AnchorPane{
                 getParent().setOnDragDropped(mContextDragDropped);
                 
                 
-                mDragOffset = new Point2D(event.getX(), event.getY());
-                System.out.println("x, y: " + event.getX() + ", " + event.getY());
+                mDragOffset = new Point2D(event.getX() + 10, event.getY() + 15);
+                //System.out.println("x, y: " + event.getX() + ", " + event.getY());
                 relocateToPoint(new Point2D(event.getSceneX(), event.getSceneY()));
-                System.out.println("x, y: " + event.getSceneX() + ", " + event.getSceneY());
+                //System.out.println("x, y: " + event.getSceneX() + ", " + event.getSceneY());
                 
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
@@ -243,19 +243,18 @@ public class DragNode extends AnchorPane{
                 mDragLink.setVisible(false);
                 
                 Point2D p = new Point2D(
-                        parent_pane.getBoundsInLocal().getMinX(),
-                        parent_pane.getBoundsInLocal().getMinY());
+                        getLayoutX() - 100,
+                        getLayoutY() + 17);
                 
                 
                 
                 mDragLink.setStart(p);
                 
                 
-                Point2D localCoords = getParent().localToParent(p);
-                System.out.println("x, y: " + localCoords.getX() + ", " + localCoords.getY());
-                System.out.println("x, y: " + p.getX() + ", " + p.getY());
-                System.out.println("x, y: " + getLayoutX() + ", " + getLayoutY());
-                System.out.println("x, y: " + getWidth()+ ", " + getHeight());
+                Point2D localCoords = getParent().localToParent(p);  
+                System.out.println("Parent coords x, " + localCoords.getX() + ", y: " + localCoords.getY());
+                System.out.println("Parent x, " + p.getX() + ", y: " + p.getY());
+                System.out.println("Layout x, " + (getLayoutX() - event.getX()) + ", y: " + (getLayoutY() - event.getY()));
                 
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();

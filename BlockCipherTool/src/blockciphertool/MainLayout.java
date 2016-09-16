@@ -252,6 +252,16 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         });
+        
+        main_window.setOnMouseClicked(new EventHandler <MouseEvent> (){
+            
+            @Override
+            public void handle (MouseEvent event) {
+                System.out.print(new Point2D(event.getX(), event.getY()));
+                event.consume();
+            }
+            
+        });
     }
     
     public void runConfirm() throws IOException {
@@ -264,5 +274,7 @@ public class MainLayout extends AnchorPane{
         stage.setScene(new Scene(root, 600, 400));
         stage.showAndWait();
     }
+    
+    
     
 }

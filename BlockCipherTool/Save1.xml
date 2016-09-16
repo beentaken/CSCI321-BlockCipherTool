@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cipher>
+    <pbox>
+        <inputs>
+            <input connectorID="1" size="32"/>
+            <input connectorID="2" size="64"/>
+        </inputs>
+        <outputs>
+            <output connectorID="1" size="32"/>
+        </outputs>
+    </pbox>
+    <pbox>
+        <inputs>
+            <input connectorID="1" size="32"/>
+            <input connectorID="2" size="64"/>
+        </inputs>
+        <outputs>
+            <output connectorID="2" size="64"/>
+        </outputs>
+    </pbox>
+</cipher>
