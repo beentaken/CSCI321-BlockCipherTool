@@ -232,7 +232,7 @@ public class MainLayout extends AnchorPane{
                         
                         Point2D cursorPoint = container.getValue("scene_coords");
                         
-                        node.relocateToPoint(new Point2D(cursorPoint.getX()- 32, cursorPoint.getY() - 32));
+                        node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
                     }
                 }
                 
@@ -261,7 +261,7 @@ public class MainLayout extends AnchorPane{
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setOpacity(1);
         stage.setTitle("Encrypt or Decrypt");
-        stage.setScene(new Scene(root, 450, 450));
+        stage.setScene(new Scene(root, 600, 400));
         stage.showAndWait();
     }
     

@@ -68,26 +68,26 @@
                                                 </ScrollPane>
                                              </children>
                                           </AnchorPane>
-                                          <AnchorPane maxWidth="230.0" minHeight="-Infinity" minWidth="-Infinity" prefWidth="230.0">
+                                          <AnchorPane maxWidth="230.0" minHeight="0.0" minWidth="-Infinity" prefWidth="230.0">
                                              <children>
-                                                <SplitPane dividerPositions="0.5" layoutY="-3.0" orientation="VERTICAL" prefHeight="677.0" prefWidth="233.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <SplitPane dividerPositions="0.5" layoutY="-3.0" minHeight="0.0" orientation="VERTICAL" prefHeight="677.0" prefWidth="233.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <items>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <AnchorPane minHeight="0.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                                                          <children>
-                                                            <ScrollPane prefHeight="305.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                                                            <ScrollPane minHeight="0.0" prefHeight="305.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                                <content>
-                                                                  <VBox fx:id="node_list" />
+                                                                  <VBox fx:id="node_list" minHeight="0.0" />
                                                                </content>
                                                             </ScrollPane>
                                                          </children>
                                                       </AnchorPane>
-                                                      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                      <AnchorPane minHeight="0.0" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0">
                                                          <children>
                                                             <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="305.0" prefWidth="198.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="14.0">
                                                                <content>
                                                                   <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="192.0">
                                                                      <children>
-                                                                        <Accordion prefHeight="303.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                        <Accordion minHeight="0.0" prefHeight="303.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                            <panes>
                                                                               <TitledPane prefHeight="203.0" text="Number of Rounds">
                                                                                  <content>
