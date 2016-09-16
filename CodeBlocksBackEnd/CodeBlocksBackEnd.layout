@@ -2,44 +2,29 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="OutputFunctions.cpp" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5109" topLine="147" />
-		</Cursor>
-	</File>
-	<File name="XMLParser.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5669" topLine="121" />
-		</Cursor>
-	</File>
 	<File name="GenericFunctions.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4260" topLine="0" />
+			<Cursor1 position="3336" topLine="103" />
 		</Cursor>
 	</File>
-	<File name="OutputFunctions.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="OutputFunctions.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="310" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="XMLParser.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2062" topLine="33" />
+			<Cursor1 position="5256" topLine="147" />
 		</Cursor>
 	</File>
 	<File name="GenericFunctions.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="467" topLine="0" />
+			<Cursor1 position="435" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="OutputRound.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="XMLParser.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2154" topLine="89" />
+			<Cursor1 position="5669" topLine="133" />
 		</Cursor>
 	</File>
-	<File name="OutputRound.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="main.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="509" topLine="2" />
+			<Cursor1 position="1371" topLine="28" />
 		</Cursor>
 	</File>
 	<File name="test.xml" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -47,9 +32,24 @@
 			<Cursor1 position="1437" topLine="130" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="OutputRound.cpp" open="1" top="1" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1520" topLine="28" />
+			<Cursor1 position="1182" topLine="52" />
+		</Cursor>
+	</File>
+	<File name="OutputFunctions.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="181" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="OutputRound.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="379" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="XMLParser.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2062" topLine="33" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

@@ -151,8 +151,15 @@ string SourceLocale() {
     for (int i = 0; i < 1024; i++) {
         Current[i] = '\0';
     }
-    GetFullPathName(Current, 1024, Current, 0);
-cout << Current << endl;
+    GetFullPathName("GenericFunctions.cpp", 1024, Current, 0);
+
+    int counter = 1023;
+    while (Current[counter] != '\\') {
+        Current[counter] = '\0';
+        counter--;
+    }
+    Current[counter] = '\0';
+
     return string (Current);
 }
 

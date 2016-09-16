@@ -32,9 +32,9 @@ int main(int argc, char** argv) {
                 } else {
                     string filelocation;
                     cout << "Enter filelocation to store output: (Leave empty for default location)" << endl;
-                    getline(cin, filelocation);
                     cin.ignore(5, '\n');
-cout << "S: " << SourceLocale() << endl;
+                    getline(cin, filelocation, '\n');
+
                     OR.ReadDest(SourceLocale());
                     if (filelocation.empty()) {
                         filelocation = DefaultLocation();

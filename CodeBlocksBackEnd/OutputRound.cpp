@@ -56,8 +56,10 @@ bool OutputRound::OutputToFile(vector<Node> Head) {
 
 void OutputRound::OutputMain(bool NodeTypes[], vector<Node> Head) {
     ofstream myfile;
+    string fname = DestLocale;
+    fname.append("\\main.cpp");
 
-    myfile.open("main.cpp");
+    myfile.open(fname.c_str());
     myfile << "#include <iostream>\n#include \"GenericsFunctions.h\"\nusing namespace std;\n\nint main() {\n";
 
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
@@ -86,45 +88,109 @@ void OutputRound::OutputMain(bool NodeTypes[], vector<Node> Head) {
 }
 
 void OutputRound::OutputGenerics(bool NodeTypes[]) {
+    char c;
+    ifstream hfile;
+    ifstream cfile;
+
     ofstream headerfile;
     ofstream codefile;
 
-    headerfile.open("GenericFunctions.h");
-    codefile.open("GenericFunctions.h");
+    /**< Copy Destination and Source folder locations */
+    string Dhfile = DestLocale;
+    string Dcppfile = DestLocale;
 
-    headerfile << "#include <iostream>\nusing namespace std;\n";
+    string Shfile = SourceLocale;
+    string Scppfile = SourceLocale;
 
-    codefile << "#include <iostream>\n#include \"GenericFunctions.h\"\nusing namespace std;\nint main() {\n";
+    /**< Append filename */
+    Dhfile.append("\\GenericFunctions.h");
+    Dcppfile.append("\\GenericFunctions.cpp");
 
-    for (int i = 0; i < 5; i++) {
-        if (NodeTypes[i] == true) {
-            if (i == 0) {
-                headerfile << "\n\tPBOX();";
-            } else if (i == 1) {
-                headerfile << "\n\tSBOX();";
-            } else if (i == 2) {
-                headerfile << "\n\tXOR();";
-            } else if (i == 3) {
-                headerfile << "\n\tFFUNCTION();";
-            } else if (i == 4) {
-                headerfile << "\n\tCONNECTION();";
-            }
-        }
+    Shfile.append("\\GenericFunctions.h");
+    Scppfile.append("\\GenericFunctions.cpp");
+
+    headerfile.open(Dhfile.c_str());
+    codefile.open(Dcppfile.c_str());
+
+    hfile.open(Shfile.c_str());
+    cfile.open(Scppfile.c_str());
+
+    /**< Header file copy start */
+    for (int i = 0; i < 213; i++) {
+        hfile >> c;
+        headerfile << c;
     }
-}
 
-void OutputRound::createFile(string filename) {
-    // Gets the current working directory
-    const int cwdbuff = 1024;
-    char cwd[cwdbuff];
-    GetCurrentDirectory(cwdbuff, cwd);
+    /**< Cpp file copy start */
+    for (int i = 0; i < 241; i++) {
+        cfile >> c;
+        codefile << c;
+    }
 
-    cout << cwd << endl;
+    /**< Check Node present and outputs related function */
+     if (NodeTypes[2] == true) {
+        /**< Header file copy XOR*/
+        for (int i = 0; i < 61; i++) {
+            hfile >> c;
+            headerfile << c;
+        }
 
-    fstream myfile;
-    myfile.open(filename.c_str(), ios::out);
-    myfile << "#include <iostream>\\nusing namespace std;\\nint main() {\\n\\nreturn 0;\\n}";
-    myfile.close();
+        /**< Cpp file copy */
+        for (int i = 0; i < 933; i++) {
+            cfile >> c;
+            codefile << c;
+        }
+    } else {
+        /**< Skips the xor block */
+        hfile.seekg(61, ios::cur);
+        cfile.seekg(933, ios::cur);
+    }
 
+    if (NodeTypes[1] == true) {
+        /**< Header file copy SBOX*/
+        for (int i = 0; i < 78; i++) {
+            hfile >> c;
+            headerfile << c;
+        }
 
+        /**< Cpp file copy */
+        for (int i = 0; i < 1511; i++) {
+            cfile >> c;
+            codefile << c;
+        }
+    } else {
+        /**< Skips SBOX block */
+        hfile.seekg(78, ios::cur);
+        cfile.seekg(1511, ios::cur);
+    }
+
+    if (NodeTypes[0] == true) {
+        /**< Header file copy PBOX*/
+        for (int i = 0; i < 77; i++) {
+            hfile >> c;
+            headerfile << c;
+        }
+
+        /**< Cpp file copy */
+        for (int i = 0; i < 576; i++) {
+            cfile >> c;
+            codefile << c;
+        }
+    } else {
+        /**< Skip PBox */
+        hfile.seekg(77, ios::cur);
+        cfile.seekg(77, ios::cur);
+    }
+
+    /**< Header file copy end*/
+    while(!hfile.eof()) {
+        hfile >> c;
+        headerfile << c;
+    }
+
+    /**< Cpp file copy */
+    while (!cfile.eof()) {
+        cfile >> c;
+        codefile << c;
+    }
 }

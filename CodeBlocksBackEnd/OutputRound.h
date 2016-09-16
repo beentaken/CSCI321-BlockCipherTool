@@ -15,7 +15,6 @@ class OutputRound {
         bool OutputToFile(vector<Node>);
         void OutputMain(bool[], vector<Node>);
         void OutputGenerics(bool[]);
-        void createFile(string);
 
     private:
         string SourceLocale;
