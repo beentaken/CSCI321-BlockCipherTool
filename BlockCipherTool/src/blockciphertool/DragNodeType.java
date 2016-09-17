@@ -16,5 +16,6 @@ public enum DragNodeType {
     black,
     yellow,
     purple,
-    grey
+    grey,
+    Start
 }

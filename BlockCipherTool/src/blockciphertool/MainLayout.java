@@ -32,6 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import blockciphertool.wrappers.SaveLoadTool;
+import javafx.scene.Node;
 
 /**
  *
@@ -86,7 +87,7 @@ public class MainLayout extends AnchorPane{
         getChildren().add(mDragOverIcon);  
 
         //populate left pane with multiple colored icons for testing
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
 
             DragIcon icn = new DragIcon();
             
@@ -95,6 +96,7 @@ public class MainLayout extends AnchorPane{
             icn.setType(DragNodeType.values()[i]);
             node_list.getChildren().add(icn);
         }
+        
         
         buildDragHandlers();
     }
@@ -129,7 +131,7 @@ public class MainLayout extends AnchorPane{
         });
     }
     
-    private void addDragDetection(DragNode dragNode) {
+    /*private void addDragDetection(DragNode dragNode) {
         
         dragNode.setOnDragDetected(new EventHandler <MouseEvent> () {
             
@@ -157,7 +159,7 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         });
-    }
+    }*/
     
     private void buildDragHandlers() {
         mIconDragOverRoot = new EventHandler<DragEvent>() {
@@ -223,7 +225,7 @@ public class MainLayout extends AnchorPane{
                 DragContainer container = 
                         (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
                 
-                if (container != null) {
+                /*if (container != null) {
                     if (container.getValue("scene_coords") != null) {
                         DragNode node = new DragNode();
                         
@@ -233,6 +235,37 @@ public class MainLayout extends AnchorPane{
                         Point2D cursorPoint = container.getValue("scene_coords");
                         
                         node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                    }
+                }*/
+                
+                if (container != null) {
+                    if (container.getValue("scene_coords") != null) {
+                        switch (DragNodeType.valueOf(container.getValue("type"))) {
+                        
+                        case Start:
+                            StartNode node = new StartNode();
+
+                            node.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(node);
+
+                            Point2D cursorPoint = container.getValue("scene_coords");
+
+                            node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                        break;
+                        
+                        default:
+                            DragNode node1 = new DragNode();
+
+                            node1.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(node1);
+
+                            Point2D cursorPoint1 = container.getValue("scene_coords");
+
+                            node1.relocateToPoint(new Point2D(cursorPoint1.getX()- 50, cursorPoint1.getY() - 50));
+                            
+                        break;
+                        }
+                                
                     }
                 }
                 
@@ -246,7 +279,29 @@ public class MainLayout extends AnchorPane{
                 container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
                 
                 if (container != null) {
-                    System.out.println(container.getData());
+                    String sourceId = container.getValue("source");
+                    String targetId = container.getValue("target");
+                    
+                    if (sourceId != null && targetId != null) {
+                        NodeLink Link = new NodeLink();
+                        
+                        main_window.getChildren().add(0, Link);
+                        
+                        DragNode source = null;
+                        DragNode target = null;
+                        
+                        for (Node n: main_window.getChildren()) {
+                            if (n.getId() == null)
+                                continue;
+                            if (n.getId().equals(sourceId))
+                                source = (DragNode) n;
+                            if (n.getId().equals(targetId))
+                                target = (DragNode) n;
+                        }
+                        
+                        if (source != null && target != null)
+                            Link.bindEnds(source, target);
+                    }
                 }
 
                 event.consume();

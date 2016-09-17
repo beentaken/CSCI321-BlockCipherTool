@@ -102,6 +102,10 @@ public class DragIcon extends AnchorPane{
         case black:
         getStyleClass().add("node-black");
         break;
+        
+        case Start:
+        getStyleClass().add("node-start");
+        break;
 
         default:
         break;

@@ -72,3 +72,7 @@ and open the template in the editor.
 .node-purple {
     -fx-background-color: purple;
 }
+
+.node-start {
+	-fx-background-color: brown;
+}

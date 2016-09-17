@@ -6,6 +6,10 @@
 package blockciphertool;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.UUID;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -13,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -55,6 +60,8 @@ public class DragNode extends AnchorPane{
     private NodeLink mDragLink = null;
     private AnchorPane parent_pane = null;
     
+    private final List <String> mLinkIds = new ArrayList <String> ();
+    
     public DragNode() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -72,6 +79,8 @@ public class DragNode extends AnchorPane{
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        
+        setId(UUID.randomUUID().toString());
     }
     
     
@@ -103,6 +112,10 @@ public class DragNode extends AnchorPane{
         });
     }
     
+    public void registerLink(String linkId) {
+        mLinkIds.add(linkId);
+    }
+    
     public void relocateToPoint (Point2D p) {
         Point2D localCoords = getParent().sceneToLocal(p);
 
@@ -110,7 +123,8 @@ public class DragNode extends AnchorPane{
             (int) (localCoords.getX() - mDragOffset.getX()),
             (int) (localCoords.getY() - mDragOffset.getY())
         );
-        System.out.println("x, y: " + localCoords.getX() + ", " + localCoords.getY());
+        
+        //System.out.println("x, y: " + localCoords.getX() + ", " + localCoords.getY());
     }
     
     public DragNodeType getType() { return mType;}
@@ -150,6 +164,10 @@ public class DragNode extends AnchorPane{
 
         case black:
         getStyleClass().add("node-black");
+        break;
+        
+        case Start:
+        getStyleClass().add("node-start");
         break;
 
         default:
@@ -192,6 +210,19 @@ public class DragNode extends AnchorPane{
             public void handle(MouseEvent event) {
                 AnchorPane parent  = (AnchorPane) self.getParent();
                 parent.getChildren().remove(self);
+                
+                for (ListIterator <String> iterId = mLinkIds.listIterator(); iterId.hasNext();) {
+                    String id = iterId.next();
+                    
+                    for (ListIterator <Node> iterNode = parent.getChildren().listIterator(); iterNode.hasNext();) {
+                        Node node = iterNode.next();
+                        
+                        if (node.getId() == null)
+                            continue;
+                        if (node.getId().equals(id))
+                            iterNode.remove();
+                    }
+                }
             }
 
         });
@@ -259,7 +290,7 @@ public class DragNode extends AnchorPane{
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
                 
-                container.addData("source", getType().toString());
+                container.addData("source", getId());
                 content.put(DragContainer.AddLink, container);
                 
                 startDragAndDrop(TransferMode.ANY).setContent(content);
@@ -283,11 +314,11 @@ public class DragNode extends AnchorPane{
                 parent_pane.getChildren().remove(0);
                 
                 AnchorPane link_handle = (AnchorPane) event.getSource();
-                DragNode parent = (DragNode) link_handle.getParent().getParent().getParent();
+                //DragNode parent = (DragNode) link_handle.getParent().getParent().getParent();
                 
                 ClipboardContent content = new ClipboardContent();
                 
-                container.addData("target", parent.getType().toString());
+                container.addData("target", getId());
                 
                 content.put(DragContainer.AddLink, container);
                 
@@ -305,7 +336,7 @@ public class DragNode extends AnchorPane{
                 if(!mDragLink.isVisible())
                     mDragLink.setVisible(true);
                 
-                mDragLink.setEnd(new Point2D(event.getX(), event.getY()));
+                mDragLink.setEnd(new Point2D(event.getX() - 150, event.getY() - 33));
                 
                 event.consume();
             }
