@@ -7,25 +7,36 @@ package blockciphertool.wrappers;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-
-
 
 /**
  *
- * @author csit321lm01a
+ * @author Gigabyte
  */
-@XmlRootElement(name = "cipher")
-public class CipherWrapper {
- 
+public class CipherFunctionWrapper {
+    private String X;
+    private String Y;
     private List<pboxWrapper> pboxs;
     private List<sboxWrapper> sboxs;
-    private List<CipherFunctionWrapper> functions;
     private List<CipherXorWrapper> xors;
     private List<CipherConnectionWrapper> connections;
-
     
+    @XmlElement(name="X")
+    public String getX() {
+        return this.X;
+    }
+    
+    public void setX(String x) {
+	this.X = x;
+    }
+    
+    @XmlElement(name="Y")
+    public String getY() {
+        return this.Y;
+    }
+    
+    public void setY(String y) {
+	this.Y = y;
+    }
     
     @XmlElement( name = "pbox")
     public List<pboxWrapper> getPboxs() {
@@ -44,16 +55,6 @@ public class CipherWrapper {
         this.sboxs = sboxs;
     }
     
-    
-    @XmlElement( name = "function")
-    public List<CipherFunctionWrapper> getFunctions() {
-        return functions;
-    }
-    public void setFunctions(List<CipherFunctionWrapper> functions) {
-        this.functions = functions;
-    }
-    
-    
     @XmlElement( name = "xor")
     public List<CipherXorWrapper> getXors() {
         return xors;
@@ -62,17 +63,12 @@ public class CipherWrapper {
         this.xors = xors;
     }
     
-    
-    @XmlElement( name = "connection")
+    @XmlElement(name="connection")
     public List<CipherConnectionWrapper> getConnections() {
-        return connections;
-    }
-    public void setConnections(List<CipherConnectionWrapper> connections) {
-        this.connections = connections;
+        return this.connections;
     }
     
-    
- 
-    
-    
+    public void setConnections(List<CipherConnectionWrapper> Connections) {
+	this.connections = Connections;
+    }
 }

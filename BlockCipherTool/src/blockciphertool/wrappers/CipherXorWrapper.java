@@ -6,30 +6,36 @@
 package blockciphertool.wrappers;
 
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-
-import blockciphertool.wrappers.input;
-import blockciphertool.wrappers.output;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
  *
- * @author nick
+ * @author Gigabyte
  */
-public class pboxWrapper {
+public class CipherXorWrapper {
     
     private String id;
+    private String size;
+    private List<output> outputs;
+    private List<input> inputs;
     private String X;
     private String Y;
-    private List<input> inputs;
-    private List<output> outputs;
+        
+    
+    @XmlAttribute(name="size")
+    public String getSize() {
+        return this.size;
+    }
+    
+    public void setSize(String Size) {
+	this.size = Size;
+    }
     
     @XmlAttribute(name="ID")
     public String getId() {
-	return this.id;
+        return this.id;
     }
     
     public void setId(String Id) {
@@ -53,10 +59,8 @@ public class pboxWrapper {
     public void setY(String y) {
 	this.Y = y;
     }
-    
-    
-    
-    @XmlElementWrapper(name="inputs")
+
+        @XmlElementWrapper(name="inputs")
     @XmlElement(name="input")
     public List<input> getInputs() {
         return this.inputs;
@@ -77,4 +81,5 @@ public class pboxWrapper {
 	this.outputs = Outputs;
     }
     
+
 }

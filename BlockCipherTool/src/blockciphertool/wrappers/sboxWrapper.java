@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  *
  * @author nick
  */
-public class pboxWrapper {
+public class sboxWrapper {
     
     private String id;
     private String X;
@@ -36,7 +36,7 @@ public class pboxWrapper {
 	this.id = Id;
     }
     
-    @XmlElement(name="X")
+        @XmlElement(name="X")
     public String getX() {
         return this.X;
     }
@@ -53,8 +53,6 @@ public class pboxWrapper {
     public void setY(String y) {
 	this.Y = y;
     }
-    
-    
     
     @XmlElementWrapper(name="inputs")
     @XmlElement(name="input")
