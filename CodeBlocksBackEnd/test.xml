@@ -1,4 +1,14 @@
 <cipher>
+	<properties>
+		<startID>7<startID>
+		<endID>1<endID>
+
+		<numberOfRounds>4</numberOfRounds>
+		<blockSize>16</blockSize>
+		<keySize>16</keySize>
+
+	</properties>
+
 	<pbox ID=1>
 		<X>
 			240

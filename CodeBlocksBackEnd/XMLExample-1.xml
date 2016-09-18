@@ -1,0 +1,156 @@
+<cipher>
+
+	<properties>
+		<startId><startID>
+		<endId><endID>
+	
+		<numberOfRounds></numberOfRounds>
+		<blockSize></blockSize>
+		<keySize></keySize>
+	
+	</properties
+	
+	<pbox ID=1>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+		<inputs num=1>
+			<input  connectorID=8 size=64/>
+		</inputs>
+		<outputs num=2>
+			<output connectorID=1 size=32></output>
+			<output connectorID=2 size=32></output>
+		</outputs>	
+	</pbox>
+	<pbox ID=2>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+		<inputs num=2>
+			<input connectorID=6 size=32/>
+			<input connectorID=7 size=32/>
+		</inputs>
+		<outputs num=1>
+			<output connectorID=3 size=64></output>
+		</outputs>
+	</pbox>
+	
+	<function>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+		<pbox ID=3>
+			<X>
+				240
+			</X>
+			<Y>
+				468
+			</Y>
+			<inputs num=1>
+				<input  connectorID=5 size=32/>
+			</inputs>
+			<outputs num=1>
+				<output connectorID=4 size=48></output>
+			</outputs>
+		</pbox>
+		
+		<pbox ID=4>
+			<X>240</X>
+			<Y>468</Y>
+			<inputs num=1>
+				<input size=48/>
+			</inputs>
+			<outputs num=8>
+				<output connectorID=5 size=6></output>
+				<output connectorID=6 size=6></output>
+				<output connectorID=7 size=6></output>
+				<output connectorID=8 size=6></output>
+				<output connectorID=9 size=6></output>
+				<output connectorID=10 size=6></output>
+				<output connectorID=11 size=6></output>
+			</outputs>
+		</pbox>
+		
+		<xor ID=5 size=48>
+		
+			<X>240</X>
+			<Y>468</Y>
+		</xor>
+		
+		<sbox ID=6>
+			<X>240</X>
+			<Y>468</Y>
+			<input  connectorID=4 size=6/>
+			<output  connectorID=12 size=4/>
+			
+		</sbox>
+		
+	</function>
+	
+	<sbox ID=7>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+		<inputs num=1>
+			<input connectorID=2 size=4></input>
+		</inputs>
+	
+		<outputs num=1>
+			<output connectorID=13 size=4></output>
+		</outputs>
+	</sbox>
+
+	<xor ID=8 size=8>
+		<input port=1 ConnectorID=1>
+			1, 2, 3, 4, ,5 ,6, 7, 8
+		</input>
+		<input port=2 ConnectionID=2>
+			1, 3, 5, 7, 8, 6, 4, 2
+		</input>
+		<X>
+			240
+		</X>
+		<Y>
+			468
+		</Y>
+	</xor>
+	
+	<connection ID=9>
+		<from>
+			<connecitonPort>
+				1
+			</connectionPort>
+			<connectionBox>
+				8
+			<connectionBox>
+			<fromId>
+				1
+			<fromId>
+		</from>
+		<to>
+			<ConnecitonPort>
+				8
+			</connectionPort>
+			<connectionBox>
+				8
+			<connectionBox>
+			<toId>
+				7
+			<toId>
+		</to>
+	</connection>
+
+	
+</cipher>

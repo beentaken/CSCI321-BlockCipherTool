@@ -12,9 +12,11 @@ class OutputRound {
         ~OutputRound();
         bool ReadSource(string);
         bool ReadDest(string);
-        bool OutputToFile(vector<Node>);
-        void OutputMain(bool[], vector<Node>);
+        bool OutputToFile(vector<Node>, Properties);
+        void OutputMain(vector<Node>, Properties);
         void OutputGenerics(bool[]);
+        void AppendConversions();
+        void AppendFunctionF(vector<Node>, ofstream&);
 
     private:
         string SourceLocale;

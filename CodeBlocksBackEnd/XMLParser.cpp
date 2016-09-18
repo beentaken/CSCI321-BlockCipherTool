@@ -18,7 +18,7 @@ using namespace std;    /**< Namespace standard */
  * \return
  * Returns all the data gathered in a vector
  */
-vector<Node> ReadXML(string filename) {
+vector<Node> ReadXML(string filename, Properties& Props) {
     vector<Node> result;
 
     /**< File input stream for the xml */
@@ -66,6 +66,9 @@ vector<Node> ReadXML(string filename) {
                         /**< Parses a connection is the connection tag is found */
                         temp = ParseConn(XMLfile, line, 4);
                         result.push_back(temp);
+                    } else if (line.find("<properties") != string::npos) {
+                        /**< Parses a properties block if the properties tag is found */
+                        Props = ParseProps(XMLfile, line);
                     }
                 }
             }
@@ -76,6 +79,30 @@ vector<Node> ReadXML(string filename) {
     }
 
     return result;
+}
+
+Properties ParseProps(ifstream& XMLfile, string line) {
+    Properties Props;
+
+    while (line.compare("</properties>") != 0) {
+        getline(XMLfile, line);
+        line.erase(remove(line.begin(), line.end(), ' '), line.end());
+        line.erase(remove(line.begin(), line.end(), '\t'), line.end());
+
+        if (line.find("startID") != string::npos) {
+            Props.StartID = StringToNumber(line);
+        } else if (line.find("endID") != string::npos) {
+            Props.EndID = StringToNumber(line);
+        } else if (line.find("numberOfRounds") != string::npos) {
+            Props.NumRounds = StringToNumber(line);
+        } else if (line.find("blockSize") != string::npos) {
+            Props.BlockSize = StringToNumber(line);
+        } else if (line.find("keySize") != string::npos) {
+            Props.KeySize = StringToNumber(line);
+        }
+    }
+
+    return Props;
 }
 
 /** \brief

@@ -9,6 +9,7 @@ using namespace std;
 int main(int argc, char** argv) {
     // Driver Program
     int choice;
+    Properties Props;
     vector<Node> Head;
     OutputRound OR;
 
@@ -23,7 +24,7 @@ int main(int argc, char** argv) {
 
         if (choice <= 3 && choice >= 0) {
             if (choice == 1) {
-                Head = ReadXML("test.xml");
+                Head = ReadXML("test.xml", Props);
             }
 
             if (choice == 2) {
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
                     }
                     OR.ReadSource(filelocation);
 
-                    //OR.OutputToFile(Head);
+                    OR.OutputToFile(Head,Props);
                 }
             }
 
@@ -50,6 +51,11 @@ int main(int argc, char** argv) {
                 if (Head.empty()) {
                     cout << "There are no crypto nodes to output!" << endl;
                 } else {
+                    cout << "Properties -----------------------------------<>" << endl;
+                    cout << "Start ID: " << Props.StartID << ", End ID: " << Props.EndID << endl;
+                    cout << "Number of Rounds: " << Props.NumRounds << endl;
+                    cout << "Block Size: " << Props.BlockSize << ", Key Size: " << Props.KeySize << endl;
+                    cout << "End of Properties ------------------------------<>" << endl;
                     PrintNodeList(Head);
                 }
             }
