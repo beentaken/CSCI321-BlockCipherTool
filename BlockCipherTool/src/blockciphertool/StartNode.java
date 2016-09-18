@@ -31,8 +31,7 @@ public class StartNode extends DragNode{
             throw new RuntimeException(exception);
         }
         
-        setId(UUID.randomUUID().toString());
+        //setId(UUID.randomUUID().toString());
     }
     
-    public void DragNode(){}
 }

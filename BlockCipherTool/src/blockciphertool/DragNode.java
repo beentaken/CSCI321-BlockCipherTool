@@ -62,24 +62,31 @@ public class DragNode extends AnchorPane{
     
     private final List <String> mLinkIds = new ArrayList <String> ();
     
+    private int xCoord;
+    private int yCoord;
+    
     public DragNode() {
-
-        FXMLLoader fxmlLoader = new FXMLLoader(
+        /**
+         * Copy whatever is commented in this constructor to the inherited node class, 
+         * except change the getResources to that node's FXML file location
+         */
+        /*
+        /*FXMLLoader fxmlLoader = new FXMLLoader(
             getClass().getResource("/resources/DragNode.fxml")
         );
 
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-        
+        */
         self = this;
-
+        /*
         try {
             fxmlLoader.load();
 
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        
+        */
         setId(UUID.randomUUID().toString());
     }
     
@@ -124,7 +131,19 @@ public class DragNode extends AnchorPane{
             (int) (localCoords.getY() - mDragOffset.getY())
         );
         
-        //System.out.println("x, y: " + localCoords.getX() + ", " + localCoords.getY());
+        setCoords(localCoords);
+        
+        System.out.println("x, y: " + (localCoords.getX() - mDragOffset.getX()) + ", " + (localCoords.getY() - mDragOffset.getY()));
+    }
+    
+    public void setCoords (Point2D p) {
+        xCoord = (int) (p.getX() - mDragOffset.getX());
+        yCoord = (int) (p.getY() - mDragOffset.getY());
+    }
+    
+    public Point2D getCoords() {
+        Point2D p = new Point2D(xCoord, yCoord);
+        return p;
     }
     
     public DragNodeType getType() { return mType;}
