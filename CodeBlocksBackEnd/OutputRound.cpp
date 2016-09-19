@@ -65,7 +65,7 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
     }
 
     OutputGenerics(NodeTypes);
-    //OutputMain(Head, Props);
+    OutputMain(Head, Props);
 
     return true;
 }
@@ -103,11 +103,11 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
             } else {
                 if (temp.NumInputs > temp.NumOutputs) {
                     /**< Prints PBox 2D table of inputs */
-                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = \n\t{";
+                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = {";
                     for (int i = 0; i < temp.NumInputs; i++) {
                         myfile << "result" << temp.inputs[i].InputConID;
                         if (i == (temp.NumInputs-1)) {
-                            myfile << "}\n";
+                            myfile << "};\n";
                         } else {
                             myfile << ",";
                         }
@@ -119,17 +119,10 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
                     myfile << "\tint * table" << temp.ID << " = PBoxSplit(result" << temp.inputs[0].InputConID;
                     myfile << ", " << temp.NumOutputs << ");\n";
                     for (int i = 0; i < temp.NumOutputs; i++) {
-                        myfile << "int result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "]";
+                        myfile << "\tint result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "];\n";
                     }
                 }
             }
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = CustomPBoxSearch(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
         } else if (temp.type == 1) {
             /**< Prints SBox 2D table */
             myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
@@ -157,10 +150,10 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
                 addedXOR = true;
             }
         } else if (temp.type == 3) {
-            AppendFunctionF(temp.Next, myfile);
+            AppendFunctionF(temp.Next, myfile, addedXOR);
         }
     }
-    myfile << "\nreturn 0;\n}";
+    myfile << "\n\treturn 0;\n}";
     myfile.close();
 }
 
@@ -206,39 +199,78 @@ void OutputRound::AppendConversions() {
     cppfile.close();
 }
 
-void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile) {
+void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR) {
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
 
         if (temp.type == 0) {
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = CustomPBoxSearch(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
+            if (temp.NumInputs == temp.NumOutputs) {
+                /**< Prints PBox 2D table */
+                myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+                for (int i = 0; i < temp.rows; i++) {
+                    myfile << "\t\t{";
+                    for (int l = 0; l < temp.cols; l++) {
+                        myfile << temp.table[i][l];
+                        if (l == (temp.cols-1)) {
+                            myfile << "},\n";
+                        } else {
+                            myfile << ",";
+                        }
+                    }
+                }
+
+                myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
+                myfile << ", result" << temp.inputs[0].InputConID << ");\n";
+            } else {
+                if (temp.NumInputs > temp.NumOutputs) {
+                    /**< Prints PBox 2D table of inputs */
+                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = {";
+                    for (int i = 0; i < temp.NumInputs; i++) {
+                        myfile << "result" << temp.inputs[i].InputConID;
+                        if (i == (temp.NumInputs-1)) {
+                            myfile << "};\n";
+                        } else {
+                            myfile << ",";
+                        }
+                    }
+
+                    myfile << "\tint result" << temp.outputs[0].InputConID << " = PBoxJoin(table" << temp.ID;
+                    myfile << ", " << temp.NumInputs << ");\n";
+                } else {
+                    myfile << "\tint * table" << temp.ID << " = PBoxSplit(result" << temp.inputs[0].InputConID;
+                    myfile << ", " << temp.NumOutputs << ");\n";
+                    for (int i = 0; i < temp.NumOutputs; i++) {
+                        myfile << "\tint result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "];\n";
+                    }
+                }
+            }
         } else if (temp.type == 1) {
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = CustomSBoxSearch(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
+            /**< Prints SBox 2D table */
+            myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+            for (int i = 0; i < temp.rows; i++) {
+                myfile << "\t\t{";
+                for (int l = 0; l < temp.cols; l++) {
+                    myfile << temp.table[i][l];
+                    if (l == (temp.cols-1)) {
+                        myfile << "},\n";
+                    } else {
+                        myfile << ",";
+                    }
+                }
+            }
+
+            myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomSBoxSearch(table" << temp.ID;
+            myfile << ", result" << temp.inputs[0].InputConID << ");\n";
         } else if (temp.type == 2) {
-            myfile << "\tstring result";
-            myfile << temp.ID;
-            myfile << " = CustomXOR(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = StringToNumber(temp";
-            myfile << temp.ID;
-            myfile << ");\n";
+            myfile << "\tstring temp" << temp.ID << " = CustomXOR(result" << temp.inputs[0].InputConID << ", result";
+            myfile << temp.inputs[1].InputConID << ");\n";
+            myfile << "\tint result" << temp.outputs[0].InputConID << " = StringToNumber(temp" << temp.ID << ");\n";
+            if (addedXOR == false) {
+                AppendConversions();
+                addedXOR = true;
+            }
+        } else if (temp.type == 3) {
+            AppendFunctionF(temp.Next, myfile, addedXOR);
         }
     }
 }
