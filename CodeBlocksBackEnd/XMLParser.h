@@ -33,14 +33,8 @@ struct InOuts {
  *
  */
 struct Node {
-    int type;           /**< 0 is PBox, 1 is SBox, 2 is XOR, 3 is F Function, 4 is Connection */
+    int type;           /**< 0 is PBox, 1 is SBox, 2 is XOR, 3 is F Function */
     int ID;             /**< The Node ID */
-
-    int XPos;           /**< The X Coordinate */
-    int YPos;           /**< The Y Coordinate */
-
-    int XPos2;          /**< The X2 Coordinate */
-    int YPos2;          /**< The Y2 Coordinate */
 
     int NumInputs;      /**< The Number of Inputs */
     InOuts * inputs;    /**< The Inputs for the Node */
@@ -51,9 +45,6 @@ struct Node {
     int ** table;       /**< Table for pbox and sbox when necessary */
     int rows;           /**< Table rows */
     int cols;           /**< Table columns */
-
-    int from;           /**< The From Node connection */
-    int to;             /**< The To Node connection */
 
     vector<Node> Next;  /**< This is for the F Function to specify all parts of the F Function */
 };

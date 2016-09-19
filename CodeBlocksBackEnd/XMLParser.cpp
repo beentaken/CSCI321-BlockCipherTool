@@ -32,6 +32,7 @@ vector<Node> ReadXML(string filename, Properties& Props) {
             /**< Gets the first line from the file */
             string line;
             getline(XMLfile, line);
+            getline(XMLfile, line);
             /**< Removes any spaces or tabbing */
             line.erase(remove(line.begin(), line.end(), ' '), line.end());
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
@@ -61,10 +62,6 @@ vector<Node> ReadXML(string filename, Properties& Props) {
                     } else if (line.find("<function") != string::npos) {
                         /**< Parses an F function if the f tag is found */
                         temp = ParseFFunc(XMLfile, line, 3);
-                        result.push_back(temp);
-                    } else if (line.find("<connection") != string::npos) {
-                        /**< Parses a connection is the connection tag is found */
-                        temp = ParseConn(XMLfile, line, 4);
                         result.push_back(temp);
                     } else if (line.find("<properties") != string::npos) {
                         /**< Parses a properties block if the properties tag is found */
@@ -132,7 +129,7 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
         N.outputs = NULL;
         N.NumInputs = (-1);
         N.NumOutputs = (-1);
-
+        N.rows = (-1);
 
         /**< Continues to cycle until the end of the F function */
         while(line.compare("</function>") != 0) {
@@ -157,78 +154,10 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
                 /**< Parses in an f function and adds it to the end of the linked list */
                 Node temp = ParseFFunc(XMLfile, line, 3);
                 N.Next.push_back(temp);
-            } else if (line.find("<connection") != string::npos) {
-                /**< Parses in a connection and adds it to the end of the linked list */
-                Node temp = ParseConn(XMLfile, line, 4);
-                N.Next.push_back(temp);
             }
         }
     }
     /**< Returns the node to be added to the vector */
-    return N;
-}
-
-/** \brief
- * ParseConn parses in a connection and stores it from the xmlfile into the node
- *
- * \param
- * XMLfile is the file input stream
- *
- * \param
- * line is the input from the xmlfile stream
- *
- * \param
- * type is the type of node being read in
- *
- * \return
- * Returns a node with the xml info
- *
- */
-Node ParseConn(ifstream& XMLfile, string line, int type) {
-    Node N;
-
-    /**< Checks for an ID for the connection */
-    if (line.find("ID") != string::npos) {
-        /**< Sets the defaults for the Node */
-        N.type = type;
-        N.ID = StringToNumber(line);
-        N.inputs = NULL;
-        N.outputs = NULL;
-        N.NumInputs = (-1);
-        N.NumOutputs = (-1);
-
-        /**< Continues to cycle until it has read all of the connection node properties */
-        while(line.compare("</connection>") != 0) {
-            /**< Gets a line of input from the file stream and removes the spacing */
-            getline(XMLfile, line);
-            line.erase(remove(line.begin(), line.end(), '\t'), line.end());
-            line.erase(remove(line.begin(), line.end(), ' '), line.end());
-
-            if (line.find("<X1>") != string::npos) {
-                /**< Stores the first X coordinate */
-                N.XPos = StringToNumber(line);
-            } else if (line.find("<X2>") != string::npos) {
-                /**< Stores the second X coordinate */
-                N.XPos2 = StringToNumber(line);
-            } else if (line.find("<Y1>") != string::npos) {
-                /**< Stores the first Y coordinate */
-                N.YPos = StringToNumber(line);
-            } else if (line.find("<Y2>") != string::npos) {
-                /**< Stores the second Y coordiante */
-                N.YPos2 = StringToNumber(line);
-            } else if (line.find("<from>") != string::npos) {
-                /**< Stores the from Node ID */
-                getline(XMLfile, line);
-                N.from = StringToNumber(line);
-            } else if (line.find("<to>") != string::npos) {
-                /**< Stores the to Node ID */
-                getline(XMLfile, line);
-                N.to = StringToNumber(line);
-            }
-        }
-    }
-
-    /**< Returns the Connection Node */
     return N;
 }
 
@@ -259,6 +188,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
         N.outputs = NULL;
         N.NumInputs = (-1);
         N.NumOutputs = (-1);
+        N.rows = (-1);
 
         /**< Continues to cycle until the end of the xor block */
         while (line.compare("</xor>") != 0) {
@@ -267,13 +197,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
             line.erase(remove(line.begin(), line.end(), ' '), line.end());
 
-            if (line.find("<X>") != string::npos) {
-                /**< Gets an X value and stores it*/
-                N.XPos = StringToNumber(line);
-            } else if (line.find("<Y>") != string::npos) {
-                /**< Gets an Y value and stores it*/
-                N.YPos = StringToNumber(line);
-            } else if (line.find("<inputs") != string::npos) {
+            if (line.find("<inputs") != string::npos) {
                 /**< Gets the inputs for the xor block */
                 N.NumInputs = StringToNumber(line);
 
@@ -365,6 +289,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
         N.outputs = NULL;
         N.NumInputs = (-1);
         N.NumOutputs = (-1);
+        N.rows = (-1);
 
         /**< Cycles until the end of the box */
         while ((line.compare("</pbox>") != 0) && (line.compare("</sbox>") != 0)) {
@@ -373,13 +298,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
             line.erase(remove(line.begin(), line.end(), ' '), line.end());
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
 
-            if (line.find("<X>") != string::npos) {
-                /**< Stores the X coordinate of the box */
-                N.XPos = StringToNumber(line);
-            } else if (line.find("<Y>") != string::npos) {
-                /**< Stores the Y coordinate of the box */
-                N.YPos = StringToNumber(line);
-            } else if (line.find("<inputs") != string::npos) {
+            if (line.find("<inputs") != string::npos) {
                 /**< Stores the number of inputs */
                 N.NumInputs = StringToNumber(line);
 
@@ -439,6 +358,32 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                 }
                 /**< Stores the node output */
                 N.outputs = outputs;
+            } else if (line.find("<table") != string::npos) {
+                int found = line.find_last_of("=");
+
+                string s = line.substr(found);
+                string s2 = line.substr(0, found);
+
+                N.rows = StringToNumber(s);
+                N.cols = StringToNumber(s2);
+
+                N.table = new int*[N.rows];
+                int counter = 0;
+                while (line.compare("</table>") != 0) {
+                    getline(XMLfile, line);
+                    line.erase(remove(line.begin(), line.end(), '\t'), line.end());
+                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
+
+                    if (line.find("<rows") != string::npos) {
+                        int * temp = StringToIntArr(line, ',');
+                        N.table[counter] = new int[N.cols];
+                        for (int i = 0; i < N.cols; i++) {
+                            N.table[counter][i] = temp[i+1];
+                        }
+                        delete [] temp;
+                        counter++;
+                    }
+                }
             }
         }
     }

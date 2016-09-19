@@ -81,7 +81,6 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     bool addedXOR = false;
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
-
         if (temp.type == 0) {
             if (temp.NumInputs == temp.NumOutputs) {
                 /**< Prints PBox 2D table */
@@ -97,6 +96,7 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
                         }
                     }
                 }
+                myfile << "\t};\n";
 
                 myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
                 myfile << ", result" << temp.inputs[0].InputConID << ");\n";
@@ -202,7 +202,6 @@ void OutputRound::AppendConversions() {
 void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR) {
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
-
         if (temp.type == 0) {
             if (temp.NumInputs == temp.NumOutputs) {
                 /**< Prints PBox 2D table */
@@ -212,12 +211,13 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
                     for (int l = 0; l < temp.cols; l++) {
                         myfile << temp.table[i][l];
                         if (l == (temp.cols-1)) {
-                            myfile << "},\n";
+                            myfile << "}\n";
                         } else {
                             myfile << ",";
                         }
                     }
                 }
+                myfile << "\t};\n";
 
                 myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
                 myfile << ", result" << temp.inputs[0].InputConID << ");\n";

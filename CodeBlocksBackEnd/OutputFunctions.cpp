@@ -30,24 +30,13 @@ void PrintNodeList(vector<Node> Head) {
             PrintNodeList(temp.Next);
             cout << "---------------------------------------------------------------------------------------" << endl;
 
-        } else if (temp.type == 4) {
-            PrintConnection(temp);
         }
-
         cout << endl;
     }
 }
 
-void PrintConnection(Node temp) {
-    cout << "Connection: " << temp.ID << endl;
-    cout << "Coordinates1: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
-    cout << "Coordinates2: (" << temp.XPos2 << ", " << temp.YPos2 << ")" << endl;
-    cout << "From ID: " << temp.from << ", To ID: " << temp.to << endl;
-}
-
 void PrintXOR(Node temp) {
     cout << "XOR: " << temp.ID << endl;
-    cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
     if (temp.NumInputs != (-1)) {
         cout << temp.NumInputs << "Inputs: " << endl;
         for (int i = 0; i < temp.NumInputs; i++) {
@@ -69,7 +58,6 @@ void PrintSPBox(Node temp) {
     } else if (temp.type == 1) {
         cout << "SBOX: " << temp.ID << endl;
     }
-    cout << "Coordinates: (" << temp.XPos << ", " << temp.YPos << ")" << endl;
     if (temp.NumInputs != (-1)) {
         cout << temp.NumInputs << "Inputs: " << endl;
         for (int i = 0; i < temp.NumInputs; i++) {
@@ -81,6 +69,18 @@ void PrintSPBox(Node temp) {
         cout << temp.NumOutputs << "Outputs: " << endl;
         for (int i = 0; i < temp.NumOutputs; i++) {
             cout << "\tOutput" << i+1 << " size: " << temp.outputs[i].InputSizes << ", Connection ID: " << temp.outputs[i].InputConID << endl;
+        }
+    }
+
+    if (temp.rows != (-1)) {
+        cout << "\tTable rows: " << temp.rows << " columns: " << temp.cols << endl;
+        cout << "\t\tValues: " << endl;
+        for (int i = 0; i < temp.rows; i++) {
+            cout << "\t\t\t";
+            for (int l = 0; l < temp.cols; l++) {
+                cout << temp.table[i][l] << ", ";
+            }
+            cout << endl;
         }
     }
 }

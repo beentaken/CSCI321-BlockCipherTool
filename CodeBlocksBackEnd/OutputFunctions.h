@@ -12,6 +12,5 @@ string DefaultLocation();
 void PrintNodeList(vector<Node>);
 void PrintSPBox(Node);
 void PrintXOR(Node);
-void PrintConnection(Node);
 
 #endif // OUTPUTFUNC

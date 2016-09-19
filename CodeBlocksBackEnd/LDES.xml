@@ -31,7 +31,8 @@
 			<inputs num=1>
 				<input  connectorID=1 size=2/>
 			</inputs>
-			<table row= col=>
+			<table row=2 col=4>
+				00,000,01,010,10,101,11,111
 			</table>
 			<outputs num=1>
 				<output connectorID=3 size=3></output>
@@ -60,6 +61,7 @@
 				<output connectorID=5 size=2></output>
 			</outputs>
 			<table row= col=>
+				
 			</table>
 		</pbox>
 		
