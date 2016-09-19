@@ -10,8 +10,8 @@
 #include <string>
 using namespace std;
 
-string CustomXOR(string, string);           // XOR Function
+string CustomXOR(int, int);           // XOR Function
 int CustomSBoxSearch(int**, int);       // Searches the Substitution Box
 int CustomPBoxSearch(int**, int);       // Searches the Permutation Box
 int* PBoxSplit(int, int);                    // Splits the input evenly
-int PBoxJoin(int*, int);                     // Joins the input sequentially
+int PBoxJoin(int[], int);                     // Joins the input sequentially

@@ -49,6 +49,8 @@ struct Node {
     InOuts * outputs;   /**< The Outputs for the Node */
 
     int ** table;       /**< Table for pbox and sbox when necessary */
+    int rows;           /**< Table rows */
+    int cols;           /**< Table columns */
 
     int from;           /**< The From Node connection */
     int to;             /**< The To Node connection */

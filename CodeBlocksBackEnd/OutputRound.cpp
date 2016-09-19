@@ -83,6 +83,46 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
         Node temp = *it;
 
         if (temp.type == 0) {
+            if (temp.NumInputs == temp.NumOutputs) {
+                /**< Prints PBox 2D table */
+                myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+                for (int i = 0; i < temp.rows; i++) {
+                    myfile << "\t\t{";
+                    for (int l = 0; l < temp.cols; l++) {
+                        myfile << temp.table[i][l];
+                        if (l == (temp.cols-1)) {
+                            myfile << "},\n";
+                        } else {
+                            myfile << ",";
+                        }
+                    }
+                }
+
+                myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
+                myfile << ", result" << temp.inputs[0].InputConID << ");\n";
+            } else {
+                if (temp.NumInputs > temp.NumOutputs) {
+                    /**< Prints PBox 2D table of inputs */
+                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = \n\t{";
+                    for (int i = 0; i < temp.NumInputs; i++) {
+                        myfile << "result" << temp.inputs[i].InputConID;
+                        if (i == (temp.NumInputs-1)) {
+                            myfile << "}\n";
+                        } else {
+                            myfile << ",";
+                        }
+                    }
+
+                    myfile << "\tint result" << temp.outputs[0].InputConID << " = PBoxJoin(table" << temp.ID;
+                    myfile << ", " << temp.NumInputs << ");\n";
+                } else {
+                    myfile << "\tint * table" << temp.ID << " = PBoxSplit(result" << temp.inputs[0].InputConID;
+                    myfile << ", " << temp.NumOutputs << ");\n";
+                    for (int i = 0; i < temp.NumOutputs; i++) {
+                        myfile << "int result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "]";
+                    }
+                }
+            }
             myfile << "\tint result";
             myfile << temp.ID;
             myfile << " = CustomPBoxSearch(result";
@@ -91,26 +131,26 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
             myfile << temp.inputs[1].InputConID;
             myfile << ");\n";
         } else if (temp.type == 1) {
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = CustomSBoxSearch(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
+            /**< Prints SBox 2D table */
+            myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+            for (int i = 0; i < temp.rows; i++) {
+                myfile << "\t\t{";
+                for (int l = 0; l < temp.cols; l++) {
+                    myfile << temp.table[i][l];
+                    if (l == (temp.cols-1)) {
+                        myfile << "},\n";
+                    } else {
+                        myfile << ",";
+                    }
+                }
+            }
+
+            myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomSBoxSearch(table" << temp.ID;
+            myfile << ", result" << temp.inputs[0].InputConID << ");\n";
         } else if (temp.type == 2) {
-            myfile << "\tstring temp";
-            myfile << temp.ID;
-            myfile << " = CustomXOR(result";
-            myfile << temp.inputs[0].InputConID;
-            myfile << ", result";
-            myfile << temp.inputs[1].InputConID;
-            myfile << ");\n";
-            myfile << "\tint result";
-            myfile << temp.ID;
-            myfile << " = StringToNumber(temp";
-            myfile << temp.ID;
-            myfile << ");\n";
+            myfile << "\tstring temp" << temp.ID << " = CustomXOR(result" << temp.inputs[0].InputConID << ", result";
+            myfile << temp.inputs[1].InputConID << ");\n";
+            myfile << "\tint result" << temp.outputs[0].InputConID << " = StringToNumber(temp" << temp.ID << ");\n";
 
             if (addedXOR == false) {
                 AppendConversions();

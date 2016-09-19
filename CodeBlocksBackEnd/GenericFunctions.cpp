@@ -13,13 +13,24 @@
 using namespace std;
 
 
-string CustomXOR(string A, string B) {
+string CustomXOR(int A, int B) {
     string Result("");
-    int length = A.length();
     stringstream ss;
+    ss << A;
+    string AStr = ss.str();
+    ss.str("");
+    ss << B;
+    string BStr = ss.str();
+    ss.str("");
+
+    int length = AStr.length();
+
+    if (AStr.length() != BStr.length()) {
+        return "-1";
+    }
 
     for (int i = 0; i < length; ++i) {
-        ss << (A[i] ^ B[i]);
+        ss << (AStr[i] ^ BStr[i]);
         Result = ss.str();
     }
 
