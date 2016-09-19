@@ -52,8 +52,13 @@ void PrintXOR(Node temp) {
         cout << temp.NumInputs << "Inputs: " << endl;
         for (int i = 0; i < temp.NumInputs; i++) {
             cout << "\tInput" << i+1 << " size: " << temp.inputs[i].InputSizes << ", Connection ID: " << temp.inputs[i].InputConID << endl;
+        }
+    }
 
-            cout << "\t\tValue: " << temp.inputs[i].values[0] << endl;
+    if (temp.NumOutputs != (-1)) {
+        cout << temp.NumOutputs << "Outputs: " << endl;
+        for (int i = 0; i < temp.NumOutputs; i++) {
+            cout << "\tOutput" << i+1 << " size: " << temp.outputs[i].InputSizes << ", Connection ID: " << temp.outputs[i].InputConID << endl;
         }
     }
 }
@@ -76,74 +81,9 @@ void PrintSPBox(Node temp) {
         cout << temp.NumOutputs << "Outputs: " << endl;
         for (int i = 0; i < temp.NumOutputs; i++) {
             cout << "\tOutput" << i+1 << " size: " << temp.outputs[i].InputSizes << ", Connection ID: " << temp.outputs[i].InputConID << endl;
-            cout << "\t\t" << temp.outputs[i].values[0] << "Values: ";
-            for (int l = 1; l < temp.outputs[i].values[0]+1; l++) {
-                cout << temp.outputs[i].values[l];
-                if (l != temp.outputs[i].values[0]) {
-                    cout << ", ";
-                }
-            }
-            cout << endl;
         }
     }
 }
-/*
-void Print(Node* Head, string pathlocation) {
-    Node* Temp = Head;
-
-    // Checks for the storage location of the c++ files
-    if (pathlocation.compare(NULL) == 0) {
-        pathlocation = DefaultLocation();
-    }
-
-    // Gets the current working directory
-    char Current[1024];
-    for (int i = 0; i < 1024; i++) {
-        Current[i] = '\0';
-    }
-    GetFullPathName(Current, 1024, Current, 0);
-    cout << Current << endl;
-
-    // Write functions to files
-    if (Temp != NULL) {
-        ifstream GenericsFile("GenericFunctions.cpp");
-        int func = Head->option;
-
-        // Open the Generic Functions File
-        if (GenericsFile.is_open()) {
-            // Create and open the c++ file containing all the custom created function code
-            ofstream OutputFile("MyProgram.cpp");
-            if (OutputFile.is_open()) {
-                while (Temp != NULL) {
-                    // XOR Function
-                    if (func == 1) {
-                        PrintXOR(Temp->variables, GenericsFile, OutputFile);
-                    }
-
-                    // S Box Function
-                    if (func == 2) {
-                        PrintSBOX(Temp->variables, GenericsFile, OutputFile);
-                    }
-
-                    // P Box Function
-                    if (func == 3) {
-                        PrintPBOX(Temp->variables, GenericsFile, OutputFile);
-                    }
-
-                    // Print out newline
-                    OutputFile << endl;
-
-                    // Goes to Next Node
-                    Temp = Temp->Next;
-                }
-                OutputFile.close();
-            }
-            GenericsFile.close();
-        }
-
-    }
-}
-*/
 
 string SourceLocale() {
     // Gets the current working directory

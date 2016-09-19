@@ -24,7 +24,10 @@ int main(int argc, char** argv) {
 
         if (choice <= 3 && choice >= 0) {
             if (choice == 1) {
-                Head = ReadXML("test.xml", Props);
+                string xmlfile;
+                cout << "Please insert the name of the XML file to be read in!" << endl;
+                cin >> xmlfile;
+                Head = ReadXML(xmlfile, Props);
             }
 
             if (choice == 2) {
@@ -36,12 +39,12 @@ int main(int argc, char** argv) {
                     cin.ignore(5, '\n');
                     getline(cin, filelocation, '\n');
 
-                    OR.ReadDest(SourceLocale());
+                    OR.ReadSource(SourceLocale());
                     if (filelocation.empty()) {
                         filelocation = DefaultLocation();
                         cout << "Using default location: " << filelocation << endl;
                     }
-                    OR.ReadSource(filelocation);
+                    OR.ReadDest(filelocation);
 
                     OR.OutputToFile(Head,Props);
                 }

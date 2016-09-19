@@ -64,7 +64,6 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
         }
     }
 
-    string DefLocation = DefaultLocation();
     OutputGenerics(NodeTypes);
     OutputMain(Head, Props);
 
@@ -80,46 +79,8 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     myfile << "#include <iostream>\n#include \"GenericsFunctions.h\"\nusing namespace std;\n\nint main() {\n";
 
     bool addedXOR = false;
-    int ID = Props.StartID;
-    int length = Head.size();
-    bool used[length];
-    for (int i = 0; i < length; i++) {
-        used[i] = false;
-    }
-
-    for (int i = 0 ; i < length; i++) {
-        Node temp;
-        int counter = 0;
-        bool found = false;
-
-        if (i != 0) {
-            /**< Searches for connection */
-            for (vector<Node>::iterator it = Head.begin(); it != Head.end() && found == false; it++) {
-                if (used[counter] == false) {
-                    temp = *it;
-                    if (temp.type == 4) {
-                        if (temp.from == ID) {
-                            ID = temp.to;
-                            used[counter] = true;
-                            found = true;
-                        }
-                    }
-                }
-                counter++;
-            }
-        }
-
-        /**< Searches for the next Node with the ID */
-        found = false;
-        for (vector<Node>::iterator it = Head.begin(); it != Head.end() && found == false; it++) {
-            if (used[counter] == false) {
-                temp = *it;
-                if (temp.ID == ID) {
-                    found = true;
-                    used[counter] = true;
-                }
-            }
-        }
+    for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
+        Node temp = *it;
 
         if (temp.type == 0) {
             myfile << "\tint result";
@@ -149,7 +110,7 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
             myfile << temp.ID;
             myfile << " = StringToNumber(temp";
             myfile << temp.ID;
-            myfile << ");";
+            myfile << ");\n";
 
             if (addedXOR == false) {
                 AppendConversions();
@@ -159,7 +120,6 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
             AppendFunctionF(temp.Next, myfile);
         }
     }
-
     myfile << "\nreturn 0;\n}";
     myfile.close();
 }
@@ -179,6 +139,7 @@ void OutputRound::AppendConversions() {
 
     /**< Headerfile */
     headerfile << "int StringToNumber(string);\n";
+    headerfile.close();
 
     /**< CPPfile */
     cppfile << "\nint StringToNumber(string input) {\tstringstream convert;\n";
@@ -202,6 +163,7 @@ void OutputRound::AppendConversions() {
     cppfile << "\t}\n";
     cppfile << "\treturn result;\n";
     cppfile << "}";
+    cppfile.close();
 }
 
 void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile) {
@@ -236,13 +198,13 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile) {
             myfile << temp.ID;
             myfile << " = StringToNumber(temp";
             myfile << temp.ID;
-            myfile << ");";
+            myfile << ");\n";
         }
     }
 }
 
 void OutputRound::OutputGenerics(bool NodeTypes[]) {
-    char c;
+    char * c = new char[2048];
     ifstream hfile;
     ifstream cfile;
 
@@ -268,32 +230,27 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
     hfile.open(Shfile.c_str());
     cfile.open(Scppfile.c_str());
-
+cout << Dhfile << endl;
+cout << Dcppfile << endl;
+cout << Shfile << endl;
+cout << Scppfile << endl;
     /**< Header file copy start */
-    for (int i = 0; i < 213; i++) {
-        hfile >> c;
-        headerfile << c;
-    }
+    hfile.get(c, 213);
+    headerfile << c;
 
     /**< Cpp file copy start */
-    for (int i = 0; i < 241; i++) {
-        cfile >> c;
-        codefile << c;
-    }
+    cfile.get(c, 241);
+    codefile << c;
 
     /**< Check Node present and outputs related function */
      if (NodeTypes[2] == true) {
         /**< Header file copy XOR*/
-        for (int i = 0; i < 61; i++) {
-            hfile >> c;
-            headerfile << c;
-        }
+        hfile.get(c, 61);
+        headerfile << c;
 
         /**< Cpp file copy */
-        for (int i = 0; i < 933; i++) {
-            cfile >> c;
-            codefile << c;
-        }
+        cfile.get(c, 933);
+        codefile << c;
     } else {
         /**< Skips the xor block */
         hfile.seekg(61, ios::cur);
@@ -302,16 +259,12 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
     if (NodeTypes[1] == true) {
         /**< Header file copy SBOX*/
-        for (int i = 0; i < 78; i++) {
-            hfile >> c;
-            headerfile << c;
-        }
+        hfile.get(c, 78);
+        headerfile << c;
 
         /**< Cpp file copy */
-        for (int i = 0; i < 1511; i++) {
-            cfile >> c;
-            codefile << c;
-        }
+        cfile.get(c, 1511);
+        codefile << c;
     } else {
         /**< Skips SBOX block */
         hfile.seekg(78, ios::cur);
@@ -320,31 +273,34 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
     if (NodeTypes[0] == true) {
         /**< Header file copy PBOX*/
-        for (int i = 0; i < 77; i++) {
-            hfile >> c;
-            headerfile << c;
-        }
+        hfile.get(c, 77);
+        headerfile << c;
 
         /**< Cpp file copy */
-        for (int i = 0; i < 576; i++) {
-            cfile >> c;
-            codefile << c;
-        }
+        cfile.get(c, 576);
+        codefile << c;
     } else {
         /**< Skip PBox */
         hfile.seekg(77, ios::cur);
-        cfile.seekg(77, ios::cur);
+        cfile.seekg(576, ios::cur);
     }
 
     /**< Header file copy end*/
     while(!hfile.eof()) {
-        hfile >> c;
+        hfile.get(c, 2048);
         headerfile << c;
     }
 
     /**< Cpp file copy */
     while (!cfile.eof()) {
-        cfile >> c;
+        cfile.get(c, 2048);
         codefile << c;
     }
+
+    hfile.close();
+    headerfile.close();
+    cfile.close();
+    codefile.close();
+
+    delete [] c;
 }

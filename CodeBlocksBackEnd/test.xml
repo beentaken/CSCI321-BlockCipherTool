@@ -139,26 +139,6 @@
 			</outputs>
 		</pbox>
 
-		<xor ID=5 size=48>
-			<X>
-                240
-            </X>
-			<Y>
-                468
-            </Y>
-		</xor>
-
-		<sbox ID=6>
-			<X>
-                240
-			</X>
-			<Y>
-                468
-			</Y>
-			<input  connectorID=4 size=6/>
-			<output  connectorID=12 size=4/>
-		</sbox>
-
 	</f>
 
 </cipher>
