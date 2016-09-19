@@ -76,7 +76,10 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     fname.append("\\main.cpp");
 
     myfile.open(fname.c_str());
-    myfile << "#include <iostream>\n#include \"GenericsFunctions.h\"\nusing namespace std;\n\nint main() {\n";
+    myfile << "#include <iostream>\n#include \"GenericFunctions.h\"\nusing namespace std;\n\nint main() {\n";
+    myfile << "\tint result0;\n";
+    myfile << "\tcout << \"Please enter the input in binary!\" << endl;\n";
+    myfile << "\tcin >> result0;\n\n";
 
     bool addedXOR = false;
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
@@ -211,7 +214,7 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
                     for (int l = 0; l < temp.cols; l++) {
                         myfile << temp.table[i][l];
                         if (l == (temp.cols-1)) {
-                            myfile << "}\n";
+                            myfile << "},\n";
                         } else {
                             myfile << ",";
                         }
