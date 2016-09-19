@@ -65,7 +65,7 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
     }
 
     OutputGenerics(NodeTypes);
-    OutputMain(Head, Props);
+    //OutputMain(Head, Props);
 
     return true;
 }
@@ -204,7 +204,7 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile) {
 }
 
 void OutputRound::OutputGenerics(bool NodeTypes[]) {
-    char * c = new char[2048];
+    string str;
     ifstream hfile;
     ifstream cfile;
 
@@ -230,77 +230,105 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
     hfile.open(Shfile.c_str());
     cfile.open(Scppfile.c_str());
-cout << Dhfile << endl;
-cout << Dcppfile << endl;
-cout << Shfile << endl;
-cout << Scppfile << endl;
+
     /**< Header file copy start */
-    hfile.get(c, 213);
-    headerfile << c;
+    for (int i = 0; i < 12; i++) {
+        getline(hfile, str);
+        headerfile << str;
+        headerfile << "\n";
+    }
 
     /**< Cpp file copy start */
-    cfile.get(c, 241);
-    codefile << c;
+    for (int i = 0; i < 15; i++) {
+        getline(cfile, str);
+        codefile << str;
+        codefile << "\n";
+    }
 
     /**< Check Node present and outputs related function */
      if (NodeTypes[2] == true) {
         /**< Header file copy XOR*/
-        hfile.get(c, 61);
-        headerfile << c;
+        getline(hfile, str);
+        headerfile << str;
+        headerfile << "\n";
 
         /**< Cpp file copy */
-        cfile.get(c, 933);
-        codefile << c;
+        for (int i = 0; i < 13; i++) {
+            getline(cfile, str);
+            codefile << str;
+            codefile << "\n";
+        }
     } else {
         /**< Skips the xor block */
-        hfile.seekg(61, ios::cur);
-        cfile.seekg(933, ios::cur);
+        getline(hfile, str);
+
+        for (int i = 0; i < 13; i++) {
+            getline(cfile, str);
+        }
     }
 
     if (NodeTypes[1] == true) {
         /**< Header file copy SBOX*/
-        hfile.get(c, 78);
-        headerfile << c;
+        getline(hfile, str);
+        headerfile << str;
+        headerfile << "\n";
 
         /**< Cpp file copy */
-        cfile.get(c, 1511);
-        codefile << c;
+        for (int i = 0; i < 28; i++) {
+            getline(cfile, str);
+            codefile << str;
+            codefile << "\n";
+        }
     } else {
         /**< Skips SBOX block */
-        hfile.seekg(78, ios::cur);
-        cfile.seekg(1511, ios::cur);
+        getline(hfile, str);
+
+        for (int i = 0; i < 28; i++) {
+            getline(cfile, str);
+        }
     }
 
     if (NodeTypes[0] == true) {
         /**< Header file copy PBOX*/
-        hfile.get(c, 77);
-        headerfile << c;
+        for (int i = 0; i < 3; i++) {
+            getline(hfile, str);
+            headerfile << str;
+            headerfile << "\n";
+        }
 
         /**< Cpp file copy */
-        cfile.get(c, 576);
-        codefile << c;
+        for (int i = 0; i < 45; i++) {
+            getline(cfile, str);
+            codefile << str;
+            codefile << "\n";
+        }
     } else {
         /**< Skip PBox */
-        hfile.seekg(77, ios::cur);
-        cfile.seekg(576, ios::cur);
+        for (int i = 0; i < 3; i++) {
+            getline(hfile, str);
+        }
+
+        for (int i = 0; i < 45; i++) {
+            getline(cfile, str);
+        }
     }
 
     /**< Header file copy end*/
     while(!hfile.eof()) {
-        hfile.get(c, 2048);
-        headerfile << c;
+        getline(hfile, str);
+        headerfile << str;
+        headerfile << "\n";
     }
 
     /**< Cpp file copy */
     while (!cfile.eof()) {
-        cfile.get(c, 2048);
-        codefile << c;
+        getline(cfile, str);
+        codefile << str;
+        codefile << "\n";
     }
 
     hfile.close();
     headerfile.close();
     cfile.close();
     codefile.close();
-
-    delete [] c;
 }
