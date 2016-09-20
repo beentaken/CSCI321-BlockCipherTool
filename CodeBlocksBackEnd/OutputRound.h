@@ -19,6 +19,7 @@ class OutputRound {
         void AppendFunctionF(vector<Node>, ofstream&, bool&);
         vector<Node> SortVec(vector<Node>);
         string KeyIDCheck(int);
+        void CheckNode(vector<Node>, bool[], vector<Node>&);
 
     private:
         string SourceLocale;

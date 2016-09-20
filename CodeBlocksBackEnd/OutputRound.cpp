@@ -107,20 +107,13 @@ vector<Node> OutputRound::SortVec(vector<Node> Head) {
     return result;
 }
 
-bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
-    vector<Node> H;
-    bool NodeTypes[3];  /**< Finds out which cipher node blocks have been used */
+void OutputRound::CheckNode(vector<Node> Head, bool NodeTypes[], vector<Node>& H) {
     bool check = false;
-
-    for (int i = 0; i < 3; i++) {
-        NodeTypes[i] = false;
-    }
 
     for (vector<Node>::iterator it = Head.begin(); it != Head.end() && check == false; it++) {
         if (NodeTypes[0] == true && NodeTypes[1] == true && NodeTypes[2] == true) {
             check = true;
         }
-
         Node Temp = *it;
 
         if (Temp.type == 0) {
@@ -133,12 +126,20 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
             NodeTypes[2] = true;
             H.push_back(Temp);
         } else if (Temp.type == 3) {
-            for (vector<Node>::iterator it2 = Temp.Next.begin(); it2 != Temp.Next.end(); it2++) {
-                Node T = *it2;
-                H.push_back(T);
-            }
+            CheckNode(Temp.Next, NodeTypes, H);
         }
     }
+}
+
+bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
+    vector<Node> H;
+    bool NodeTypes[3];  /**< Finds out which cipher node blocks have been used */
+
+    for (int i = 0; i < 3; i++) {
+        NodeTypes[i] = false;
+    }
+
+    CheckNode(Head, NodeTypes, H);
 
     H = SortVec(H);
 
