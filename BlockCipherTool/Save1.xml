@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cipher>
-    <pbox>
+    <connection ID="5">
+        <from>
+            <connectionBox>1</connectionBox>
+            <connectionPort>2</connectionPort>
+            <fromId>3</fromId>
+        </from>
+        <to>
+            <connectionBox>2</connectionBox>
+            <connectionPort>1</connectionPort>
+            <toId>2</toId>
+        </to>
+    </connection>
+    <function>
+        <connection ID="5">
+            <from>
+                <connectionBox>1</connectionBox>
+                <connectionPort>2</connectionPort>
+                <fromId>3</fromId>
+            </from>
+            <to>
+                <connectionBox>2</connectionBox>
+                <connectionPort>1</connectionPort>
+                <toId>2</toId>
+            </to>
+        </connection>
+        <pbox ID="1">
+            <inputs>
+                <input connectorID="1" size="32"/>
+                <input connectorID="2" size="64"/>
+            </inputs>
+            <outputs>
+                <output connectorID="1" size="32"/>
+            </outputs>
+            <X>100</X>
+            <Y>200</Y>
+        </pbox>
+        <sbox ID="1">
+            <inputs>
+                <input connectorID="1" size="32"/>
+                <input connectorID="2" size="64"/>
+            </inputs>
+            <outputs>
+                <output connectorID="1" size="32"/>
+            </outputs>
+            <X>100</X>
+            <Y>200</Y>
+        </sbox>
+        <X>500</X>
+        <xor ID="3" size="8">
+            <inputs>
+                <input connectorID="1" size="32"/>
+                <input connectorID="2" size="64"/>
+            </inputs>
+            <outputs>
+                <output connectorID="1" size="32"/>
+            </outputs>
+            <X>980</X>
+            <Y>150</Y>
+        </xor>
+        <Y>700</Y>
+    </function>
+    <pbox ID="1">
         <inputs>
             <input connectorID="1" size="32"/>
             <input connectorID="2" size="64"/>
@@ -8,14 +69,29 @@
         <outputs>
             <output connectorID="1" size="32"/>
         </outputs>
+        <X>100</X>
+        <Y>200</Y>
     </pbox>
-    <pbox>
+    <sbox ID="1">
         <inputs>
             <input connectorID="1" size="32"/>
             <input connectorID="2" size="64"/>
         </inputs>
         <outputs>
-            <output connectorID="2" size="64"/>
+            <output connectorID="1" size="32"/>
         </outputs>
-    </pbox>
+        <X>100</X>
+        <Y>200</Y>
+    </sbox>
+    <xor ID="3" size="8">
+        <inputs>
+            <input connectorID="1" size="32"/>
+            <input connectorID="2" size="64"/>
+        </inputs>
+        <outputs>
+            <output connectorID="1" size="32"/>
+        </outputs>
+        <X>980</X>
+        <Y>150</Y>
+    </xor>
 </cipher>

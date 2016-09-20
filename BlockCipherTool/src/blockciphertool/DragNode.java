@@ -157,12 +157,12 @@ public class DragNode extends AnchorPane{
 
         switch (mType) {
 
-        case blue:
-        getStyleClass().add("node-blue");
+        case pbox:
+        getStyleClass().add("node-pbox");
         break;
 
-        case red:
-        getStyleClass().add("node-red");            
+        case sbox:
+        getStyleClass().add("node-sbox");            
         break;
 
         case green:

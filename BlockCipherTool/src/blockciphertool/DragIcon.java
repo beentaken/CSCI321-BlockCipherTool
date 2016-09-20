@@ -21,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
  */
 public class DragIcon extends AnchorPane{
     @FXML AnchorPane drag_icon;
+    @FXML AnchorPane centre_box;
     
     private EventHandler mContextDragOver;
     private EventHandler mContextDragDropped;
@@ -75,12 +76,19 @@ public class DragIcon extends AnchorPane{
 
         switch (mType) {
 
-        case blue:
-        getStyleClass().add("node-blue");
+        case pbox:
+            //getStyleClass().add("node-pbox");
+            centre_box.getStyleClass().add("node-pboxIcon");
         break;
 
-        case red:
-        getStyleClass().add("node-red");            
+        case sbox:
+            //getStyleClass().add("node-sbox");
+            centre_box.getStyleClass().add("node-sboxIcon");
+        break;
+        
+        case Start:
+            //getStyleClass().add("node-start");
+            centre_box.getStyleClass().add("node-startIcon");
         break;
 
         case green:
@@ -103,10 +111,6 @@ public class DragIcon extends AnchorPane{
         getStyleClass().add("node-black");
         break;
         
-        case Start:
-        getStyleClass().add("node-start");
-        break;
-
         default:
         break;
         }

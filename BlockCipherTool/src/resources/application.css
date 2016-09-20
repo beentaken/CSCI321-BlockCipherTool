@@ -45,12 +45,17 @@ and open the template in the editor.
 	-fx-background-color:
 	rgba(255, 255, 255, 0.35);
 }
-.node-blue {
+
+.node-pbox {
     -fx-background-color: blue;
 }
 
-.node-red {
+.node-sbox {
     -fx-background-color: red;
+}
+
+.node-start {
+    -fx-background-color: brown;
 }
 
 .node-green {
@@ -73,6 +78,14 @@ and open the template in the editor.
     -fx-background-color: purple;
 }
 
-.node-start {
-	-fx-background-color: brown;
+.node-pboxIcon {
+    -fx-background-image: url("/resources/Icons/Pbox.png");
+}
+
+.node-sboxIcon {
+    -fx-background-image: url("/resources/Icons/Sbox.png");
+}
+
+.node-startIcon {
+    -fx-background-image: url("/resources/Icons/Start.png");
 }

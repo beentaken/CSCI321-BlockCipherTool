@@ -10,12 +10,12 @@ package blockciphertool;
  * @author Aloe2020
  */
 public enum DragNodeType {
-    red,
+    Start,
+    pbox,
+    sbox,
     green,
-    blue,
     black,
     yellow,
     purple,
     grey,
-    Start
 }
