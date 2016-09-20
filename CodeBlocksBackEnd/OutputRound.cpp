@@ -159,9 +159,14 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     myfile << "\tint result0;\n";
     myfile << "\tcout << \"Please enter the input in binary!\" << endl;\n";
     myfile << "\tcin >> result0;\n\n";
+    myfile << "\tcout << \"Please enter the key in binary!\" << endl;\n";
+    myfile << "\tcin >> result_1;\n\n";
+
 
     bool addedXOR = false;
-    AppendFunctionF(Head, myfile, addedXOR);
+    int lastID = AppendFunctionF(Head, myfile, addedXOR);
+
+    myfile << "\n\tcout << result" << KeyIDCheck(lastID) << " << endl;\n";
 
     myfile << "\n\treturn 0;\n}";
     myfile.close();
@@ -222,7 +227,9 @@ void OutputRound::AppendConversions() {
     cppfile.close();
 }
 
-void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR) {
+int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR) {
+    int ID;
+
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
         if (temp.type == 0) {
@@ -241,6 +248,7 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
                 myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomPBoxSearch(table" << KeyIDCheck(temp.ID);
                 myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ");\n";
 
+                ID = temp.outputs[0].InputConID;
                 myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
             } else {
                 if (temp.NumInputs > temp.NumOutputs) {
@@ -257,11 +265,14 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
 
                     myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxJoin(table" << KeyIDCheck(temp.ID);
                     myfile << ", " << temp.NumInputs << ");\n";
+
+                    ID = temp.outputs[0].InputConID;
                 } else {
                     myfile << "\tint * table" << KeyIDCheck(temp.ID) << " = PBoxSplit(result" << KeyIDCheck(temp.inputs[0].InputConID);
                     myfile << ", " << temp.NumOutputs << ");\n";
                     for (int i = 0; i < temp.NumOutputs; i++) {
                         myfile << "\tint result" << KeyIDCheck(temp.outputs[i].InputConID) << " = table" << KeyIDCheck(temp.ID) << "[" << i << "];\n";
+                        ID = temp.outputs[i].InputConID;
                     }
 
                     myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
@@ -282,20 +293,24 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
             myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomSBoxSearch(table" << KeyIDCheck(temp.ID);
             myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ");\n";
 
+            ID = temp.outputs[0].InputConID;
             myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
         } else if (temp.type == 2) {
             myfile << "\tstring temp" << KeyIDCheck(temp.ID) << " = CustomXOR(result" << KeyIDCheck(temp.inputs[0].InputConID) << ", result";
             myfile << KeyIDCheck(temp.inputs[1].InputConID) << ");\n";
             myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
 
+            ID = temp.outputs[0].InputConID;
             if (addedXOR == false) {
                 AppendConversions();
                 addedXOR = true;
             }
         } else if (temp.type == 3) {
-            AppendFunctionF(temp.Next, myfile, addedXOR);
+            ID = AppendFunctionF(temp.Next, myfile, addedXOR);
         }
     }
+
+    return ID;
 }
 
 void OutputRound::OutputGenerics(bool NodeTypes[]) {

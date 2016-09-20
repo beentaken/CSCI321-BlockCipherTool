@@ -55,15 +55,17 @@
 	<string>
 	<sstream>
 
-1474332329 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputround.h
+1474341559 c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputround.h
 	<string>
 	"OutputFunctions.h"
 
-1474326427 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputround.cpp
+1474341840 source:c:\users\chris\documents\github\csci321-blockciphertool\codeblocksbackend\outputround.cpp
 	"OutputRound.h"
 	<iostream>
 	<fstream>
 	<string>
+	<sstream>
+	<algorithm>
 	<stdlib.h>
 	<unistd.h>
 	<windows.h>
