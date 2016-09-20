@@ -343,13 +343,29 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                         /**< Stores an output node */
                         int p = line.find_last_of("=");
 
-                        /**< Splits the string and stores the connection id and size */
-                        string s = line.substr(p);
-                        string s2 = line.substr(0, p);
+                        if (line.find("</output>") == string::npos) {
+                            /**< Splits the string and stores the connection id and size */
+                            string s = line.substr(p);
+                            string s2 = line.substr(0, p);
 
-                        outputs[outputspos].InputConID = StringToNumber(s2);
-                        outputs[outputspos].InputSizes = StringToNumber(s);
-                        outputspos++;
+                            outputs[outputspos].InputConID = StringToNumber(s2);
+                            outputs[outputspos].InputSizes = StringToNumber(s);
+                            outputs[outputspos].positions = new int[1];
+                            outputs[outputspos].positions[0] = (-1);
+                            outputspos++;
+                        } else {
+                            /**< Splits the string and stores the connection id and size */
+                            string s = line.substr(p);
+                            string s2 = line.substr(0, p);
+                            p = s.find_first_of(">");
+                            string s3 = s.substr(p);
+                            s = s.substr(0, p);
+
+                            outputs[outputspos].InputConID = StringToNumber(s2);
+                            outputs[outputspos].InputSizes = StringToNumber(s);
+                            outputs[outputspos].positions = StringToIntArr(s3, ',');
+                            outputspos++;
+                        }
                     }
                 }
                 /**< Stores the node output */

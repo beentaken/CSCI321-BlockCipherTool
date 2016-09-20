@@ -3,15 +3,11 @@
     <function ID="8">
         <pbox ID="2">
             <inputs num="1">
-                <input connectorID="1" size="2"/>
+                <input connectorID="2" size="2"/>
             </inputs>
             <outputs num="1">
-                <output connectorID="3" size="3"/>
+                <output connectorID="3" size="3">0,1,0</output>
             </outputs>
-            <table cols="8" rows="2">
-                <rows> 000, 001, 010, 011, 100, 101, 110, 111 </rows>
-                <rows> 00, 00, 00, 01, 00, 00, 10, 11 </rows>
-            </table>
             <X>500</X>
             <Y>500</Y>
         </pbox>
@@ -20,12 +16,8 @@
                 <input connectorID="5" size="2"/>
             </inputs>
             <outputs num="1">
-                <output connectorID="6" size="2"/>
+                <output connectorID="6" size="2">1, 0</output>
             </outputs>
-            <table cols="4" rows="2">
-                <rows> 00, 01, 10, 11</rows>
-                <rows> 00, 10, 01, 11 </rows>
-            </table>
             <X>600</X>
             <Y>600</Y>
         </pbox>
@@ -36,10 +28,13 @@
             <outputs num="1">
                 <output connectorID="5" size="2"/>
             </outputs>
-            <table cols="8" rows="2">
-                <rows> 000, 001, 010, 011, 100, 101, 110, 111 </rows>
-                <rows> 00, 00, 00, 01, 00, 00, 10, 11 </rows>
-            </table>
+			<table cols="3" rows="5">
+				<rows> 2  , 0 , 1 </rows>	First Row is the Column Identifier | First Column is the Row Identifier
+				<rows> 00 , 00, 01</rows>	
+				<rows> 01 , 00, 00</rows>
+				<rows> 10 , 00, 10</rows>
+				<rows> 11 , 00, 11</rows>
+			</table>
             <X>700</X>
             <Y>700</Y>
         </sbox>
@@ -47,7 +42,7 @@
         <xor ID="3">
             <inputs num="2">
                 <input connectorID="3" size="3"/>
-                <input connectorID="k" size="3"/>
+                <input connectorID="k1" size="3"/>
             </inputs>
             <outputs num="1">
                 <output connectorID="4" size="3"/>
@@ -57,28 +52,34 @@
         </xor>
         <Y>900</Y>
     </function>
+	<pbox ID="10">
+		<inputs num="1">
+			<input connectorID="0" size="4"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="9" size="4">1, 2, 3, 0</output>
+		</outputs>
+	</pbox>
     <pbox ID="1">
         <inputs num="1">
-            <input connectorID="0" size="4"/>
+            <input connectorID="9" size="4"/>
         </inputs>
         <outputs num="2">
-            <output connectorID="1" size="2"/>
-            <output connectorID="2" size="2"/>
+            <output connectorID="1" size="2">0,1</output>
+            <output connectorID="2" size="2">2,3</output>
         </outputs>
         <X>240</X>
         <Y>468</Y>
     </pbox>
-    <pbox ID="7">
-        <inputs num="2">
-            <input connectorID="6" size="2"/>
-            <input connectorID="2" size="2"/>
-        </inputs>
-        <outputs num="1">
-            <output connectorID="7" size="4"/>
-        </outputs>
-        <X>240</X>
-        <Y>468</Y>
-    </pbox>
+	<pbox ID="9">
+		<inputs num="2">
+			<input connectorID="1" size="2"/>
+			<input connectorID="7" size="2"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="8" size="4"/>
+		</outputs>
+	</pbox>
     <properties>
         <blockSize>7</blockSize>
         <endID>7</endID>
@@ -86,15 +87,102 @@
         <numberOfRounds>9</numberOfRounds>
         <startID>1</startID>
     </properties>
-    <xor ID="3">
+    <xor ID="6">
         <inputs num="2">
-            <input connectorID="3" size="3"/>
-            <input connectorID="k" size="3"/>
+            <input connectorID="6" size="2"/>
+            <input connectorID="1" size="2"/>
         </inputs>
         <outputs num="1">
-            <output connectorID="4" size="3"/>
+            <output connectorID="7" size="2"/>
         </outputs>
         <X>300</X>
         <Y>300</Y>
     </xor>
+	<pbox ID="11">
+		<inputs num="1">
+			<input connectorID="8" size="4"/>
+		</inputs>
+		<outputs num="2">
+			<output connectorID="11" size="2">0, 1</output>
+			<output connectorID="12" size="2">2,3</output>
+		</outputs>
+	</pbox>
+	<function ID="12">
+		<pbox ID="13">
+			<inputs num="1">
+				<input connectorID="12" size="2"/>
+			</inputs>
+			<outputs num="1">
+				<output connectorID="13" size="3">0,1,0</output>
+			</outputs>
+		</pbox>
+		<xor ID="14">
+			<inputs num="2">
+				<input connectorID="13" size="3"/>
+				<input connectorID="k2" size="3"/>
+			</inputs>
+			<outputs num="1">
+				<output connectorID="14" size="3"/>
+			</outputs>
+		</xor>
+		<sbox ID="15">
+            <inputs num="1">
+                <input connectorID="14" size="3"/>
+            </inputs>
+            <outputs num="1">
+                <output connectorID="15" size="2"/>
+            </outputs>
+			<table cols="3" rows="5">
+				<rows> 2  , 0 , 1 </rows>	First Row is the Column Identifier | First Column is the Row Identifier
+				<rows> 00 , 00, 01</rows>	
+				<rows> 01 , 00, 00</rows>
+				<rows> 10 , 00, 10</rows>
+				<rows> 11 , 00, 11</rows>
+			</table>
+            <X>700</X>
+            <Y>700</Y>
+        </sbox>
+		<pbox ID="16">
+			<inputs num="1">
+				<input connectorID="15" size="2"/>
+			</inputs>
+			<outputs num="1">
+				<output connectorID="16" size="2">1,0</output>
+			</outputs>
+		</pbox>
+	</function>
+	<xor ID="18">
+		<inputs num="2">
+			<input connectorID="16" size="2"/>
+			<input connectorID="11" size="2"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="17" size="2"/>
+		</outputs>
+	</xor>
+	<pbox ID="17">
+		<inputs num="2">
+			<input connectorID="11" size="2"/>
+			<input connectorID="17" size="2"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="18" size="4">0,1,2,3</output>
+		</outputs>
+	</pbox>
+	<pbox ID="19">
+		<inputs num="1">
+			<input connectorID="18" size="4"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="19" size="4">2,3,0,1</output>
+		</outputs>
+	</pbox>
+	<pbox ID="20">
+		<inputs num="1">
+			<input connectorID="19" size="4"/>
+		</inputs>
+		<outputs num="1">
+			<output connectorID="20" size="4">3,0,1,2</output>
+		</outputs>
+	</pbox>	
 </cipher>

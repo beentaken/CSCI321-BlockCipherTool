@@ -69,6 +69,14 @@ void PrintSPBox(Node temp) {
         cout << temp.NumOutputs << "Outputs: " << endl;
         for (int i = 0; i < temp.NumOutputs; i++) {
             cout << "\tOutput" << i+1 << " size: " << temp.outputs[i].InputSizes << ", Connection ID: " << temp.outputs[i].InputConID << endl;
+
+            if (temp.outputs[i].positions[0] != (-1)) {
+                cout << "\t\tOutput Positions: ";
+                for (int l = 1; l < temp.outputs[i].positions[0]+1; l++) {
+                    cout << temp.outputs[i].positions[l] << ", ";
+                }
+                cout << endl;
+            }
         }
     }
 

@@ -25,6 +25,7 @@ struct Properties {
 struct InOuts {
     int InputConID;     /**< The Input/Output ConnectionID */
     int InputSizes;     /**< The Input/Output Sizes */
+    int * positions;    /**< The Output Positions */
 };
 
 /** \brief
@@ -42,7 +43,7 @@ struct Node {
     int NumOutputs;     /**< The Number of Outputs */
     InOuts * outputs;   /**< The Outputs for the Node */
 
-    int ** table;       /**< Table for pbox and sbox when necessary */
+    int ** table;       /**< Table for sbox when necessary */
     int rows;           /**< Table rows */
     int cols;           /**< Table columns */
 
