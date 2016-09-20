@@ -15,6 +15,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <algorithm>
 #include <stdlib.h>
 #include <unistd.h>
 #include <windows.h>
@@ -40,7 +42,73 @@ bool OutputRound::ReadDest(string input) {
     return true;
 }
 
+vector<Node> OutputRound::SortVec(vector<Node> Head) {
+    vector<Node> result;
+    vector<int> ConnIDs;    /**< connection IDs created */
+
+    ConnIDs.push_back(0);
+    ConnIDs.push_back(-1);
+    int length = Head.size();
+
+    /**< Cycles through all nodes */
+    for (int i = 0; i < length; i++) {
+        /**< Cycles through all nodes */
+        for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
+            /**< Gets Node */
+            Node temp = *it;
+
+            /**< Checks that input exists */
+            if (temp.NumInputs != (-1)) {
+                /**< Cycles through all connections and check that all input connections exist */
+                bool AllConnections = true;
+
+                for (int l = 0; l < temp.NumInputs; l++) {
+                    /**< Checks current connection exists */
+                    bool CurrentConnection = false;
+                    for (vector<int>::iterator it2 = ConnIDs.begin(); it2 != ConnIDs.end(); it2++) {
+                        int tmp = *it2;
+
+                        if (tmp == temp.inputs[l].InputConID) {
+                            /**< Current connection exists */
+                            CurrentConnection = true;
+                        }
+                    }
+
+                    if (CurrentConnection == false) {
+                        /**< One or more connections did not exist */
+                        AllConnections = false;
+                    }
+                }
+
+                /**< If all input connections exist */
+                if (AllConnections == true) {
+                    /**< Add the node and the output connection IDs if they dont exist*/
+                    bool added = false;
+                    if (!result.empty()) {
+                        for (vector<Node>::iterator it3 = result.begin(); it3 != result.end(); it3++) {
+                            Node t = *it3;
+                            if (temp.ID == t.ID) {
+                                added = true;
+                            }
+                        }
+                    }
+
+                    if (added == false) {
+                        result.push_back(temp);
+                        for (int l = 0; l < temp.NumOutputs; l++) {
+                            ConnIDs.push_back(temp.outputs[l].InputConID);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
 bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
+    vector<Node> H;
     bool NodeTypes[3];  /**< Finds out which cipher node blocks have been used */
     bool check = false;
 
@@ -56,16 +124,26 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
         Node Temp = *it;
 
         if (Temp.type == 0) {
+            H.push_back(Temp);
             NodeTypes[0] = true;
         } else if (Temp.type == 1) {
             NodeTypes[1] = true;
+            H.push_back(Temp);
         } else if (Temp.type == 2) {
             NodeTypes[2] = true;
+            H.push_back(Temp);
+        } else if (Temp.type == 3) {
+            for (vector<Node>::iterator it2 = Temp.Next.begin(); it2 != Temp.Next.end(); it2++) {
+                Node T = *it2;
+                H.push_back(T);
+            }
         }
     }
 
+    H = SortVec(H);
+
     OutputGenerics(NodeTypes);
-    OutputMain(Head, Props);
+    OutputMain(H, Props);
 
     return true;
 }
@@ -82,82 +160,23 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     myfile << "\tcin >> result0;\n\n";
 
     bool addedXOR = false;
-    for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
-        Node temp = *it;
-        if (temp.type == 0) {
-            if (temp.NumInputs == temp.NumOutputs) {
-                /**< Prints PBox 2D table */
-                myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
-                for (int i = 0; i < temp.rows; i++) {
-                    myfile << "\t\t{";
-                    for (int l = 0; l < temp.cols; l++) {
-                        myfile << temp.table[i][l];
-                        if (l == (temp.cols-1)) {
-                            myfile << "},\n";
-                        } else {
-                            myfile << ",";
-                        }
-                    }
-                }
-                myfile << "\t};\n";
+    AppendFunctionF(Head, myfile, addedXOR);
 
-                myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
-                myfile << ", result" << temp.inputs[0].InputConID << ");\n";
-            } else {
-                if (temp.NumInputs > temp.NumOutputs) {
-                    /**< Prints PBox 2D table of inputs */
-                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = {";
-                    for (int i = 0; i < temp.NumInputs; i++) {
-                        myfile << "result" << temp.inputs[i].InputConID;
-                        if (i == (temp.NumInputs-1)) {
-                            myfile << "};\n";
-                        } else {
-                            myfile << ",";
-                        }
-                    }
-
-                    myfile << "\tint result" << temp.outputs[0].InputConID << " = PBoxJoin(table" << temp.ID;
-                    myfile << ", " << temp.NumInputs << ");\n";
-                } else {
-                    myfile << "\tint * table" << temp.ID << " = PBoxSplit(result" << temp.inputs[0].InputConID;
-                    myfile << ", " << temp.NumOutputs << ");\n";
-                    for (int i = 0; i < temp.NumOutputs; i++) {
-                        myfile << "\tint result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "];\n";
-                    }
-                }
-            }
-        } else if (temp.type == 1) {
-            /**< Prints SBox 2D table */
-            myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
-            for (int i = 0; i < temp.rows; i++) {
-                myfile << "\t\t{";
-                for (int l = 0; l < temp.cols; l++) {
-                    myfile << temp.table[i][l];
-                    if (l == (temp.cols-1)) {
-                        myfile << "},\n";
-                    } else {
-                        myfile << ",";
-                    }
-                }
-            }
-
-            myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomSBoxSearch(table" << temp.ID;
-            myfile << ", result" << temp.inputs[0].InputConID << ");\n";
-        } else if (temp.type == 2) {
-            myfile << "\tstring temp" << temp.ID << " = CustomXOR(result" << temp.inputs[0].InputConID << ", result";
-            myfile << temp.inputs[1].InputConID << ");\n";
-            myfile << "\tint result" << temp.outputs[0].InputConID << " = StringToNumber(temp" << temp.ID << ");\n";
-
-            if (addedXOR == false) {
-                AppendConversions();
-                addedXOR = true;
-            }
-        } else if (temp.type == 3) {
-            AppendFunctionF(temp.Next, myfile, addedXOR);
-        }
-    }
     myfile << "\n\treturn 0;\n}";
     myfile.close();
+}
+
+string OutputRound::KeyIDCheck(int ID) {
+    string result;
+    stringstream ss;
+    ss << ID;
+    result = ss.str();
+
+    if (ID < 0) {
+        replace(result.begin(), result.end(), '-', '_');
+    }
+
+    return result;
 }
 
 void OutputRound::AppendConversions() {
@@ -208,28 +227,26 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
         if (temp.type == 0) {
             if (temp.NumInputs == temp.NumOutputs) {
                 /**< Prints PBox 2D table */
-                myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+                myfile << "\tint ** table" << KeyIDCheck(temp.ID) << " = new int*[" << temp.rows << "];\n";
+                myfile << "\tfor(int i = 0; i < " << temp.rows << "; i++) {\n";
+                myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[i] = new int[" << temp.cols << "];\n";
+                myfile << "\t}\n";
                 for (int i = 0; i < temp.rows; i++) {
-                    myfile << "\t\t{";
                     for (int l = 0; l < temp.cols; l++) {
-                        myfile << temp.table[i][l];
-                        if (l == (temp.cols-1)) {
-                            myfile << "},\n";
-                        } else {
-                            myfile << ",";
-                        }
+                        myfile << "\ttable" << KeyIDCheck(temp.ID) << "["<< i << "][" << l << "] = " << temp.table[i][l] << ";\n";
                     }
                 }
-                myfile << "\t};\n";
 
-                myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomPBoxSearch(table" << temp.ID;
-                myfile << ", result" << temp.inputs[0].InputConID << ");\n";
+                myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomPBoxSearch(table" << KeyIDCheck(temp.ID);
+                myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ");\n";
+
+                myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
             } else {
                 if (temp.NumInputs > temp.NumOutputs) {
-                    /**< Prints PBox 2D table of inputs */
-                    myfile << "\tint table" << temp.ID << "[" << temp.NumInputs << "] = {";
+                    /**< Prints PBox 1D table of inputs */
+                    myfile << "\tint table" << KeyIDCheck(temp.ID) << "[" << temp.NumInputs << "] = {";
                     for (int i = 0; i < temp.NumInputs; i++) {
-                        myfile << "result" << temp.inputs[i].InputConID;
+                        myfile << "result" << KeyIDCheck(temp.inputs[i].InputConID);
                         if (i == (temp.NumInputs-1)) {
                             myfile << "};\n";
                         } else {
@@ -237,37 +254,39 @@ void OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& add
                         }
                     }
 
-                    myfile << "\tint result" << temp.outputs[0].InputConID << " = PBoxJoin(table" << temp.ID;
+                    myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxJoin(table" << KeyIDCheck(temp.ID);
                     myfile << ", " << temp.NumInputs << ");\n";
                 } else {
-                    myfile << "\tint * table" << temp.ID << " = PBoxSplit(result" << temp.inputs[0].InputConID;
+                    myfile << "\tint * table" << KeyIDCheck(temp.ID) << " = PBoxSplit(result" << KeyIDCheck(temp.inputs[0].InputConID);
                     myfile << ", " << temp.NumOutputs << ");\n";
                     for (int i = 0; i < temp.NumOutputs; i++) {
-                        myfile << "\tint result" << temp.outputs[i].InputConID << " = table" << temp.ID << "[" << i << "];\n";
+                        myfile << "\tint result" << KeyIDCheck(temp.outputs[i].InputConID) << " = table" << KeyIDCheck(temp.ID) << "[" << i << "];\n";
                     }
+
+                    myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
                 }
             }
         } else if (temp.type == 1) {
             /**< Prints SBox 2D table */
-            myfile << "\tint table" << temp.ID << "[" << temp.rows << "][" << temp.cols << "] = \n\t{\n";
+            myfile << "\tint ** table" << KeyIDCheck(temp.ID) << " = new int*[" << temp.rows << "];\n";
+            myfile << "\tfor(int i = 0; i < " << temp.rows << "; i++) {\n";
+            myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[i] = new int[" << temp.cols << "];\n";
+            myfile << "\t}\n";
             for (int i = 0; i < temp.rows; i++) {
-                myfile << "\t\t{";
                 for (int l = 0; l < temp.cols; l++) {
-                    myfile << temp.table[i][l];
-                    if (l == (temp.cols-1)) {
-                        myfile << "},\n";
-                    } else {
-                        myfile << ",";
-                    }
+                    myfile << "\ttable" << KeyIDCheck(temp.ID) << "["<< i << "][" << l << "] = " << temp.table[i][l] << ";\n";
                 }
             }
 
-            myfile << "\tint result" << temp.outputs[0].InputConID << " = CustomSBoxSearch(table" << temp.ID;
-            myfile << ", result" << temp.inputs[0].InputConID << ");\n";
+            myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomSBoxSearch(table" << KeyIDCheck(temp.ID);
+            myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ");\n";
+
+            myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
         } else if (temp.type == 2) {
-            myfile << "\tstring temp" << temp.ID << " = CustomXOR(result" << temp.inputs[0].InputConID << ", result";
-            myfile << temp.inputs[1].InputConID << ");\n";
-            myfile << "\tint result" << temp.outputs[0].InputConID << " = StringToNumber(temp" << temp.ID << ");\n";
+            myfile << "\tstring temp" << KeyIDCheck(temp.ID) << " = CustomXOR(result" << KeyIDCheck(temp.inputs[0].InputConID) << ", result";
+            myfile << KeyIDCheck(temp.inputs[1].InputConID) << ");\n";
+            myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
+
             if (addedXOR == false) {
                 AppendConversions();
                 addedXOR = true;

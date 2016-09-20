@@ -17,6 +17,8 @@ class OutputRound {
         void OutputGenerics(bool[]);
         void AppendConversions();
         void AppendFunctionF(vector<Node>, ofstream&, bool&);
+        vector<Node> SortVec(vector<Node>);
+        string KeyIDCheck(int);
 
     private:
         string SourceLocale;

@@ -246,7 +246,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
                         string s2 = line.substr(0, p);
 
                         /**< Stores the Connection ID the size and the values */
-                        if (s2.find("K") != string::npos) {
+                        if (s2.find("k") != string::npos) {
                             outputs[outscounter].InputConID = (-1);
                         } else {
                             outputs[outscounter].InputConID = StringToNumber(s2);
@@ -349,10 +349,6 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
 
                         outputs[outputspos].InputConID = StringToNumber(s2);
                         outputs[outputspos].InputSizes = StringToNumber(s);
-                    }
-
-                    if (line.find("</output>") != string::npos) {
-                        /**< Increments the output */
                         outputspos++;
                     }
                 }
