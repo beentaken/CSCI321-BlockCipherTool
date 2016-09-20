@@ -5,12 +5,32 @@
  * Created on 23 July 2016, 10:29 AM
  */
 
-#include "GenericFunctions.h"
-#include <iostream>
-#include <limits>
-#include <string>
-#include <sstream>
-using namespace std;
+#include "GenericFunctions.h"       /**< Includes Generic Functions headers */
+#include <iostream>                 /**< Includes iostream library */
+#include <string>                   /**< Includes the string library */
+#include <sstream>                  /**< Includes the string stream library */
+using namespace std;                /**< Uses standard namespace */
+
+/** \brief
+ * CustomXOR takes in two inputs, makes them the same size and the XORs them together.
+ * It uses strings to xor them together
+ *
+ * \param
+ * A is input one
+ *
+ * \param
+ * B is input two
+ *
+ * \param
+ * ASize is input ones size
+ *
+ * \param
+ * BSize is input twos size
+ *
+ * \return
+ * Returns the string that has the result of A XOR B
+ *
+ */
 
 string CustomXOR(int A, int B, int ASize, int BSize) {
     /**< Turn the ints into strings */
@@ -43,6 +63,26 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
     /**< Returns the result */
     return Result;
 }
+
+/** \brief
+ * CustomSBoxSearch takes in the SBOX table, the input and the table rows and columns
+ *
+ * \param
+ * Sbox is the table that holds all the values and look ups
+ *
+ * \param
+ * input is the input used to look up the table
+ *
+ * \param
+ * rows is the number of table rows
+ *
+ * \param
+ * cols is the number of table columns
+ *
+ * \return
+ * Returns an int with the value at the table position where the row value and column value meet
+ *
+ */
 
 int CustomSBoxSearch(int** Sbox, int input, int rows, int cols) {
     /**< Extract first digit and last digit from the input */
@@ -79,7 +119,27 @@ int CustomSBoxSearch(int** Sbox, int input, int rows, int cols) {
     return Sbox[rowpos][colpos];
 }
 
-int PBoxOneToOne(int* tablepos, int input, int iosize) {
+/** \brief
+ * PBoxOneToOne switches the bits of a PBox with one input and one output
+ *
+ * \param
+ * tablepos is the table that holds the positions of the new string relative to the input
+ *
+ * \param
+ * input is the value used to be permutated
+ *
+ * \param
+ * insize is the size of the input
+ *
+ * \param
+ * outsize is the size of the output
+ *
+ * \return
+ * Returns an int with the permutated input
+ *
+ */
+
+int PBoxOneToOne(int* tablepos, int input, int insize, int outsize) {
     int result;
     stringstream ss;
     string ins;
@@ -89,13 +149,13 @@ int PBoxOneToOne(int* tablepos, int input, int iosize) {
     ss >> ins;
 
     /**< Makes it the correct length */
-    while(ins.length() < iosize) {
+    while(ins.length() < insize) {
         ins.insert(ins.begin(), '0');
     }
 
     /**< Creates the output by appending the value at the position of the input to the result string  */
     ss.str("");
-    for(int i = 0; i < iosize; i++) {
+    for(int i = 0; i < outsize; i++) {
         ss << ins[tablepos[i]];
     }
 
@@ -105,6 +165,30 @@ int PBoxOneToOne(int* tablepos, int input, int iosize) {
     /**< Returns result */
     return result;
 }
+
+/** \brief
+ * PBoxMultiOuts takes in the input, number of outputs, inputsize, outputsize and table of swapped positions
+ * and creates multiple outputs with the permutated bits
+ *
+ * \param
+ * input is the input holding the original bits
+ *
+ * \param
+ * numofOutputs is the total number of outputs
+ *
+ * \param
+ * inputsize is the size of the input
+ *
+ * \param
+ * outputsize is the length of the output
+ *
+ * \param
+ * tablepos holds all the positions of the permutated outputs
+ *
+ * \return
+ * Returns an array holding the multiple outputs
+ *
+ */
 
 int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, int** tablepos) {
     /**< Creates multiple output array */
@@ -120,6 +204,7 @@ int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, i
         str.insert(str.begin(), '0');
     }
 
+    /**< Cycles through all outputs */
     for (int i = 0; i < numofOutputs; i++) {
         /**< Clear stringstream */
         ss.str("");
@@ -135,6 +220,29 @@ int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, i
     return result;
 }
 
+/** \brief
+ * PBoxSingleOut takes in multiple inputs, the number of inputs, the input size, the output size and the table of positions
+ * and permutates the inputs into one output
+ *
+ * \param
+ * inputs is the multiple inputs to be used
+ *
+ * \param
+ * numofInputs if the number of inputs to be used
+ *
+ * \param
+ * inputsize is the size of the input
+ *
+ * \param
+ * outputsize is the size of the output
+ *
+ * \param
+ * tablepos is the array of positions for the output int
+ *
+ * \return
+ * returns an integer that has been permutated with the bits from all the inputs
+ *
+ */
 int PBoxSingleOut(int* inputs, int numofInputs, int inputsize, int outputsize, int* tablepos) {
     stringstream ss;
     stringstream si;
@@ -151,7 +259,7 @@ int PBoxSingleOut(int* inputs, int numofInputs, int inputsize, int outputsize, i
         while (singleinput.length() < inputsize) {
             singleinput.insert(singleinput.begin(), '0');
         }
-        /**< Inserts into massive input stream and increases the size */
+        /**< Inserts into massive input stream */
         si << singleinput;
     }
 

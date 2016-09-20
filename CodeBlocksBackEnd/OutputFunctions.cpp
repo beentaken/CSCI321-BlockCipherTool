@@ -73,7 +73,10 @@ void PrintSPBox(Node temp) {
             if (temp.outputs[i].positions[0] != (-1)) {
                 cout << "\t\tOutput Positions: ";
                 for (int l = 1; l < temp.outputs[i].positions[0]+1; l++) {
-                    cout << temp.outputs[i].positions[l] << ", ";
+                    cout << temp.outputs[i].positions[l];
+                    if (temp.outputs[i].positions[0] != l) {
+                        cout  << ", ";
+                    }
                 }
                 cout << endl;
             }
@@ -86,7 +89,10 @@ void PrintSPBox(Node temp) {
         for (int i = 0; i < temp.rows; i++) {
             cout << "\t\t\t";
             for (int l = 0; l < temp.cols; l++) {
-                cout << temp.table[i][l] << ", ";
+                cout << temp.table[i][l];
+                if (l != (temp.cols-1)) {
+                    cout << ", ";
+                }
             }
             cout << endl;
         }

@@ -156,12 +156,13 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
 
     myfile.open(fname.c_str());
     myfile << "#include <iostream>\n#include \"GenericFunctions.h\"\nusing namespace std;\n\nint main() {\n";
-    myfile << "\tint result0;\n";
+    myfile << "\tint result0;\n\tint result_1;\n\tint result_2\n";
     myfile << "\tcout << \"Please enter the input in binary!\" << endl;\n";
     myfile << "\tcin >> result0;\n\n";
-    myfile << "\tcout << \"Please enter the key in binary!\" << endl;\n";
+    myfile << "\tcout << \"Please enter key one in binary!\" << endl;\n";
     myfile << "\tcin >> result_1;\n\n";
-
+    myfile << "\tcout << \"Please enter key two in binary!\" << endl;\n";
+    myfile << "\tcin >> result_2;\n\n";
 
     bool addedXOR = false;
     int lastID = AppendFunctionF(Head, myfile, addedXOR);
@@ -234,51 +235,19 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
         Node temp = *it;
         if (temp.type == 0) {
             if (temp.NumInputs == temp.NumOutputs) {
-                /**< Prints PBox 2D table */
-                myfile << "\tint ** table" << KeyIDCheck(temp.ID) << " = new int*[" << temp.rows << "];\n";
-                myfile << "\tfor(int i = 0; i < " << temp.rows << "; i++) {\n";
-                myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[i] = new int[" << temp.cols << "];\n";
-                myfile << "\t}\n";
-                for (int i = 0; i < temp.rows; i++) {
-                    for (int l = 0; l < temp.cols; l++) {
-                        myfile << "\ttable" << KeyIDCheck(temp.ID) << "["<< i << "][" << l << "] = " << temp.table[i][l] << ";\n";
-                    }
-                }
+                /**< Prints PBox with one to one input output */
 
-                myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomPBoxSearch(table" << KeyIDCheck(temp.ID);
-                myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ");\n";
-
-                ID = temp.outputs[0].InputConID;
-                myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
             } else {
                 if (temp.NumInputs > temp.NumOutputs) {
-                    /**< Prints PBox 1D table of inputs */
-                    myfile << "\tint table" << KeyIDCheck(temp.ID) << "[" << temp.NumInputs << "] = {";
-                    for (int i = 0; i < temp.NumInputs; i++) {
-                        myfile << "result" << KeyIDCheck(temp.inputs[i].InputConID);
-                        if (i == (temp.NumInputs-1)) {
-                            myfile << "};\n";
-                        } else {
-                            myfile << ",";
-                        }
-                    }
+                    /**< Prints PBox with multiple inputs to one output */
 
-                    myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxJoin(table" << KeyIDCheck(temp.ID);
-                    myfile << ", " << temp.NumInputs << ");\n";
-
-                    ID = temp.outputs[0].InputConID;
                 } else {
-                    myfile << "\tint * table" << KeyIDCheck(temp.ID) << " = PBoxSplit(result" << KeyIDCheck(temp.inputs[0].InputConID);
-                    myfile << ", " << temp.NumOutputs << ");\n";
-                    for (int i = 0; i < temp.NumOutputs; i++) {
-                        myfile << "\tint result" << KeyIDCheck(temp.outputs[i].InputConID) << " = table" << KeyIDCheck(temp.ID) << "[" << i << "];\n";
-                        ID = temp.outputs[i].InputConID;
-                    }
+                    /**< Prints PBox with multiple outputs with one input */
 
-                    myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
                 }
             }
         } else if (temp.type == 1) {
+            /**< Prints SBox */
             /**< Prints SBox 2D table */
             myfile << "\tint ** table" << KeyIDCheck(temp.ID) << " = new int*[" << temp.rows << "];\n";
             myfile << "\tfor(int i = 0; i < " << temp.rows << "; i++) {\n";
@@ -296,6 +265,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
             ID = temp.outputs[0].InputConID;
             myfile << "\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
         } else if (temp.type == 2) {
+            /**< Prints XOR */
             myfile << "\tstring temp" << KeyIDCheck(temp.ID) << " = CustomXOR(result" << KeyIDCheck(temp.inputs[0].InputConID) << ", result";
             myfile << KeyIDCheck(temp.inputs[1].InputConID) << ");\n";
             myfile << "\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
@@ -342,14 +312,14 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
     cfile.open(Scppfile.c_str());
 
     /**< Header file copy start */
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 10; i++) {
         getline(hfile, str);
         headerfile << str;
         headerfile << "\n";
     }
 
     /**< Cpp file copy start */
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 13; i++) {
         getline(cfile, str);
         codefile << str;
         codefile << "\n";
@@ -363,7 +333,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         headerfile << "\n";
 
         /**< Cpp file copy */
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 53; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -372,7 +342,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         /**< Skips the xor block */
         getline(hfile, str);
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 53; i++) {
             getline(cfile, str);
         }
     }
@@ -384,7 +354,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         headerfile << "\n";
 
         /**< Cpp file copy */
-        for (int i = 0; i < 28; i++) {
+        for (int i = 0; i < 55; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -393,7 +363,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         /**< Skips SBOX block */
         getline(hfile, str);
 
-        for (int i = 0; i < 28; i++) {
+        for (int i = 0; i < 55; i++) {
             getline(cfile, str);
         }
     }
@@ -407,7 +377,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         }
 
         /**< Cpp file copy */
-        for (int i = 0; i < 45; i++) {
+        for (int i = 0; i < 160; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -418,7 +388,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
             getline(hfile, str);
         }
 
-        for (int i = 0; i < 45; i++) {
+        for (int i = 0; i < 160; i++) {
             getline(cfile, str);
         }
     }
