@@ -37,7 +37,10 @@
                            <children>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Label fx:id="title_bar" layoutX="9.0" layoutY="2.0" text="PBOX" textAlignment="CENTER" />
+                                    <Label fx:id="title_bar" layoutX="9.0" layoutY="2.0" text="PBOX" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip text="Permutation box: used to permute or transpose bits from input(s) to output(s)" width="200.0" />
+                                       </tooltip></Label>
                                  </children>
                               </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">

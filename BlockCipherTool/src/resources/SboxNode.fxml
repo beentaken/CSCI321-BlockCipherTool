@@ -35,7 +35,14 @@
                             <RowConstraints prefHeight="1.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label fx:id="title_bar" layoutX="9.0" layoutY="2.0" text="SBOX" textAlignment="CENTER">
+                                       <tooltip>
+                                          <Tooltip text="Substitution box: takes some input bits and replaces them with different output bits" />
+                                       </tooltip></Label>
+                                 </children>
+                              </AnchorPane>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
                                     <Label fx:id="close_button" layoutX="10.0" layoutY="2.0" text="x" />
@@ -43,16 +50,16 @@
                               </AnchorPane>
                            </children>
                         </GridPane>
+                        <Button mnemonicParsing="false" prefWidth="50.0" text="Options" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font name="System Bold" size="9.0" />
+                           </font>
+                        </Button>
                      </children>
                   </VBox>
-                  <Label fx:id="title_bar" text="START" textAlignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="25.0">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <tooltip>
-                        <Tooltip text="Start: Node that represents the input for the cipher. (Required in cipher)" width="200.0" />
-                     </tooltip>
-                  </Label>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="tl_link_handle" prefHeight="200.0" prefWidth="200.0" styleClass="link-handle" />

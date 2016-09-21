@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 public class DragIcon extends AnchorPane{
     @FXML AnchorPane drag_icon;
     @FXML AnchorPane centre_box;
+    @FXML Tooltip Icon_Tooltip;
     
     private EventHandler mContextDragOver;
     private EventHandler mContextDragDropped;
@@ -93,7 +95,7 @@ public class DragIcon extends AnchorPane{
         break;
 
         case end:
-        getStyleClass().add("node-end");
+        getStyleClass().add("node-endIcon");
         break;
         
         default:

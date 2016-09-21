@@ -45,12 +45,12 @@
                         </GridPane>
                      </children>
                   </VBox>
-                  <Label fx:id="title_bar" text="START" textAlignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="25.0">
+                  <Label fx:id="title_bar" prefHeight="20.0" prefWidth="30.0" text="END" textAlignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                      <tooltip>
-                        <Tooltip text="Start: Node that represents the input for the cipher. (Required in cipher)" width="200.0" />
+                        <Tooltip text="End - Node that represents the output for the cipher. (Required in cipher)" />
                      </tooltip>
                   </Label>
                </children>

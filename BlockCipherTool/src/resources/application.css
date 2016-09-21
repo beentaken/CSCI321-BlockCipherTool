@@ -47,23 +47,23 @@ and open the template in the editor.
 }
 
 .node-pbox {
-    -fx-background-color: blue;
+    -fx-background-color: #99ccff;
 }
 
 .node-sbox {
-    -fx-background-color: red;
+    -fx-background-color: #ff6666;
 }
 
 .node-start {
-    -fx-background-color: grey;
+    -fx-background-color: lightgrey;
 }
 
 .node-xor {
-    -fx-background-color: green;
+    -fx-background-color: #99ff99;
 }
 
 .node-end {
-    -fx-background-color: black;
+    -fx-background-color: lightgrey;
 }
 
 .node-brown {

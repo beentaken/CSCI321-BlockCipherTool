@@ -94,6 +94,26 @@ public class MainLayout extends AnchorPane{
             addDragDetectionIcon(icn);
 
             icn.setType(DragNodeType.values()[i]);
+            
+            switch (i) {
+                case 0:
+                    icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
+                break;
+                case 1:
+                    icn.Icon_Tooltip.setText("Permutation box: used to permute or transpose bits from input(s) to output(s)");
+                break;
+                case 2:
+                    icn.Icon_Tooltip.setText("Substitution box: takes some input bits and replaces them with different output bits");
+                break;
+                case 3:
+                    icn.Icon_Tooltip.setText("XOR: a bitwise XOR across two inputs");
+                break;
+                case 4:
+                    icn.Icon_Tooltip.setText("End: Node that represents the output for the cipher. (Required in cipher)");
+                break;
+                    
+            }
+            
             node_list.getChildren().add(icn);
         }
         
@@ -169,7 +189,7 @@ public class MainLayout extends AnchorPane{
                 Point2D p = main_window.sceneToLocal(event.getSceneX(), event.getSceneY());
                 
                 if (!main_window.boundsInLocalProperty().get().contains(p)) {
-                    mDragOverIcon.relocateToPoint(new Point2D(event.getSceneX(), event.getSceneY()));
+                    mDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
                     return;
                 }
                 
@@ -185,7 +205,7 @@ public class MainLayout extends AnchorPane{
                 event.acceptTransferModes(TransferMode.ANY);
 
                 mDragOverIcon.relocateToPoint(
-                    new Point2D(event.getSceneX(), event.getSceneY())
+                    new Point2D(event.getSceneX() - 50, event.getSceneY() - 50)
                 );
 
                 event.consume();
@@ -251,6 +271,50 @@ public class MainLayout extends AnchorPane{
                             Point2D cursorPoint = container.getValue("scene_coords");
 
                             node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                        break;
+                        
+                        case pbox:
+                            PboxNode pnode = new PboxNode();
+
+                            pnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(pnode);
+
+                            Point2D pcursorPoint = container.getValue("scene_coords");
+
+                            pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
+                        break;
+                        
+                        case sbox:
+                            SboxNode snode = new SboxNode();
+
+                            snode.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(snode);
+
+                            Point2D scursorPoint = container.getValue("scene_coords");
+
+                            snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
+                        break;
+                        
+                        case xor:
+                            XorNode xnode = new XorNode();
+
+                            xnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(xnode);
+
+                            Point2D xcursorPoint = container.getValue("scene_coords");
+
+                            xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
+                        break;
+                        
+                        case end:
+                            EndNode enode = new EndNode();
+
+                            enode.setType(DragNodeType.valueOf(container.getValue("type")));
+                            main_window.getChildren().add(enode);
+
+                            Point2D ecursorPoint = container.getValue("scene_coords");
+
+                            enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                         break;
                         
                         default:
