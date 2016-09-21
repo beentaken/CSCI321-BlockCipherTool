@@ -90,6 +90,30 @@ public class DragNode extends AnchorPane{
         setId(UUID.randomUUID().toString());
     }
     
+    public void setUp() {
+        /**
+         * Copy whatever is commented in this constructor to the inherited node class, 
+         * except change the getResources to that node's FXML file location
+         */
+        
+        FXMLLoader fxmlLoader = new FXMLLoader(
+            getClass().getResource("/resources/DragNode.fxml")
+        );
+
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        
+        //self = this;
+        
+        try {
+            fxmlLoader.load();
+
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+        
+        setId(UUID.randomUUID().toString());
+    }
     
 
     @FXML
@@ -141,9 +165,24 @@ public class DragNode extends AnchorPane{
         yCoord = (int) (p.getY() - mDragOffset.getY());
     }
     
+    public void setCoords (String xString, String yString) {
+        xCoord = Integer.parseInt(xString);
+        yCoord = Integer.parseInt(yString);
+    }
+    
     public Point2D getCoords() {
         Point2D p = new Point2D(xCoord, yCoord);
         return p;
+    }
+    
+    public String getXSting() {
+        String xString = "" + xCoord;
+        return xString;
+    }
+    
+    public String getYString() {
+        String yString = "" + yCoord;
+        return yString;
     }
     
     public DragNodeType getType() { return mType;}
@@ -164,30 +203,19 @@ public class DragNode extends AnchorPane{
         case sbox:
         getStyleClass().add("node-sbox");            
         break;
-
-        case green:
-        getStyleClass().add("node-green");
-        break;
-
-        case grey:
-        getStyleClass().add("node-grey");
-        break;
-
-        case purple:
-        getStyleClass().add("node-purple");
-        break;
-
-        case yellow:
-        getStyleClass().add("node-yellow");
-        break;
-
-        case black:
-        getStyleClass().add("node-black");
-        break;
         
         case Start:
         getStyleClass().add("node-start");
         break;
+
+        case xor:
+        getStyleClass().add("node-xor");
+        break;
+
+        case end:
+        getStyleClass().add("node-end");
+        break;
+        
 
         default:
         break;

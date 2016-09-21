@@ -87,7 +87,7 @@ public class MainLayout extends AnchorPane{
         getChildren().add(mDragOverIcon);  
 
         //populate left pane with multiple colored icons for testing
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 5; i++) {
 
             DragIcon icn = new DragIcon();
             
@@ -255,6 +255,8 @@ public class MainLayout extends AnchorPane{
                         
                         default:
                             DragNode node1 = new DragNode();
+                            
+                            node1.setUp();
 
                             node1.setType(DragNodeType.valueOf(container.getValue("type")));
                             main_window.getChildren().add(node1);
