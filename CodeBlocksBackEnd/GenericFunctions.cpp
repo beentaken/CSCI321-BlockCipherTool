@@ -45,7 +45,6 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
     string BStr = ss.str();
     ss.str("");
     ss.clear();
-
     /**< Inserts 0s if the length of the strings are too small */
     while (AStr.length() < ASize) {
         AStr.insert(AStr.begin(), '0');
@@ -85,18 +84,41 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
  *
  */
 
-int CustomSBoxSearch(int** Sbox, int input, int rows, int cols) {
-    /**< Extract first digit and last digit from the input */
-    int tens = 1;
-    int firstdigit = input;
-    int lastdigit = firstdigit % 10;
-    while (firstdigit > 10) {
-        firstdigit = firstdigit / 10;
-        tens = tens * 10;
+int CustomSBoxSearch(int** Sbox, int input, int rows, int cols, int inputsize) {
+    /**< Turns the input into a string */
+    stringstream ss;
+    string ins;
+
+    ss << input;
+    ss >> ins;
+
+    ss.str("");
+    ss.clear();
+
+    while (ins.length() < inputsize) {
+        ins.insert(ins.begin(), '0');
     }
 
+    /**< Extract first digit and last digit from the input */
+    int firstdigit;
+    int lastdigit;
+    ss << ins[0];
+    ss >> firstdigit;
+    ss.str("");
+    ss.clear();
+    ss << ins[ins.length()-1];
+    ss >> lastdigit;
+
     /**< Create column ID by taking input and leaving out the final and starting digit */
-    int colID = (input - (firstdigit*tens))/10;
+    int colID;
+    string colIDtmp = ins;
+    colIDtmp[0] = ' ';
+    colIDtmp[colIDtmp.length()-1] = ' ';
+    colIDtmp.erase(remove(colIDtmp.begin(), colIDtmp.end(), ' '), colIDtmp.end());
+    ss.str("");
+    ss.clear();
+    ss << colIDtmp;
+    ss >> colID;
     /**< Create row ID by using the final and starting digit of the input */
     int rowID = (firstdigit * 10) + lastdigit;
     int rowpos = 0;

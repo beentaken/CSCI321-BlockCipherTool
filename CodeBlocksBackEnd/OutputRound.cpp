@@ -424,7 +424,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         headerfile << "\n";
 
         /**< Cpp file copy */
-        for (int i = 0; i < 53; i++) {
+        for (int i = 0; i < 52; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -433,7 +433,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         /**< Skips the xor block */
         getline(hfile, str);
 
-        for (int i = 0; i < 53; i++) {
+        for (int i = 0; i < 52; i++) {
             getline(cfile, str);
         }
     }
@@ -445,7 +445,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         headerfile << "\n";
 
         /**< Cpp file copy */
-        for (int i = 0; i < 55; i++) {
+        for (int i = 0; i < 78; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -454,7 +454,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         /**< Skips SBOX block */
         getline(hfile, str);
 
-        for (int i = 0; i < 55; i++) {
+        for (int i = 0; i < 78; i++) {
             getline(cfile, str);
         }
     }

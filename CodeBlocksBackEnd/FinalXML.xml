@@ -134,7 +134,7 @@
             </outputs>
 			<table cols="3" rows="5">
 				<rows> 2  , 0 , 1 </rows>	First Row is the Column Identifier | First Column is the Row Identifier
-				<rows> 00 , 00, 01</rows>	
+				<rows> 00 , 00, 00</rows>	
 				<rows> 01 , 00, 00</rows>
 				<rows> 10 , 00, 10</rows>
 				<rows> 11 , 00, 11</rows>
