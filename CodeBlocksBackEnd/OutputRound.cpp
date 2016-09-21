@@ -151,24 +151,30 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
 
 void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     bool addedXOR = false;
+    vector<int> ExistingIDs;
+    int counts = 0;
     int sizeID = 0;
     ofstream myfile;
     string fname = DestLocale;
     fname.append("\\block.cpp");
 
+    ExistingIDs.push_back(counts);
+    counts--;
     myfile.open(fname.c_str());
     myfile << "#include <iostream>\n#include <string>\n#include <sstream>\n#include \"block.h\"\n#include \"GenericFunctions.h\"\nusing namespace std;\n\nstring Block(string initial, string* key) {\n";
-    myfile << "\tint result0 = StringToNumber(initial);\n\tstring returnval;\n\tint result_1;\n\tint result_2;\n";
+    myfile << "\tint result0 = StringToNumber(initial);\n\tstring returnval;\n";
     if (Props.NumKey != 0) {
         for (int i = 1; i < Props.NumKey+1; i++) {
-            myfile << "\tresult_" << i << " = StringToNumber(key[" << i-1 << "]);\n";
+            myfile << "\tint result_" << i << " = StringToNumber(key[" << i-1 << "]);\n";
+            ExistingIDs.push_back(counts);
+            counts--;
         }
         addedXOR = true;
         AppendConversions();
     }
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
 
-    int lastID = AppendFunctionF(Head, myfile, addedXOR, sizeID);
+    int lastID = AppendFunctionF(Head, myfile, addedXOR, sizeID, ExistingIDs);
 
     myfile << "\t\tstringstream ss;\n";
     myfile << "\t\tss << result" << KeyIDCheck(lastID) << ";\n";
@@ -245,7 +251,7 @@ void OutputRound::AppendConversions() {
     cppfile.close();
 }
 
-int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR, int& sizeID) {
+int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR, int& sizeID, vector<int>& ExistingIDs) {
     int ID;
 
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
@@ -260,7 +266,20 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
                 }
 
                 /**< Calls the one to one pbox function */
-                myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxOneToOne(array";
+                bool ExistCheck = false;
+                for (vector<int>::iterator it2 = ExistingIDs.begin(); it2 != ExistingIDs.end(); it2++) {
+                    int EID = *it2;
+                    /**< Checks if output exists already */
+                    if (EID == temp.outputs[0].InputConID) {
+                        ExistCheck = true;
+                    }
+                }
+                myfile << "\t\t";
+                if (ExistCheck == false) {
+                    myfile << "int ";
+                    ExistingIDs.push_back(temp.outputs[0].InputConID);
+                }
+                myfile << "result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxOneToOne(array";
                 myfile << KeyIDCheck(temp.ID) << ", result" << temp.inputs[0].InputConID << ", " << temp.inputs[0].InputSizes;
                 myfile << ", " << temp.outputs[0].InputSizes << ");\n";
 
@@ -284,7 +303,20 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
                     }
 
                     /**< Calls the multiple inputs to single output function */
-                    myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxSingleOut(table";
+                    bool ExistCheck = false;
+                    for (vector<int>::iterator it2 = ExistingIDs.begin(); it2 != ExistingIDs.end(); it2++) {
+                        int EID = *it2;
+                        /**< Checks if output exists already */
+                        if (EID == temp.outputs[0].InputConID) {
+                            ExistCheck = true;
+                        }
+                    }
+                    myfile << "\t\t";
+                    if (ExistCheck == false) {
+                        myfile << "int ";
+                        ExistingIDs.push_back(temp.outputs[0].InputConID);
+                    }
+                    myfile << "result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxSingleOut(table";
                     myfile << KeyIDCheck(temp.ID) << ", " << temp.NumInputs << ", " << temp.inputs[0].InputSizes << ", ";
                     myfile << temp.outputs[0].InputSizes << ", array" << KeyIDCheck(temp.ID) << ");\n";
 
@@ -313,7 +345,20 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
 
                     /**< Assign to multiple outputs */
                     for (int i = 0; i < temp.NumOutputs; i++) {
-                        myfile << "\t\tint result" << temp.outputs[i].InputConID << " = array" << KeyIDCheck(temp.ID) << "[" << i << "];\n";
+                        bool ExistCheck = false;
+                        for (vector<int>::iterator it2 = ExistingIDs.begin(); it2 != ExistingIDs.end(); it2++) {
+                            int EID = *it2;
+                            /**< Checks if output exists already */
+                            if (EID == temp.outputs[i].InputConID) {
+                                ExistCheck = true;
+                            }
+                        }
+                        myfile << "\t\t";
+                        if (ExistCheck == false) {
+                            myfile << "int ";
+                            ExistingIDs.push_back(temp.outputs[i].InputConID);
+                        }
+                        myfile << "result" << temp.outputs[i].InputConID << " = array" << KeyIDCheck(temp.ID) << "[" << i << "];\n";
                     }
 
                     /**< delete dynamics */
@@ -338,9 +383,22 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
             }
 
             /**< Calls SBox function */
-            myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomSBoxSearch(table" << KeyIDCheck(temp.ID);
+            bool ExistCheck = false;
+            for (vector<int>::iterator it2 = ExistingIDs.begin(); it2 != ExistingIDs.end(); it2++) {
+                int EID = *it2;
+                /**< Checks if output exists already */
+                if (EID == temp.outputs[0].InputConID) {
+                    ExistCheck = true;
+                }
+            }
+            myfile << "\t\t";
+            if (ExistCheck == false) {
+                myfile << "int ";
+                ExistingIDs.push_back(temp.outputs[0].InputConID);
+            }
+            myfile << "result" << KeyIDCheck(temp.outputs[0].InputConID) << " = CustomSBoxSearch(table" << KeyIDCheck(temp.ID);
             myfile << ", result" << KeyIDCheck(temp.inputs[0].InputConID) << ", " << KeyIDCheck(temp.rows);
-            myfile << ", " << KeyIDCheck(temp.cols) << ");\n";
+            myfile << ", " << KeyIDCheck(temp.cols) << ", " << temp.inputs[0].InputSizes << ");\n";
 
             /**< Deletes table for sbox */
             ID = temp.outputs[0].InputConID;
@@ -357,7 +415,21 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
             myfile << "\t\tstring temp" << KeyIDCheck(temp.ID) << " = CustomXOR(result" << KeyIDCheck(temp.inputs[0].InputConID) << ", result";
             myfile << KeyIDCheck(temp.inputs[1].InputConID) << ", " << KeyIDCheck(temp.inputs[0].InputSizes) << ", ";
             myfile << KeyIDCheck(temp.inputs[1].InputSizes) << ");\n";
-            myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
+
+            bool ExistCheck = false;
+            for (vector<int>::iterator it2 = ExistingIDs.begin(); it2 != ExistingIDs.end(); it2++) {
+                int EID = *it2;
+                /**< Checks if output exists already */
+                if (EID == temp.outputs[0].InputConID) {
+                    ExistCheck = true;
+                }
+            }
+            myfile << "\t\t";
+            if (ExistCheck == false) {
+                myfile << "int ";
+                ExistingIDs.push_back(temp.outputs[0].InputConID);
+            }
+            myfile << "result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
 
             ID = temp.outputs[0].InputConID;
             sizeID = temp.outputs[0].InputSizes;
@@ -367,7 +439,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
                 addedXOR = true;
             }
         } else if (temp.type == 3) {
-            ID = AppendFunctionF(temp.Next, myfile, addedXOR, sizeID);
+            ID = AppendFunctionF(temp.Next, myfile, addedXOR, sizeID, ExistingIDs);
         }
     }
 

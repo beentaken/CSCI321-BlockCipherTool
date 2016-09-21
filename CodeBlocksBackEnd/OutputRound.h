@@ -16,7 +16,7 @@ class OutputRound {
         void OutputMain(vector<Node>, Properties);
         void OutputGenerics(bool[]);
         void AppendConversions();
-        int AppendFunctionF(vector<Node>, ofstream&, bool&, int&);
+        int AppendFunctionF(vector<Node>, ofstream&, bool&, int&, vector<int>&);
         vector<Node> SortVec(vector<Node>, int);
         string KeyIDCheck(int);
         void CheckNode(vector<Node>, bool[], vector<Node>&);
