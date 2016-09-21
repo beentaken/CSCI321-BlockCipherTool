@@ -40,6 +40,7 @@ vector<Node> ReadXML(string filename, Properties& Props) {
             /**< Checks that it is reading a cipher in the xml */
             if (line.compare("<cipher>") == 0) {
                 Node temp;
+                int KeyCount = 0;
                 /**< Will continue to cycle until the end of the cipher in the xml */
                 while (line.compare("</cipher>") != 0) {
                     /**< Gets a line from the file and removes the spacing and tabbing */
@@ -49,25 +50,26 @@ vector<Node> ReadXML(string filename, Properties& Props) {
 
                     if (line.find("<pbox") != string::npos) {
                         /**< Parses a PBox if the pbox tag is found */
-                        temp = ParseSPBox(XMLfile, line, 0);
+                        temp = ParseSPBox(XMLfile, line, 0, KeyCount);
                         result.push_back(temp);
                     } else if (line.find("<sbox") != string::npos) {
                         /**< Parses a SBox if the sbox tag is found */
-                        temp = ParseSPBox(XMLfile, line, 1);
+                        temp = ParseSPBox(XMLfile, line, 1, KeyCount);
                         result.push_back(temp);
                     } else if (line.find("<xor") != string::npos) {
                         /**< Parses an XOR is the xor tag is found */
-                        temp = ParseXOR(XMLfile, line, 2);
+                        temp = ParseXOR(XMLfile, line, 2, KeyCount);
                         result.push_back(temp);
                     } else if (line.find("<function") != string::npos) {
                         /**< Parses an F function if the f tag is found */
-                        temp = ParseFFunc(XMLfile, line, 3);
+                        temp = ParseFFunc(XMLfile, line, 3, KeyCount);
                         result.push_back(temp);
                     } else if (line.find("<properties") != string::npos) {
                         /**< Parses a properties block if the properties tag is found */
                         Props = ParseProps(XMLfile, line);
                     }
                 }
+                Props.NumKey = KeyCount;
             }
 
             /**< Closes the file stream */
@@ -118,7 +120,7 @@ Properties ParseProps(ifstream& XMLfile, string line) {
  * Returns a node with the xml
  *
  */
-Node ParseFFunc(ifstream& XMLfile, string line, int type) {
+Node ParseFFunc(ifstream& XMLfile, string line, int type, int& KeyCount) {
     Node N;
     /**< Attempts to find the ID */
     if (line.find("ID") != string::npos) {
@@ -140,19 +142,19 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
 
             if (line.find("<pbox") != string::npos) {
                 /**< Parses in a p box and adds it to the end of the linked list */
-                Node temp = ParseSPBox(XMLfile, line, 0);
+                Node temp = ParseSPBox(XMLfile, line, 0, KeyCount);
                 N.Next.push_back(temp);
             } else if (line.find("<sbox") != string::npos) {
                 /**< Parses in a s box and adds it to the end of the linked list */
-                Node temp = ParseSPBox(XMLfile, line, 1);
+                Node temp = ParseSPBox(XMLfile, line, 1, KeyCount);
                 N.Next.push_back(temp);
             } else if (line.find("<xor") != string::npos) {
                 /**< Parses in an xor and adds it to the end of the linked list */
-                Node temp = ParseXOR(XMLfile, line, 2);
+                Node temp = ParseXOR(XMLfile, line, 2, KeyCount);
                 N.Next.push_back(temp);
             } else if (line.find("<f") != string::npos) {
                 /**< Parses in an f function and adds it to the end of the linked list */
-                Node temp = ParseFFunc(XMLfile, line, 3);
+                Node temp = ParseFFunc(XMLfile, line, 3, KeyCount);
                 N.Next.push_back(temp);
             }
         }
@@ -177,7 +179,7 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type) {
  * Returns a node with the xml
  *
  */
-Node ParseXOR(ifstream& XMLfile, string line, int type) {
+Node ParseXOR(ifstream& XMLfile, string line, int type, int& KeyCount) {
     Node N;
     /**< Checks for an ID and size  */
     if (line.find("ID") != string::npos) {
@@ -220,6 +222,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
                         /**< Stores the Connection ID the size and the values */
                         if (s2.find("k") != string::npos) {
                             int key = StringToNumber(s2);
+                            KeyCount++;
                             inputs[inscounter].InputConID = (0 - key);
                         } else {
                             inputs[inscounter].InputConID = StringToNumber(s2);
@@ -253,6 +256,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
                         /**< Stores the Connection ID the size and the values */
                         if (s2.find("k") != string::npos) {
                             int key = StringToNumber(s2);
+                            KeyCount++;
                             outputs[outscounter].InputConID = (0 - key);
                         } else {
                             outputs[outscounter].InputConID = StringToNumber(s2);
@@ -284,7 +288,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
  *
  */
 
-Node ParseSPBox(ifstream& XMLfile, string line, int type) {
+Node ParseSPBox(ifstream& XMLfile, string line, int type, int& KeyCount) {
     Node N;
     /**< Finds the ID of the S or P Box */
     if (line.find_first_of("ID") != string::npos) {
@@ -326,6 +330,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                         /**< Stores the connection id and size of the input */
                         if (s2.find("k") != string::npos) {
                             int key = StringToNumber(s2);
+                            KeyCount++;
                             inputs[inputspos].InputConID = (0 - key);
                         } else {
                             inputs[inputspos].InputConID = StringToNumber(s2);
@@ -375,6 +380,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                             /**< Stores the Connection ID the size and the values */
                             if (s2.find("k") != string::npos) {
                                 int key = StringToNumber(s2);
+                                KeyCount++;
                                 outputs[outputspos].InputConID = (0 - key);
                             } else {
                                 outputs[outputspos].InputConID = StringToNumber(s2);

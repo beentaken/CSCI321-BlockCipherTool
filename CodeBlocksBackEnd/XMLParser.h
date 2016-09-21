@@ -16,6 +16,7 @@ struct Properties {
     int NumRounds;
     int BlockSize;
     int KeySize;
+    int NumKey;
 };
 
 /** \brief
@@ -53,10 +54,9 @@ struct Node {
 vector<Node> ReadXML(string, Properties&);               /**< This function reads the XML Parser */
 int StringToNumber(string);                 /**< The function converts the String to a number(int) */
 int* StringToIntArr(string, char);          /**< This function converts the String to an integer array */
-Node ParseSPBox(ifstream&, string, int);    /**< This function parses in a P Box or an S Box */
-Node ParseXOR(ifstream&, string, int);      /**< This function parses in an xor block */
-Node ParseFFunc(ifstream&, string, int);    /**< This function parses in an F Function */
-Node ParseConn(ifstream&, string, int);     /**< This function parses in a connection */
+Node ParseSPBox(ifstream&, string, int, int&);    /**< This function parses in a P Box or an S Box */
+Node ParseXOR(ifstream&, string, int, int&);      /**< This function parses in an xor block */
+Node ParseFFunc(ifstream&, string, int, int&);    /**< This function parses in an F Function */
 Properties ParseProps(ifstream&, string);
 
 #endif // XMLPARSE
