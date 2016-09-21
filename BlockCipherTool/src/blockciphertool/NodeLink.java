@@ -30,6 +30,8 @@ public class NodeLink extends AnchorPane {
     private final DoubleProperty mControlDirectionX2 = new SimpleDoubleProperty();
     private final DoubleProperty mControlDirectionY2 = new SimpleDoubleProperty();
     
+    private String mSize;
+    
     public NodeLink() {
         
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -114,5 +116,21 @@ public class NodeLink extends AnchorPane {
         
         source.registerLink (getId());
         target.registerLink (getId());
+    }
+    
+    public String getLinkID() {
+        return getId();
+    }
+    
+    public void setLinkID(String myId) {
+        setId(myId);
+    }
+    
+    public String getSize() {
+        return mSize;
+    }
+    
+    public void setSize(String size) {
+        mSize = size;
     }
 }

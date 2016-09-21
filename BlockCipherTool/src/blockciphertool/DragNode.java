@@ -5,6 +5,7 @@
  */
 package blockciphertool;
 
+import blockciphertool.wrappers.input;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class DragNode extends AnchorPane{
     private NodeLink mDragLink = null;
     private AnchorPane parent_pane = null;
     
-    private final List <String> mLinkIds = new ArrayList <String> ();
+    private List <String> mLinkIds = new ArrayList <String> ();
     
     private int xCoord;
     private int yCoord;
@@ -147,6 +148,23 @@ public class DragNode extends AnchorPane{
         mLinkIds.add(linkId);
     }
     
+    public String GetLink(int index) {
+        String linkId = mLinkIds.get(index);
+        return linkId;
+    }
+    
+    public List<input> GetLinkList() {
+        List<input> inputs = null;
+        for(int i = 0; i < mLinkIds.size(); i++) {
+            input temp = new input();
+            temp.setConnectorID(mLinkIds.get(i));
+            //temp.setSize(mLinkIds);
+            //size is to be implemented later
+            inputs.add(i, temp);
+        }
+        return inputs;
+    }
+    
     public void relocateToPoint (Point2D p) {
         Point2D localCoords = getParent().sceneToLocal(p);
 
@@ -183,6 +201,14 @@ public class DragNode extends AnchorPane{
     public String getYString() {
         String yString = "" + yCoord;
         return yString;
+    }
+    
+    public String getNodeID() {
+        return getId();
+    }
+    
+    public void setNodeID(String myId) {
+        setId(myId);
     }
     
     public DragNodeType getType() { return mType;}

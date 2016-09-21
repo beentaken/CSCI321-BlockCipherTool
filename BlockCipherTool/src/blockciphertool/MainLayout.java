@@ -285,6 +285,7 @@ public class MainLayout extends AnchorPane{
                     String targetId = container.getValue("target");
                     
                     if (sourceId != null && targetId != null) {
+                        System.out.println(container.getData());
                         NodeLink Link = new NodeLink();
                         
                         main_window.getChildren().add(0, Link);
