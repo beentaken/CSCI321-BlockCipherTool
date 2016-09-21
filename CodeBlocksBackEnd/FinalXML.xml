@@ -77,7 +77,7 @@
 			<input connectorID="7" size="2"/>
 		</inputs>
 		<outputs num="1">
-			<output connectorID="8" size="4"/>
+			<output connectorID="8" size="4">0, 1, 2, 3</output>
 		</outputs>
 	</pbox>
     <properties>

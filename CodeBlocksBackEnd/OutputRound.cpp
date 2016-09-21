@@ -150,25 +150,44 @@ bool OutputRound::OutputToFile(vector<Node> Head, Properties Props) {
 }
 
 void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
+    bool addedXOR = false;
+    int sizeID = 0;
     ofstream myfile;
     string fname = DestLocale;
     fname.append("\\block.cpp");
 
     myfile.open(fname.c_str());
-    myfile << "#include <iostream>\n#include \"GenericFunctions.h\"\nusing namespace std;\n\nstring Block(string initial, string* key) {\n";
-    myfile << "\tint result0 = StringToNumber(initial);\n\tint result_1;\n\tint result_2;\n";
-    for (int i = 1; i < Props.NumKey+1; i++) {
-        myfile << "\tresult_" << i << " = key[" << i-1 << "];\n";
+    myfile << "#include <iostream>\n#include <string>\n#include <sstream>\n#include \"block.h\"\n#include \"GenericFunctions.h\"\nusing namespace std;\n\nstring Block(string initial, string* key) {\n";
+    myfile << "\tint result0 = StringToNumber(initial);\n\tstring returnval;\n\tint result_1;\n\tint result_2;\n";
+    if (Props.NumKey != 0) {
+        for (int i = 1; i < Props.NumKey+1; i++) {
+            myfile << "\tresult_" << i << " = StringToNumber(key[" << i-1 << "]);\n";
+        }
+        addedXOR = true;
+        AppendConversions();
     }
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
 
-    bool addedXOR = false;
-    int lastID = AppendFunctionF(Head, myfile, addedXOR);
+    int lastID = AppendFunctionF(Head, myfile, addedXOR, sizeID);
 
+    myfile << "\t\tstringstream ss;\n";
+    myfile << "\t\tss << result" << KeyIDCheck(lastID) << ";\n";
+    myfile << "\t\tss >> returnval;\n";
     myfile << "\t}";
 
-    myfile << "\n\treturn 0;\n}";
+    myfile << "\twhile (returnval.length() < " << sizeID << ") {\n";
+    myfile << "\t\treturnval.insert(returnval.begin(), '0');\n";
+    myfile << "\t}\n;";
+    myfile << "\n\treturn returnval;\n}";
     myfile.close();
+
+    ofstream hfile;
+    string hname = DestLocale;
+    hname.append("\\block.h");
+    hfile.open(hname.c_str());
+    hfile << "#include <iostream>\n#include <string>\n\nusing namespace std;\n\n";
+    hfile << "string Block(string, string*);\n";
+    hfile.close();
 }
 
 string OutputRound::KeyIDCheck(int ID) {
@@ -226,7 +245,7 @@ void OutputRound::AppendConversions() {
     cppfile.close();
 }
 
-int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR) {
+int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& addedXOR, int& sizeID) {
     int ID;
 
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
@@ -248,6 +267,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
                 /**< Deletes table */
                 myfile << "\t\tdelete [] array" << KeyIDCheck(temp.ID) << ";\n";
                 ID = temp.outputs[0].InputConID;
+                sizeID = temp.outputs[0].InputSizes;
             } else {
                 if (temp.NumInputs > temp.NumOutputs) {
                     /**< Prints PBox with multiple inputs to one output */
@@ -260,28 +280,29 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
                     /**< Creates table for the inputs for the function */
                     myfile << "\t\tint * table" << KeyIDCheck(temp.ID) << " = new int[" << temp.NumInputs << "];\n";
                     for (int i = 0; i < temp.NumInputs; i++) {
-                        myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[" << i << "] = result" << temp.inputs[i].InputConID << "];\n";
+                        myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[" << i << "] = result" << temp.inputs[i].InputConID << ";\n";
                     }
 
                     /**< Calls the multiple inputs to single output function */
                     myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = PBoxSingleOut(table";
-                    myfile << KeyIDCheck(temp.ID) << ", " << temp.NumInputs << ", " << temp.inputs[0].InputSizes << ", array";
-                    myfile << KeyIDCheck(temp.ID) << ");\n";
+                    myfile << KeyIDCheck(temp.ID) << ", " << temp.NumInputs << ", " << temp.inputs[0].InputSizes << ", ";
+                    myfile << temp.outputs[0].InputSizes << ", array" << KeyIDCheck(temp.ID) << ");\n";
 
                     /**< Deletes the dynamic arrays and tables */
                     myfile << "\t\tdelete [] array" << KeyIDCheck(temp.ID) << ";\n";
                     myfile << "\t\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
                     ID = temp.outputs[0].InputConID;
+                    sizeID = temp.outputs[0].InputSizes;
                 } else {
                     /**< Prints PBox with multiple outputs with one input */
                     /**< Create 2D array of permutated positions */
-                    myfile << "\t\tint ** table" << KeyIDCheck(temp.ID) << " = new int[" << temp.NumOutputs << "];\n";
+                    myfile << "\t\tint ** table" << KeyIDCheck(temp.ID) << " = new int*[" << temp.NumOutputs << "];\n";
                     myfile << "\t\tfor(int i = 0; i < " << temp.NumOutputs << "; i++) {\n";
                     myfile << "\t\t\ttable" << KeyIDCheck(temp.ID) << "[i] = new int[" << temp.outputs[0].InputSizes << "];\n";
                     myfile << "\t\t}\n";
                     for (int i = 0; i < temp.NumOutputs; i++) {
                         for (int l = 1; l < temp.outputs[0].InputSizes+1; l++) {
-                            myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[" << i << "][" << l << "] = " << temp.outputs[i].positions[l] << ";\n";
+                            myfile << "\t\ttable" << KeyIDCheck(temp.ID) << "[" << i << "][" << l-1 << "] = " << temp.outputs[i].positions[l] << ";\n";
                         }
                     }
 
@@ -327,6 +348,9 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
             myfile << "\t\t\tdelete [] table" << KeyIDCheck(temp.ID) << "[i];\n";
             myfile << "\t\t}\n";
             myfile << "\t\tdelete [] table" << KeyIDCheck(temp.ID) << ";\n";
+
+            ID = temp.outputs[0].InputConID;
+            sizeID = temp.outputs[0].InputSizes;
         } else if (temp.type == 2) {
             /**< Prints XOR */
             /**< Calls XOR function */
@@ -336,13 +360,14 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
             myfile << "\t\tint result" << KeyIDCheck(temp.outputs[0].InputConID) << " = StringToNumber(temp" << KeyIDCheck(temp.ID) << ");\n";
 
             ID = temp.outputs[0].InputConID;
+            sizeID = temp.outputs[0].InputSizes;
             /**< Appends a string to int conversion method to the generic functions */
             if (addedXOR == false) {
                 AppendConversions();
                 addedXOR = true;
             }
         } else if (temp.type == 3) {
-            ID = AppendFunctionF(temp.Next, myfile, addedXOR);
+            ID = AppendFunctionF(temp.Next, myfile, addedXOR, sizeID);
         }
     }
 
@@ -385,7 +410,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
     }
 
     /**< Cpp file copy start */
-    for (int i = 0; i < 13; i++) {
+    for (int i = 0; i < 14; i++) {
         getline(cfile, str);
         codefile << str;
         codefile << "\n";
@@ -443,7 +468,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         }
 
         /**< Cpp file copy */
-        for (int i = 0; i < 160; i++) {
+        for (int i = 0; i < 164; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -454,7 +479,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
             getline(hfile, str);
         }
 
-        for (int i = 0; i < 160; i++) {
+        for (int i = 0; i < 164; i++) {
             getline(cfile, str);
         }
     }

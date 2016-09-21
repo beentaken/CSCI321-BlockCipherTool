@@ -9,6 +9,7 @@
 #include <iostream>                 /**< Includes iostream library */
 #include <string>                   /**< Includes the string library */
 #include <sstream>                  /**< Includes the string stream library */
+#include <algorithm>                /**< Includes the algorithm library */
 using namespace std;                /**< Uses standard namespace */
 
 /** \brief
@@ -39,11 +40,11 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
     ss << A;
     string AStr = ss.str();
     ss.str("");
+    ss.clear();
     ss << B;
     string BStr = ss.str();
     ss.str("");
-
-    int length = AStr.length();
+    ss.clear();
 
     /**< Inserts 0s if the length of the strings are too small */
     while (AStr.length() < ASize) {
@@ -55,7 +56,7 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
     }
 
     /**< XORs each individual character */
-    for (int i = 0; i < length; ++i) {
+    for (int i = 0; i < ASize; ++i) {
         ss << (AStr[i] ^ BStr[i]);
         Result = ss.str();
     }
@@ -95,7 +96,7 @@ int CustomSBoxSearch(int** Sbox, int input, int rows, int cols) {
     }
 
     /**< Create column ID by taking input and leaving out the final and starting digit */
-    int colID = (input/10) - firstdigit * tens;
+    int colID = (input - (firstdigit*tens))/10;
     /**< Create row ID by using the final and starting digit of the input */
     int rowID = (firstdigit * 10) + lastdigit;
     int rowpos = 0;
@@ -155,6 +156,7 @@ int PBoxOneToOne(int* tablepos, int input, int insize, int outsize) {
 
     /**< Creates the output by appending the value at the position of the input to the result string  */
     ss.str("");
+    ss.clear();
     for(int i = 0; i < outsize; i++) {
         ss << ins[tablepos[i]];
     }
@@ -208,6 +210,7 @@ int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, i
     for (int i = 0; i < numofOutputs; i++) {
         /**< Clear stringstream */
         ss.str("");
+        ss.clear();
         for (int l = 0; l < outputsize; l++) {
             /**< Append the string character at the position */
             ss << str[tablepos[i][l]];
@@ -253,6 +256,7 @@ int PBoxSingleOut(int* inputs, int numofInputs, int inputsize, int outputsize, i
     for (int i = 0; i < numofInputs; i++) {
         /**< Clears stream and inserts next input */
         ss.str("");
+        ss.clear();
         ss << inputs[i];
         ss >> singleinput;
         /**< Inserts 0 at start if not the right length */
@@ -267,6 +271,7 @@ int PBoxSingleOut(int* inputs, int numofInputs, int inputsize, int outputsize, i
     si >> singleinput;
 
     ss.str("");
+    ss.clear();
     /**< Goes through the length of the output value */
     for (int i = 0; i < outputsize; i++) {
         /**< Appends/inserts the bit at the position of the massive input */
