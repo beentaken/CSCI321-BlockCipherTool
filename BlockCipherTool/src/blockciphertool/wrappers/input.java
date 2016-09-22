@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class input {
     
     private String connectorID;
-    private String size;
+    private int size;
     
     @XmlAttribute(name="connectorID")
     public String getConnectorID() {
@@ -28,11 +28,11 @@ public class input {
     }
     
     @XmlAttribute(name="size")
-    public String getSize() {
+    public int getSize() {
         return this.size;
     }
     
-    public void setSize(String Size) {
+    public void setSize(int Size) {
         this.size = Size;
     }
     

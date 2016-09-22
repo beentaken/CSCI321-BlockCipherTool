@@ -50,7 +50,7 @@
                               </AnchorPane>
                            </children>
                         </GridPane>
-                        <Button mnemonicParsing="false" prefWidth="50.0" text="Options" textAlignment="CENTER">
+                        <Button mnemonicParsing="false" onMouseClicked="#options" prefWidth="50.0" text="Options" textAlignment="CENTER">
                            <VBox.margin>
                               <Insets left="10.0" right="10.0" top="10.0" />
                            </VBox.margin>

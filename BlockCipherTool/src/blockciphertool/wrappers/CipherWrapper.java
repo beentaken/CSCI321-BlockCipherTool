@@ -24,7 +24,15 @@ public class CipherWrapper {
     private List<CipherFunctionWrapper> functions;
     private List<CipherXorWrapper> xors;
     private List<CipherConnectionWrapper> connections;
-
+    private PropertiesWrapper properties;
+    
+    @XmlElement( name = "properties")
+    public PropertiesWrapper getProperties() {
+        return this.properties;
+    }
+    public void setProperties(PropertiesWrapper Properties) {
+        this.properties = Properties;
+    }
     
     
     @XmlElement( name = "pbox")

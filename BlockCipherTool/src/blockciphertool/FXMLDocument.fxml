@@ -31,7 +31,6 @@
                         <MenuItem mnemonicParsing="false" text="End Node" />
                       <MenuItem mnemonicParsing="false" text="P-Box" />
                         <MenuItem mnemonicParsing="false" text="S-Box" />
-                        <MenuItem mnemonicParsing="false" text="F Functions" />
                         <MenuItem mnemonicParsing="false" text="XOR" />
                     </items>
                   </Menu>

@@ -18,8 +18,8 @@ public class CipherXorWrapper {
     
     private String id;
     private String size;
-    private List<output> outputs;
-    private List<input> inputs;
+    private inputs inputs;
+    private Outputs outputs;
     private String X;
     private String Y;
         
@@ -60,24 +60,22 @@ public class CipherXorWrapper {
 	this.Y = y;
     }
 
-        @XmlElementWrapper(name="inputs")
-    @XmlElement(name="input")
-    public List<input> getInputs() {
+    @XmlElement(name="inputs")
+    public inputs getInputs() {
         return this.inputs;
     }
     
-    public void setInputs(List<input> Inputs) {
+    public void setInputs(inputs Inputs) {
 	this.inputs = Inputs;
     }
     
     
-    @XmlElementWrapper(name="outputs")
-    @XmlElement(name="output")
-    public List<output> getOutputs() {
+    @XmlElement(name="outputs")
+    public Outputs getOutputs() {
         return this.outputs;
     }
     
-    public void setOutputs(List<output> Outputs) {
+    public void setOutputs(Outputs Outputs) {
 	this.outputs = Outputs;
     }
     

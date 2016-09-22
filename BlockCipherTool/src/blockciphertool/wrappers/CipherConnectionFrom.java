@@ -37,7 +37,7 @@ public class CipherConnectionFrom {
     
    
     
-        @XmlElement(name="fromId")
+    @XmlElement(name="fromId")
     public String getFromId() {
         return this.fromId;
     }

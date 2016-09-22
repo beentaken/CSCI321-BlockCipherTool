@@ -19,6 +19,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -27,6 +29,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -428,5 +432,19 @@ public class DragNode extends AnchorPane{
                 event.consume();
             }
         };
+    }
+    
+    public void options() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/pboxOptions.fxml"));
+        
+        Parent root = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOpacity(1);
+        stage.setTitle("Options");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.showAndWait();
+        
+        
     }
 }

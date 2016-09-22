@@ -6,6 +6,7 @@
 package blockciphertool.wrappers;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -13,12 +14,22 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Gigabyte
  */
 public class CipherFunctionWrapper {
+    private String id;
     private String X;
     private String Y;
     private List<pboxWrapper> pboxs;
     private List<sboxWrapper> sboxs;
     private List<CipherXorWrapper> xors;
     private List<CipherConnectionWrapper> connections;
+    
+    @XmlAttribute(name="ID")
+    public String getId() {
+        return this.id;
+    }
+    
+    public void setId(String Id) {
+	this.id = Id;
+    }
     
     @XmlElement(name="X")
     public String getX() {

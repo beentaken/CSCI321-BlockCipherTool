@@ -15,8 +15,12 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <RadioButton layoutX="20.0" layoutY="38.0" mnemonicParsing="false" text="Encrypt" AnchorPane.leftAnchor="20.0" />
-      <RadioButton layoutX="20.0" layoutY="55.0" mnemonicParsing="false" text="Decrypt" AnchorPane.leftAnchor="20.0" />
+      <RadioButton layoutX="25.0" layoutY="35.0" mnemonicParsing="false" text="Encrypt">
+         <toggleGroup>
+            <ToggleGroup fx:id="mode" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="25.0" layoutY="55.0" mnemonicParsing="false" text="Decrypt" toggleGroup="$mode" />
       <Label layoutX="20.0" layoutY="84.0" text="Key">
          <font>
             <Font name="System Bold" size="14.0" />

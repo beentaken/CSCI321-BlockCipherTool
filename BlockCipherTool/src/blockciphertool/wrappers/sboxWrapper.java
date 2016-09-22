@@ -24,8 +24,9 @@ public class sboxWrapper {
     private String id;
     private String X;
     private String Y;
-    private List<input> inputs;
-    private List<output> outputs;
+    private inputs inputs;
+    private Table table;
+    private Outputs outputs;
     
     @XmlAttribute(name="ID")
     public String getId() {
@@ -36,7 +37,7 @@ public class sboxWrapper {
 	this.id = Id;
     }
     
-        @XmlElement(name="X")
+    @XmlElement(name="X")
     public String getX() {
         return this.X;
     }
@@ -54,25 +55,32 @@ public class sboxWrapper {
 	this.Y = y;
     }
     
-    @XmlElementWrapper(name="inputs")
-    @XmlElement(name="input")
-    public List<input> getInputs() {
+    @XmlElement(name="inputs")
+    public inputs getInputs() {
         return this.inputs;
     }
     
-    public void setInputs(List<input> Inputs) {
+    public void setInputs(inputs Inputs) {
 	this.inputs = Inputs;
     }
     
     
-    @XmlElementWrapper(name="outputs")
-    @XmlElement(name="output")
-    public List<output> getOutputs() {
+    @XmlElement(name="table")
+    public Table getTable() {
+        return this.table;
+    }
+    
+    public void setTable(Table Table) {
+	this.table = Table;
+    }
+    
+    
+    @XmlElement(name="outputs")
+    public Outputs getOutputs() {
         return this.outputs;
     }
     
-    public void setOutputs(List<output> Outputs) {
+    public void setOutputs(Outputs Outputs) {
 	this.outputs = Outputs;
     }
-    
 }

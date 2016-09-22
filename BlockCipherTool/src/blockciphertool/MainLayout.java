@@ -393,7 +393,7 @@ public class MainLayout extends AnchorPane{
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setOpacity(1);
         stage.setTitle("Encrypt or Decrypt");
-        stage.setScene(new Scene(root, 600, 400));
+        stage.setScene(new Scene(root, 570, 300));
         stage.showAndWait();
     }
     

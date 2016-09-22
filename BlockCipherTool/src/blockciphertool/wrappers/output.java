@@ -17,7 +17,7 @@ public class output {
     
         
     private String connectorID;
-    private String size;
+    private int size;
     
     private String outputData;
     
@@ -32,11 +32,11 @@ public class output {
     }
     
     @XmlAttribute(name="size")
-    public String getSize() {
+    public int getSize() {
         return this.size;
     }
     
-    public void setSize(String Size) {
+    public void setSize(int Size) {
         this.size = Size;
     }
     
