@@ -61,8 +61,10 @@ vector<Node> OutputRound::SortVec(vector<Node> Head, int NumOfKeys) {
         for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
             /**< Gets Node */
             Node temp = *it;
+
             /**< Checks that input exists */
             if (temp.NumInputs != (-1)) {
+
                 /**< Cycles through all connections and check that all input connections exist */
                 bool AllConnections = true;
 
@@ -256,6 +258,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, bool& adde
 
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
+
         if (temp.type == 0) {
             if (temp.NumInputs == temp.NumOutputs) {
                 /**< Prints PBox with one to one input output */
