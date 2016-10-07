@@ -10,7 +10,9 @@
 #include <string>                   /**< Includes the string library */
 #include <sstream>                  /**< Includes the string stream library */
 #include <algorithm>                /**< Includes the algorithm library */
+#include <boost/dynamic_bitset.hpp> /**< Includes the dynamic_bitset library */
 using namespace std;                /**< Uses standard namespace */
+using namespace boost;              /**< Uses the boost namespace */
 
 /** \brief
  * CustomXOR takes in two inputs, makes them the same size and the XORs them together.
@@ -22,46 +24,13 @@ using namespace std;                /**< Uses standard namespace */
  * \param
  * B is input two
  *
- * \param
- * ASize is input ones size
- *
- * \param
- * BSize is input twos size
- *
  * \return
  * Returns the string that has the result of A XOR B
  *
  */
 
-string CustomXOR(int A, int B, int ASize, int BSize) {
-    /**< Turn the ints into strings */
-    string Result("");
-    stringstream ss;
-    ss << A;
-    string AStr = ss.str();
-    ss.str("");
-    ss.clear();
-    ss << B;
-    string BStr = ss.str();
-    ss.str("");
-    ss.clear();
-    /**< Inserts 0s if the length of the strings are too small */
-    while (AStr.length() < ASize) {
-        AStr.insert(AStr.begin(), '0');
-    }
-
-    while (BStr.length() < BSize) {
-        BStr.insert(BStr.begin(), '0');
-    }
-
-    /**< XORs each individual character */
-    for (int i = 0; i < ASize; ++i) {
-        ss << (AStr[i] ^ BStr[i]);
-        Result = ss.str();
-    }
-
-    /**< Returns the result */
-    return Result;
+dynamic_bitset<> CustomXOR(dynamic_bitset<> A, dynamic_bitset<> B) {
+    return A^B;
 }
 
 /** \brief
@@ -79,46 +48,27 @@ string CustomXOR(int A, int B, int ASize, int BSize) {
  * \param
  * cols is the number of table columns
  *
+ * \param
+ * outputsize is the length of the output
+ *
  * \return
  * Returns an int with the value at the table position where the row value and column value meet
  *
  */
 
-int CustomSBoxSearch(int** Sbox, int input, int rows, int cols, int inputsize) {
-    /**< Turns the input into a string */
-    stringstream ss;
-    string ins;
-
-    ss << input;
-    ss >> ins;
-
-    ss.str("");
-    ss.clear();
-
-    while (ins.length() < inputsize) {
-        ins.insert(ins.begin(), '0');
-    }
-
+dynamic_bitset<> CustomSBoxSearch(unsigned long** Sbox, dynamic_bitset<> input, int rows, int cols, int outputsize) {
     /**< Extract first digit and last digit from the input */
-    int firstdigit;
-    int lastdigit;
-    ss << ins[0];
-    ss >> firstdigit;
-    ss.str("");
-    ss.clear();
-    ss << ins[ins.length()-1];
-    ss >> lastdigit;
+    int firstdigit = input[input.size()-1];
+    int lastdigit = input[0];
 
     /**< Create column ID by taking input and leaving out the final and starting digit */
-    int colID;
-    string colIDtmp = ins;
-    colIDtmp[0] = ' ';
-    colIDtmp[colIDtmp.length()-1] = ' ';
-    colIDtmp.erase(remove(colIDtmp.begin(), colIDtmp.end(), ' '), colIDtmp.end());
-    ss.str("");
-    ss.clear();
-    ss << colIDtmp;
-    ss >> colID;
+    int colID = 0;
+    int tens = 1;
+    for (int i = 1; i < (input.size() - 2); i++) {
+        colID = colID + (input[i] * tens);
+        tens = tens * 10;
+    }
+
     /**< Create row ID by using the final and starting digit of the input */
     int rowID = (firstdigit * 10) + lastdigit;
     int rowpos = 0;
@@ -138,8 +88,20 @@ int CustomSBoxSearch(int** Sbox, int input, int rows, int cols, int inputsize) {
         }
     }
 
+    /**< Converts the binary in the sbox to a decimal */
+    unsigned long binary = Sbox[rowpos][colpos];
+    unsigned long decimal = 0;
+    for (int i = 0; i < outputsize; i++) {
+        if ((binary % 10) == 1) {
+            decimal += (1 << i);
+        }
+
+        binary /= 10;
+    }
+
     /**< Return the value at the table position */
-    return Sbox[rowpos][colpos];
+    dynamic_bitset<> res(outputsize, decimal);
+    return res;
 }
 
 /** \brief
@@ -152,9 +114,6 @@ int CustomSBoxSearch(int** Sbox, int input, int rows, int cols, int inputsize) {
  * input is the value used to be permutated
  *
  * \param
- * insize is the size of the input
- *
- * \param
  * outsize is the size of the output
  *
  * \return
@@ -162,29 +121,16 @@ int CustomSBoxSearch(int** Sbox, int input, int rows, int cols, int inputsize) {
  *
  */
 
-int PBoxOneToOne(int* tablepos, int input, int insize, int outsize) {
-    int result;
-    stringstream ss;
-    string ins;
-
-    /**< Turns int into string */
-    ss << input;
-    ss >> ins;
-
-    /**< Makes it the correct length */
-    while(ins.length() < insize) {
-        ins.insert(ins.begin(), '0');
-    }
+dynamic_bitset<> PBoxOneToOne(unsigned long* tablepos, dynamic_bitset<> input, int outsize) {
+    dynamic_bitset<> result(outsize);
 
     /**< Creates the output by appending the value at the position of the input to the result string  */
-    ss.str("");
-    ss.clear();
+    int counter = result.size();
+    counter--;
     for(int i = 0; i < outsize; i++) {
-        ss << ins[tablepos[i]];
+        result[counter] = input[input.size() - tablepos[i] - 1];
+        counter--;
     }
-
-    /**< Transforms into int */
-    ss >> result;
 
     /**< Returns result */
     return result;
@@ -201,9 +147,6 @@ int PBoxOneToOne(int* tablepos, int input, int insize, int outsize) {
  * numofOutputs is the total number of outputs
  *
  * \param
- * inputsize is the size of the input
- *
- * \param
  * outputsize is the length of the output
  *
  * \param
@@ -214,31 +157,22 @@ int PBoxOneToOne(int* tablepos, int input, int insize, int outsize) {
  *
  */
 
-int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, int** tablepos) {
+unsigned long* PBoxMultiOuts(dynamic_bitset<> input, int numofOutputs, int outputsize, unsigned long** tablepos) {
     /**< Creates multiple output array */
-    int* result = new int[numofOutputs];
-    /**< Checks input length */
-    stringstream ss;
-    ss << input;
-
-    string str = ss.str();
-
-    /**< If smaller add 0s to the front */
-    while (str.length() < inputsize) {
-        str.insert(str.begin(), '0');
-    }
+    unsigned long* result = new unsigned long[numofOutputs];
 
     /**< Cycles through all outputs */
     for (int i = 0; i < numofOutputs; i++) {
-        /**< Clear stringstream */
-        ss.str("");
-        ss.clear();
+        dynamic_bitset<>temp (outputsize);
+        int counter = temp.size();
+        counter--;
         for (int l = 0; l < outputsize; l++) {
             /**< Append the string character at the position */
-            ss << str[tablepos[i][l]];
+            temp[counter] = input[input.size() - tablepos[i][l] - 1];
+            counter--;
         }
         /**< Insert into return result */
-        ss >> result[i];
+        result[i] = temp.to_ulong();
     }
 
     /**< Return result */
@@ -268,40 +202,23 @@ int* PBoxMultiOuts(int input, int numofOutputs, int inputsize, int outputsize, i
  * returns an integer that has been permutated with the bits from all the inputs
  *
  */
-int PBoxSingleOut(int* inputs, int numofInputs, int inputsize, int outputsize, int* tablepos) {
-    stringstream ss;
-    stringstream si;
-    string singleinput;
-    int result;
+dynamic_bitset<> PBoxSingleOut(unsigned long* inputs, int numofInputs, int inputsize, int outputsize, unsigned long* tablepos) {
+    dynamic_bitset<> result (outputsize);
+    int counter = result.size();
+    counter--;
 
     /**< Creates one massive input */
     for (int i = 0; i < numofInputs; i++) {
         /**< Clears stream and inserts next input */
-        ss.str("");
-        ss.clear();
-        ss << inputs[i];
-        ss >> singleinput;
+        dynamic_bitset<> temp(inputsize, inputs[i]);
         /**< Inserts 0 at start if not the right length */
-        while (singleinput.length() < inputsize) {
-            singleinput.insert(singleinput.begin(), '0');
+        for (long i = temp.size()-1; i >= 0; i--) {
+            result[counter] = temp[i];
+            counter--;
         }
-        /**< Inserts into massive input stream */
-        si << singleinput;
     }
-
-    /**< Turns massive input into string */
-    si >> singleinput;
-
-    ss.str("");
-    ss.clear();
-    /**< Goes through the length of the output value */
-    for (int i = 0; i < outputsize; i++) {
-        /**< Appends/inserts the bit at the position of the massive input */
-        ss << singleinput[tablepos[i]];
-    }
-
-    /**< Converts to int */
-    ss >> result;
 
     return result;
 }
+
+
