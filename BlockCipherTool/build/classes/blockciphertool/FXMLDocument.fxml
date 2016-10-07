@@ -335,7 +335,7 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button layoutX="291.0" layoutY="29.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Generate" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <Button layoutX="291.0" layoutY="29.0" mnemonicParsing="false" onAction="#listpboxes" prefHeight="55.0" prefWidth="250.0" text="Generate" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>

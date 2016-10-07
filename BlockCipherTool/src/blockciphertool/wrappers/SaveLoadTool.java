@@ -17,16 +17,17 @@ import javax.xml.bind.Marshaller;
  */
 public class SaveLoadTool {
     
-    public void saveAsXml(String filename) {
+
+    public void saveAsXml(String filename, CipherWrapper wrapper) {
 	try {
 	    
 	    JAXBContext context = JAXBContext.newInstance(CipherWrapper.class);
 	    Marshaller m = context.createMarshaller();
 	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    
-	    CipherWrapper wrapper = new CipherWrapper();
 	    
 	    
+	    /*
 	    //pbox 2 table
 	    Row pbox2row1 = new Row();
 	    Row pbox2row2 = new Row();
@@ -388,7 +389,7 @@ public class SaveLoadTool {
 	    wrapper.setXors(cipherXors);
 	    wrapper.setFunctions(cipherFunctions);
 	    wrapper.setProperties(properties);
-	    
+	    */
 	    File file = new File("Save1.xml");
 	    m.marshal(wrapper, file);
 	    	    

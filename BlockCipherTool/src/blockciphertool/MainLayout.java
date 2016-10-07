@@ -5,6 +5,11 @@
  */
 package blockciphertool;
 
+import blockciphertool.wrappers.CipherConnectionWrapper;
+import blockciphertool.wrappers.CipherFunctionWrapper;
+import blockciphertool.wrappers.CipherWrapper;
+import blockciphertool.wrappers.CipherXorWrapper;
+import blockciphertool.wrappers.PropertiesWrapper;
 /**
  *
  * @author Aloe2020
@@ -32,7 +37,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import blockciphertool.wrappers.SaveLoadTool;
+import blockciphertool.wrappers.pboxWrapper;
+import blockciphertool.wrappers.sboxWrapper;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
 
 /**
  *
@@ -49,6 +59,13 @@ public class MainLayout extends AnchorPane{
     private EventHandler<DragEvent> mIconDragOverRoot=null;
     private EventHandler<DragEvent> mIconDragDropped=null;
     private EventHandler<DragEvent> mIconDragOverLeftPane=null;
+    
+    private List<PboxNode> pboxs;
+    private List<SboxNode> sboxs;
+    //private List<CipherFunctionWrapper> functions;
+    private List<XorNode> xors;
+    private List<NodeLink> connections;
+    private PropertiesWrapper properties;
     
     public MainLayout() {
 
@@ -73,8 +90,8 @@ public class MainLayout extends AnchorPane{
 	
 	
 	
-	SaveLoadTool saveController = new SaveLoadTool();
-	saveController.saveAsXml("save.xml");
+	//SaveLoadTool saveController = new SaveLoadTool();
+	//saveController.saveAsXml("save.xml");
 	
 	
         //Add one icon that will be used for the drag-drop process
@@ -119,6 +136,12 @@ public class MainLayout extends AnchorPane{
         
         
         buildDragHandlers();
+        
+        pboxs = new ArrayList<PboxNode>();
+        sboxs = new ArrayList<SboxNode>();
+        xors = new ArrayList<XorNode>();
+        connections = new ArrayList<NodeLink>();
+        properties = new PropertiesWrapper();
     }
     
     private void addDragDetectionIcon(DragIcon dragIcon) {
@@ -267,6 +290,7 @@ public class MainLayout extends AnchorPane{
 
                             node.setType(DragNodeType.valueOf(container.getValue("type")));
                             main_window.getChildren().add(node);
+                            
 
                             Point2D cursorPoint = container.getValue("scene_coords");
 
@@ -282,6 +306,8 @@ public class MainLayout extends AnchorPane{
                             Point2D pcursorPoint = container.getValue("scene_coords");
 
                             pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
+                            System.out.print(pnode);
+                            pboxs.add(pnode);
                         break;
                         
                         case sbox:
@@ -293,6 +319,7 @@ public class MainLayout extends AnchorPane{
                             Point2D scursorPoint = container.getValue("scene_coords");
 
                             snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
+                            sboxs.add(snode);
                         break;
                         
                         case xor:
@@ -304,6 +331,7 @@ public class MainLayout extends AnchorPane{
                             Point2D xcursorPoint = container.getValue("scene_coords");
 
                             xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
+                            xors.add(xnode);
                         break;
                         
                         case end:
@@ -368,6 +396,8 @@ public class MainLayout extends AnchorPane{
                         
                         if (source != null && target != null)
                             Link.bindEnds(source, target);
+                        
+                        connections.add(Link);
                     }
                 }
 
@@ -387,16 +417,27 @@ public class MainLayout extends AnchorPane{
     }
     
     public void runConfirm() throws IOException {
+        
+        CipherWrapper cWrap = new CipherWrapper();
+        //pass in the lists into a conversion function then store them in cipherwrapper
+        //assign conversion function returned lists to 
+        
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
+        RunConfirm confirm = new RunConfirm(cWrap);         //create runconfirm controller objet
+        fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setOpacity(1);
         stage.setTitle("Encrypt or Decrypt");
-        stage.setScene(new Scene(root, 570, 300));
+        stage.setScene(new Scene(root, 620, 400));
         stage.showAndWait();
     }
     
-    
+    public void listpboxes() {
+        for (int i = 0; i < pboxs.size(); i++) {
+            System.out.println(pboxs.get(i).getCoords());
+        }
+    }
     
 }

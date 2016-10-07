@@ -8,14 +8,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="620.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="20.0" layoutY="14.0" text="Encrypt/Decrypt">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <RadioButton layoutX="25.0" layoutY="35.0" mnemonicParsing="false" text="Encrypt">
+      <RadioButton layoutX="25.0" layoutY="35.0" mnemonicParsing="false" selected="true" text="Encrypt">
          <toggleGroup>
             <ToggleGroup fx:id="mode" />
          </toggleGroup>
@@ -26,19 +26,19 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="20.0" layoutY="107.0" prefHeight="25.0" prefWidth="280.0" promptText="The key you would like to use" />
-      <Label layoutX="21.0" layoutY="143.0" text="Input/Output">
+      <TextField fx:id="key" layoutX="20.0" layoutY="107.0" prefHeight="25.0" prefWidth="280.0" promptText="The key you would like to use" />
+      <Label layoutX="20.0" layoutY="143.0" text="Input/Output">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Accordion layoutX="20.0" layoutY="20.0" prefHeight="175.0" prefWidth="580.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <Accordion layoutX="20.0" layoutY="165.0" prefHeight="175.0" prefWidth="580.0">
         <panes>
             <TitledPane text="Input">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea layoutX="10.0" layoutY="25.0" prefHeight="100.0" prefWidth="392.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="input" layoutX="10.0" layoutY="25.0" prefHeight="100.0" prefWidth="392.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -50,7 +50,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea layoutX="20.0" layoutY="27.0" prefHeight="80.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TextArea fx:id="output" layoutX="20.0" layoutY="27.0" prefHeight="80.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -60,8 +60,8 @@
             </TitledPane>
         </panes>
       </Accordion>
-      <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="270.0" text="Run" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" />
-      <Button layoutX="534.0" layoutY="361.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="270.0" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" />
+      <Button fx:id="run" mnemonicParsing="false" prefHeight="40.0" prefWidth="280.0" text="Run" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" />
+      <Button fx:id="cancel" layoutX="534.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelButtonAction" prefHeight="40.0" prefWidth="280.0" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" />
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
