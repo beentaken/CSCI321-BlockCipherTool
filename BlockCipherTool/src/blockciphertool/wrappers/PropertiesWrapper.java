@@ -23,6 +23,8 @@ public class PropertiesWrapper {
     private String numberOfRounds;
     private String blockSize;
     private String keySize;
+    private String chainMode;
+    private String padding;
     
     @XmlElement(name="startID")
     public String getStartId() {
@@ -67,5 +69,23 @@ public class PropertiesWrapper {
     
     public void setKeySize(String KeySize) {
 	this.keySize = KeySize;
+    }
+    
+    @XmlElement(name="chainMode")
+    public String getChainMode() {
+	return this.chainMode;
+    }
+    
+    public void setChainMode(String ChainMode) {
+	this.chainMode = ChainMode;
+    }
+    
+    @XmlElement(name="padding")
+    public String getPadding() {
+	return this.padding;
+    }
+    
+    public void setPadding(String Padding) {
+	this.padding = Padding;
     }
 }

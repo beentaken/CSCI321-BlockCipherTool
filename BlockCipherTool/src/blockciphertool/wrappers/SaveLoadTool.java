@@ -10,15 +10,139 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-
+import blockciphertool.PboxNode;
+import blockciphertool.SboxNode;
+import blockciphertool.XorNode;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javax.xml.bind.Unmarshaller;
 /**
  *
  * @author Gigabyte
  */
 public class SaveLoadTool {
+    private CipherWrapper cipher;
     
+    public void AddProperties(String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
+	PropertiesWrapper props = new PropertiesWrapper();
+	props.setNumberOfRounds(NumRounds);
+	props.setBlockSize(BlockSize);
+	props.setKeySize(KeySize);
+	props.setChainMode(ChainMode);
+	props.setPadding(Padding);
+	props.setStartId(StartId);
+	props.setEndId(EndId);
+    }
+    
+    public void AddPBoxs(List<PboxNode> pboxs) {
+	List<pboxWrapper> convertedPBoxs = new ArrayList<pboxWrapper>();
+	
+	for (int i=0; i<pboxs.size(); i++) {
+	   pboxWrapper pbox = new pboxWrapper();
+	   pbox.setId(pboxs.get(i).getId());
+	   pbox.setX(pboxs.get(i).getXString());
+	   pbox.setY(pboxs.get(i).getYString());
+	   
+	   //pbox.setInputs(    );
+	   //pbox.setOutputs(   );
+	   //pbox.setTable(     );
+	   
+	   convertedPBoxs.add(pbox);
+	   
+	}
+	
+	cipher.setPboxs(convertedPBoxs);
+    }
+    
+    public void AddSBoxes(List<SboxNode> sboxs) {
+	List<sboxWrapper> convertedSBoxs = new ArrayList<sboxWrapper>();
+	
+	for (int i=0; i<sboxs.size(); i++) {
+	   sboxWrapper sbox = new sboxWrapper();
+	   sbox.setId(sboxs.get(i).getId());
+	   sbox.setX(sboxs.get(i).getXString());
+	   sbox.setY(sboxs.get(i).getYString());
+	   
+	   //sbox.setInputs(    );
+	   //sbox.setOutputs(   );
+	   //sbox.setTable(     );
+	   
+	   convertedSBoxs.add(sbox);
+	   
+	}
+	
+	cipher.setSboxs(convertedSBoxs);
+    }
+    
+    public void AddXors(List<XorNode> xors) {
+	List<CipherXorWrapper> convertedXors = new ArrayList<CipherXorWrapper>();
+	
+	for (int i=0; i<xors.size(); i++) {
+	    CipherXorWrapper xor = new CipherXorWrapper();
+	    xor.setId(xors.get(i).getId());
+	    xor.setX(xors.get(i).getXString());
+	    xor.setY(xors.get(i).getYString());
+	   
+	    // xor.setInputs(    );
+	    //xor.setOutputs(   );
+	    //xor.setSize(xors.get(i).getSize());
+	   
+	    convertedXors.add(xor);
+	   
+	}
+	
+	cipher.setXors(convertedXors);
+    }
+    
+//    public void AddConnections(List<connections> connections) {
+//	    for (int i=0; i<xors.size(); i++) {
+//	    CipherXorWrapper xor = new CipherXorWrapper();
+//	    xor.setId(xors.get(i).getId());
+//	    xor.setX(xors.get(i).getXString());
+//	    xor.setY(xors.get(i).getYString());
+//	   
+//	    // xor.setInputs(    );
+//	    //xor.setOutputs(   );
+//	    //xor.setSize(xors.get(i).getSize());
+//	   
+//	    convertedXors.add(xor);
+//	   
+//	}
+//    }
+//    
+//    public void AddFunction(function function) {
+//	List<CipherFunctionWrapper> functions = this.cipher.getFunctions();
+//	
+//	
+//	
+//    }
+    
+    
+    public void loadAsXml(String filename) {
+	try {
+	    JAXBContext context = JAXBContext
+		    .newInstance(CipherWrapper.class);
+	    Unmarshaller um = context.createUnmarshaller();
 
-    public void saveAsXml(String filename, CipherWrapper wrapper) {
+	    File file = new File("Save2.xml");
+
+
+	    // Reading XML from the file and unmarshalling.
+	    CipherWrapper wrapper = (CipherWrapper) um.unmarshal(file);
+
+	    wrapper.getPboxs().get(0).getX();
+
+	} catch (Exception e) { // catches ANY exception
+	    Alert alert = new Alert(AlertType.ERROR);
+	    alert.setTitle("Error");
+	    alert.setHeaderText("Could not load data");
+	    alert.setContentText("Could not load data from file");
+
+	    alert.showAndWait();
+	}
+    }
+    
+    public void saveAsXml(String filename) {
 	try {
 	    
 	    JAXBContext context = JAXBContext.newInstance(CipherWrapper.class);
@@ -391,7 +515,7 @@ public class SaveLoadTool {
 	    wrapper.setProperties(properties);
 	    */
 	    File file = new File("Save1.xml");
-	    m.marshal(wrapper, file);
+	    m.marshal(cipher, file);
 	    	    
 	} catch (Exception e) {
 	    e.printStackTrace();

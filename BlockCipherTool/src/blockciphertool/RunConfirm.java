@@ -48,9 +48,17 @@ public class RunConfirm extends AnchorPane{
         
         stage.close();
     }
-    
+
+	    
     @FXML
     private void runButtonAction() {
-        save = new SaveLoadTool();
+	
+	//CipherWrapper cipher = CipherWrapper.generateCipherWrapper();
+	
+	
+	SaveLoadTool saveController = new SaveLoadTool();
+	saveController.saveAsXml("save.xml");
     }
+    
+
 }

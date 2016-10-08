@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 
 /**
  *
@@ -27,6 +28,13 @@ public class PboxOptions extends AnchorPane{
         System.out.println("blockciphertool.PboxOptions.PboxOptions()");
     }
     
+    @FXML
+    private void chooseFileButtonAction() {
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Open Resource File");
+	//fileChooser.showOpenDialog();
+	System.out.println("loading");
+    }
     
     public static class Lookup {
         private final String col1;

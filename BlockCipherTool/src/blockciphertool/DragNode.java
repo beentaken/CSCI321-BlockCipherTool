@@ -197,7 +197,7 @@ public class DragNode extends AnchorPane{
         return p;
     }
     
-    public String getXSting() {
+    public String getXString() {
         String xString = "" + xCoord;
         return xString;
     }
