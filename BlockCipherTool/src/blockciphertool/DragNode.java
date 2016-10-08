@@ -434,17 +434,5 @@ public class DragNode extends AnchorPane{
         };
     }
     
-    public void options() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/pboxOptions.fxml"));
-        
-        Parent root = fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setOpacity(1);
-        stage.setTitle("Options");
-        stage.setScene(new Scene(root, 600, 400));
-        stage.showAndWait();
-        
-        
-    }
+    
 }
