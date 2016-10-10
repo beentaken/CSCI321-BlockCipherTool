@@ -15,12 +15,15 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -33,14 +36,14 @@ import javax.swing.ProgressMonitorInputStream;
 public class PboxOptions extends AnchorPane{
     
     @FXML private TextArea LookupText;
-    @FXML private TableView inputTableSizes;
+    @FXML private TableView<connection> inputTable;
     @FXML private TableView outputTableSizes;
-    @FXML private TableColumn InputIds;
+    @FXML private TableColumn<connection, String> InputIds;
     @FXML private TableColumn OutputIds;
-    @FXML private TableColumn InputIdSizes;
+    @FXML private TableColumn<connection, String> InputIdSizes;
     @FXML private TableColumn OutputIdSizes;
     
-    private final ObservableList<link_list> inputTable = FXCollections.observableArrayList();
+    private final ObservableList<connection> data = FXCollections.observableArrayList();
     
     public PboxOptions() {
                 
@@ -49,14 +52,34 @@ public class PboxOptions extends AnchorPane{
     
     public void loadports(int numPort) {
         
+        inputTable.setEditable(true);
+
+        data.clear();
+        connection conn;
         for (int i = 0; i < numPort; i++) {
-            inputTable.add(new link_list(i+1, "0"));
+            conn = new connection();
+            conn.setLinkNum(i+1);
+            conn.setSize("0");
+            data.add(conn);
         }
         
-        InputIds.setCellValueFactory(new PropertyValueFactory<>("linknum"));
-        InputIdSizes.setCellValueFactory(new PropertyValueFactory<>("size"));
+        InputIds.setCellValueFactory(new PropertyValueFactory<connection, String>("linknum"));
+        InputIdSizes.setCellValueFactory(new PropertyValueFactory<connection, String>("size"));
+        InputIdSizes.setCellFactory(TextFieldTableCell.forTableColumn());
         
-        inputTableSizes.setItems(inputTable);
+        InputIdSizes.setOnEditCommit(
+            new EventHandler<CellEditEvent<connection, String>>() {
+                @Override
+                public void handle(CellEditEvent<connection, String> t) {
+                    ((connection) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                            ).setSize(t.getNewValue());
+                }
+            }
+        );
+        System.out.print(data.get(4).getLinknum());
+        inputTable.setItems(data);
+
     }
     
     @FXML
@@ -73,29 +96,34 @@ public class PboxOptions extends AnchorPane{
         }
     }
     
-    public static class link_list {
+    public static class connection {
  
         private SimpleIntegerProperty linknum;
         private SimpleStringProperty size;
  
-        private link_list(int templinknum, String tempsize) {
+        private connection() {
+            this.linknum = new SimpleIntegerProperty(0);
+            this.size = new SimpleStringProperty("");
+        }
+                
+        private connection(int templinknum, String tempsize) {
             this.linknum = new SimpleIntegerProperty(templinknum);
             this.size = new SimpleStringProperty(tempsize);
         }
  
-        public int getlinknum() {
+        public int getLinknum() {
             return linknum.get();
         }
  
-        public void setFirstName(int lnum) {
+        public void setLinkNum(int lnum) {
             linknum.set(lnum);
         }
  
-        public String getsize() {
+        public String getSize() {
             return size.get();
         }
  
-        public void setLastName(String lsize) {
+        public void setSize(String lsize) {
             size.set(lsize);
         }
     }
