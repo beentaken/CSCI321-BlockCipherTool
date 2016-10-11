@@ -397,6 +397,8 @@ public class MainLayout extends AnchorPane{
                         if (source != null && target != null)
                             Link.bindEnds(source, target);
                         
+			source.addConnection(Link);
+			target.addConnection(Link);
                         connections.add(Link);
                     }
                 }

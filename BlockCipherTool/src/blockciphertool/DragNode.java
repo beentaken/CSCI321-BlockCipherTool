@@ -67,6 +67,8 @@ public class DragNode extends AnchorPane{
     
     private List <String> mLinkIds = new ArrayList <String> ();
     
+    private List<NodeLink> connections = new ArrayList<NodeLink> ();
+    
     private int xCoord;
     private int yCoord;
     
@@ -156,6 +158,30 @@ public class DragNode extends AnchorPane{
         String linkId = mLinkIds.get(index);
         return linkId;
     }
+    
+    public List<String> getLinks() {
+	return mLinkIds;
+    }
+    
+    public void addConnection(NodeLink connection) {
+	connections.add(connection);
+    }
+    
+    public List<NodeLink> getConnections() {
+	return this.connections;
+    }
+    
+    public void removeConnection(String id ) {
+	boolean found = false;
+	for (int i=0; i<connections.size(); i++) {
+	    if ( connections.get(i).getId().equals(id) ) {
+		connections.remove(i);
+		return;
+	    }
+	}
+	System.out.println("err: connection not found");
+    }
+    
     
     public List<input> GetLinkList() {
         List<input> inputs = null;

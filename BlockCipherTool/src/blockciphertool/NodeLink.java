@@ -126,7 +126,7 @@ public class NodeLink extends AnchorPane {
         setId(myId);
     }
     
-    public String getSize() {
+    public String getConnectionSize() {
         return mSize;
     }
     

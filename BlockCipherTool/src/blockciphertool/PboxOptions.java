@@ -9,6 +9,7 @@ import java.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -50,18 +51,28 @@ public class PboxOptions extends AnchorPane{
         System.out.println("blockciphertool.PboxOptions.PboxOptions()");
     }
     
-    public void loadports(int numPort) {
+    public void loadports(List <NodeLink> Links) {
         
-        inputTable.setEditable(true);
-
-        data.clear();
+	data.clear();
         connection conn;
-        for (int i = 0; i < numPort; i++) {
+
+	for (int i=0; i< Links.size(); i++) {
             conn = new connection();
             conn.setLinkNum(i+1);
-            conn.setSize("0");
-            data.add(conn);
-        }
+	    
+	    if ( Links.get(i).getConnectionSize() == null ) {
+		conn.setSize("0");
+
+	    } else {
+		conn.setSize( Links.get(i).getConnectionSize() );
+
+	    }
+            data.add(conn);	    
+	}
+	
+        inputTable.setEditable(true);
+
+
         
         InputIds.setCellValueFactory(new PropertyValueFactory<connection, String>("linknum"));
         InputIdSizes.setCellValueFactory(new PropertyValueFactory<connection, String>("size"));
@@ -77,7 +88,6 @@ public class PboxOptions extends AnchorPane{
                 }
             }
         );
-        System.out.print(data.get(4).getLinknum());
         inputTable.setItems(data);
 
     }
