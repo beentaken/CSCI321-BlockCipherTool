@@ -283,6 +283,7 @@ public class MainLayout extends AnchorPane{
                             Point2D cursorPoint = container.getValue("scene_coords");
 
                             node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                            node.setParent(MainLayout.this);
                         break;
                         
                         case pbox:
@@ -309,6 +310,7 @@ public class MainLayout extends AnchorPane{
 
                             snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
                             sboxs.add(snode);
+                            snode.setParent(MainLayout.this);
                         break;
                         
                         case xor:
@@ -321,6 +323,7 @@ public class MainLayout extends AnchorPane{
 
                             xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
                             xors.add(xnode);
+                            xnode.setParent(MainLayout.this);
                         break;
                         
                         case end:
@@ -332,6 +335,7 @@ public class MainLayout extends AnchorPane{
                             Point2D ecursorPoint = container.getValue("scene_coords");
 
                             enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                            enode.setParent(MainLayout.this);
                         break;
                         
                         default:
@@ -417,6 +421,18 @@ public class MainLayout extends AnchorPane{
                         pboxs.get(j).removeConnection(id);
                     if(pboxs.get(j).getId().equals(tId))
                         pboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<sboxs.size(); j++) {
+                    if(sboxs.get(j).getId().equals(sId))
+                        sboxs.get(j).removeConnection(id);
+                    if(sboxs.get(j).getId().equals(tId))
+                        sboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<xors.size(); j++) {
+                    if(xors.get(j).getId().equals(sId))
+                        xors.get(j).removeConnection(id);
+                    if(xors.get(j).getId().equals(tId))
+                        xors.get(j).removeConnection(id);
                 }
 		connections.remove(i);
 		return;

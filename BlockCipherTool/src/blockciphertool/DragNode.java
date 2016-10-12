@@ -221,7 +221,7 @@ public class DragNode extends AnchorPane{
         
         setCoords(localCoords);
         
-        System.out.println("x, y: " + (localCoords.getX() - mDragOffset.getX()) + ", " + (localCoords.getY() - mDragOffset.getY()));
+        //System.out.println("x, y: " + (localCoords.getX() - mDragOffset.getX()) + ", " + (localCoords.getY() - mDragOffset.getY()));
     }
     
     public void setCoords (Point2D p) {
@@ -422,12 +422,13 @@ public class DragNode extends AnchorPane{
                 
                 mDragLink.setStart(p);
                 
-                
+/*                
                 Point2D localCoords = getParent().localToParent(p);  
                 System.out.println("Parent coords x, " + localCoords.getX() + ", y: " + localCoords.getY());
                 System.out.println("Parent x, " + p.getX() + ", y: " + p.getY());
                 System.out.println("Layout x, " + (getLayoutX() - event.getX()) + ", y: " + (getLayoutY() - event.getY()));
-                
+*/                
+
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
                 

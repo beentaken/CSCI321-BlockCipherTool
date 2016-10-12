@@ -8,6 +8,10 @@ package blockciphertool;
 import java.io.IOException;
 import java.util.UUID;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -16,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 public class XorNode extends DragNode{
     
     private String xorSize;
+    private XorOptions options = null;
     
     public XorNode() {
 
@@ -34,6 +39,7 @@ public class XorNode extends DragNode{
         }
         
         //setId(UUID.randomUUID().toString());
+        options = new XorOptions();
     }
     
     public String getSize() {
@@ -42,6 +48,19 @@ public class XorNode extends DragNode{
     
     public void setSize(String newSize) {
         xorSize = newSize;
+    }
+    
+    public void options() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/xorOptions.fxml"));
+        fxmlLoader.setController(options);
+        Parent root = fxmlLoader.load();
+        options.loadData( this.getInConnections(), this.getOutConnections());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOpacity(1);
+        stage.setTitle("Options");
+        stage.setScene(new Scene(root, 600, 300));
+        stage.showAndWait();
     }
     
 }

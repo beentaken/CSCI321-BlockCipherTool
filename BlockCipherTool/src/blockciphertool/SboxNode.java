@@ -8,12 +8,18 @@ package blockciphertool;
 import java.io.IOException;
 import java.util.UUID;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
  * @author csit321lm01a
  */
 public class SboxNode extends DragNode{
+    
+    private SboxOptions options = null;
     
     public SboxNode() {
 
@@ -32,6 +38,20 @@ public class SboxNode extends DragNode{
         }
         
         //setId(UUID.randomUUID().toString());
+        options = new SboxOptions();
     }
     
+    
+    public void options() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/sboxOptions.fxml"));
+        fxmlLoader.setController(options);
+        Parent root = fxmlLoader.load();
+        options.loadData( this.getInConnections(), this.getOutConnections());
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setOpacity(1);
+        stage.setTitle("Options");
+        stage.setScene(new Scene(root, 600, 400));
+        stage.showAndWait();
+    }
 }
