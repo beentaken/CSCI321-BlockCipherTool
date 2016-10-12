@@ -268,18 +268,6 @@ public class MainLayout extends AnchorPane{
                 DragContainer container = 
                         (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
                 
-                /*if (container != null) {
-                    if (container.getValue("scene_coords") != null) {
-                        DragNode node = new DragNode();
-                        
-                        node.setType(DragNodeType.valueOf(container.getValue("type")));
-                        main_window.getChildren().add(node);
-                        
-                        Point2D cursorPoint = container.getValue("scene_coords");
-                        
-                        node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
-                    }
-                }*/
                 
                 if (container != null) {
                     if (container.getValue("scene_coords") != null) {
@@ -308,6 +296,7 @@ public class MainLayout extends AnchorPane{
                             pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
                             System.out.print(pnode);
                             pboxs.add(pnode);
+                            pnode.setParent(MainLayout.this);
                         break;
                         
                         case sbox:
@@ -418,6 +407,23 @@ public class MainLayout extends AnchorPane{
         });
     }
     
+    public void updateConnections(String id) {
+        for (int i=0; i<connections.size(); i++) {
+	    if ( connections.get(i).getId().equals(id) ) {
+                String sId = connections.get(i).getSourceId();
+                String tId = connections.get(i).getTargetId();
+                for (int j=0; j<pboxs.size(); j++) {
+                    if(pboxs.get(j).getId().equals(sId))
+                        pboxs.get(j).removeConnection(id);
+                    if(pboxs.get(j).getId().equals(tId))
+                        pboxs.get(j).removeConnection(id);
+                }
+		connections.remove(i);
+		return;
+	    }
+	}
+    }
+    
     public void runConfirm() throws IOException {
         
         CipherWrapper cWrap = new CipherWrapper();
@@ -439,6 +445,9 @@ public class MainLayout extends AnchorPane{
     public void listpboxes() {
         for (int i = 0; i < pboxs.size(); i++) {
             System.out.println(pboxs.get(i).getCoords());
+        }
+        for (int i = 0; i < connections.size(); i++) {
+            System.out.println(connections.get(i).getSourceId());
         }
     }
     

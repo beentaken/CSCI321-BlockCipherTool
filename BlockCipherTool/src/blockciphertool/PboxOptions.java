@@ -38,45 +38,64 @@ public class PboxOptions extends AnchorPane{
     
     @FXML private TextArea LookupText;
     @FXML private TableView<connection> inputTable;
-    @FXML private TableView outputTableSizes;
+    @FXML private TableView<connection> outputTable;
     @FXML private TableColumn<connection, String> InputIds;
-    @FXML private TableColumn OutputIds;
+    @FXML private TableColumn<connection, String> OutputIds;
     @FXML private TableColumn<connection, String> InputIdSizes;
-    @FXML private TableColumn OutputIdSizes;
+    @FXML private TableColumn<connection, String> OutputIdSizes;
     
-    private final ObservableList<connection> data = FXCollections.observableArrayList();
+    private final ObservableList<connection> dataIn = FXCollections.observableArrayList();
+    private final ObservableList<connection> dataOut = FXCollections.observableArrayList();
     
     public PboxOptions() {
                 
         System.out.println("blockciphertool.PboxOptions.PboxOptions()");
     }
     
-    public void loadports(List <NodeLink> Links) {
+    public void loadports(List <NodeLink> inLinks, List<NodeLink> outLinks) {
         
-	data.clear();
+	dataIn.clear();
+        dataOut.clear();
         connection conn;
 
-	for (int i=0; i< Links.size(); i++) {
+	for (int i=0; i< inLinks.size(); i++) {
             conn = new connection();
             conn.setLinkNum(i+1);
 	    
-	    if ( Links.get(i).getConnectionSize() == null ) {
+	    if ( inLinks.get(i).getConnectionSize() == null ) {
 		conn.setSize("0");
 
 	    } else {
-		conn.setSize( Links.get(i).getConnectionSize() );
+		conn.setSize( inLinks.get(i).getConnectionSize() );
 
 	    }
-            data.add(conn);	    
+            dataIn.add(conn);	    
+	}
+        
+        for (int i=0; i< outLinks.size(); i++) {
+            conn = new connection();
+            conn.setLinkNum(i+1);
+	    
+	    if ( outLinks.get(i).getConnectionSize() == null ) {
+		conn.setSize("0");
+
+	    } else {
+		conn.setSize( outLinks.get(i).getConnectionSize() );
+
+	    }
+            dataOut.add(conn);	    
 	}
 	
         inputTable.setEditable(true);
-
-
+        outputTable.setEditable(true);
         
         InputIds.setCellValueFactory(new PropertyValueFactory<connection, String>("linknum"));
         InputIdSizes.setCellValueFactory(new PropertyValueFactory<connection, String>("size"));
         InputIdSizes.setCellFactory(TextFieldTableCell.forTableColumn());
+        
+        OutputIds.setCellValueFactory(new PropertyValueFactory<connection, String>("linknum"));
+        OutputIdSizes.setCellValueFactory(new PropertyValueFactory<connection, String>("size"));
+        OutputIdSizes.setCellFactory(TextFieldTableCell.forTableColumn());
         
         InputIdSizes.setOnEditCommit(
             new EventHandler<CellEditEvent<connection, String>>() {
@@ -88,8 +107,19 @@ public class PboxOptions extends AnchorPane{
                 }
             }
         );
-        inputTable.setItems(data);
+        inputTable.setItems(dataIn);
 
+        OutputIdSizes.setOnEditCommit(
+            new EventHandler<CellEditEvent<connection, String>>() {
+                @Override
+                public void handle(CellEditEvent<connection, String> t) {
+                    ((connection) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                            ).setSize(t.getNewValue());
+                }
+            }
+        );
+        outputTable.setItems(dataOut);
     }
     
     @FXML

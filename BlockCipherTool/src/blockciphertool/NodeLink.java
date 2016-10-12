@@ -31,6 +31,11 @@ public class NodeLink extends AnchorPane {
     private final DoubleProperty mControlDirectionY2 = new SimpleDoubleProperty();
     
     private String mSize;
+    private String sourceId;
+    private String targetId;
+    
+    private DragNode sourceNode;
+    private DragNode targetNode;
     
     public NodeLink() {
         
@@ -116,6 +121,12 @@ public class NodeLink extends AnchorPane {
         
         source.registerLink (getId());
         target.registerLink (getId());
+        
+        sourceNode = source;
+        targetNode = target;
+        
+        sourceId = source.getNodeID();
+        targetId = target.getNodeID();
     }
     
     public String getLinkID() {
@@ -132,5 +143,17 @@ public class NodeLink extends AnchorPane {
     
     public void setSize(String size) {
         mSize = size;
+    }
+    
+    public String getSourceId() {
+        return sourceId;
+    }
+    
+    public String getTargetId() {
+        return targetId;
+    }
+    
+    public void removeLink(){
+        sourceNode.removeConnection(this.getLinkID());
     }
 }

@@ -64,10 +64,13 @@ public class DragNode extends AnchorPane{
     
     private NodeLink mDragLink = null;
     private AnchorPane parent_pane = null;
+    private MainLayout main_parent = null;
     
     private List <String> mLinkIds = new ArrayList <String> ();
     
-    private List<NodeLink> connections = new ArrayList<NodeLink> ();
+    private List <NodeLink> connections = new ArrayList<NodeLink> ();
+    
+    private List <DragNode> connectedFromNodes = new ArrayList<DragNode> ();
     
     private int xCoord;
     private int yCoord;
@@ -150,6 +153,10 @@ public class DragNode extends AnchorPane{
         });
     }
     
+    public void setParent(MainLayout main) {
+        main_parent = main;
+    }
+    
     public void registerLink(String linkId) {
         mLinkIds.add(linkId);
     }
@@ -163,6 +170,16 @@ public class DragNode extends AnchorPane{
 	return mLinkIds;
     }
     
+    public void removeLink(String id ) {
+	for (int i=0; i<mLinkIds.size(); i++) {
+	    if ( mLinkIds.get(i).equals(id) ) {
+		mLinkIds.remove(i);
+		return;
+	    }
+	}
+	System.out.println("err: connection not found");
+    }
+    
     public void addConnection(NodeLink connection) {
 	connections.add(connection);
     }
@@ -172,7 +189,6 @@ public class DragNode extends AnchorPane{
     }
     
     public void removeConnection(String id ) {
-	boolean found = false;
 	for (int i=0; i<connections.size(); i++) {
 	    if ( connections.get(i).getId().equals(id) ) {
 		connections.remove(i);
@@ -239,6 +255,26 @@ public class DragNode extends AnchorPane{
     
     public void setNodeID(String myId) {
         setId(myId);
+    }
+    
+    public List<NodeLink> getInConnections() {
+        List<NodeLink> ins = new ArrayList<>();
+        for (int i=0; i<connections.size(); i++){
+            if (connections.get(i).getTargetId().equals(getId()))
+                ins.add(connections.get(i));
+        }
+        
+        return ins;
+    }
+    
+    public List<NodeLink> getOutConnections() {
+        List<NodeLink> outs = new ArrayList<>();
+        for (int i=0; i<connections.size(); i++){
+            if (connections.get(i).getSourceId().equals(getId()))
+                outs.add(connections.get(i));
+        }
+        
+        return outs;
     }
     
     public DragNodeType getType() { return mType;}
@@ -322,8 +358,10 @@ public class DragNode extends AnchorPane{
                         
                         if (node.getId() == null)
                             continue;
-                        if (node.getId().equals(id))
+                        if (node.getId().equals(id)) {
+                            main_parent.updateConnections(id);
                             iterNode.remove();
+                        }
                     }
                 }
             }
