@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -44,15 +45,25 @@ public class PboxOptions extends AnchorPane{
     @FXML private TableColumn<connection, String> InputIdSizes;
     @FXML private TableColumn<connection, String> OutputIdSizes;
     
+    @FXML Button cancel;
+    
+    private String LookupData;
+    
     private final ObservableList<connection> dataIn = FXCollections.observableArrayList();
     private final ObservableList<connection> dataOut = FXCollections.observableArrayList();
     
+    private List<NodeLink> inNodeLinks;
+    private List<NodeLink> outNodeLinks;
+    
     public PboxOptions() {
-                
+        
         System.out.println("blockciphertool.PboxOptions.PboxOptions()");
     }
     
-    public void loadports(List <NodeLink> inLinks, List<NodeLink> outLinks) {
+    public void loadData(List <NodeLink> inLinks, List<NodeLink> outLinks) {
+        
+        if (LookupData != null)
+            LookupText.setText(LookupData);
         
 	dataIn.clear();
         dataOut.clear();
@@ -120,6 +131,9 @@ public class PboxOptions extends AnchorPane{
             }
         );
         outputTable.setItems(dataOut);
+        
+        inNodeLinks = inLinks;
+        outNodeLinks = outLinks;
     }
     
     @FXML
@@ -168,11 +182,6 @@ public class PboxOptions extends AnchorPane{
         }
     }
     
-    @FXML
-    private void save() {
-        
-    }
-    
     /*readFile Was not written by me, aquired online via http://java-buddy.blogspot.com.au/2012/05/read-text-file-with-javafx-filechooser.html*/
     private String readFile(File file){
         StringBuilder stringBuffer = new StringBuilder();
@@ -201,4 +210,26 @@ public class PboxOptions extends AnchorPane{
          
         return stringBuffer.toString();
     }
+    
+    @FXML
+    private void save() {
+        LookupData = LookupText.getText();
+        
+        for (int i=0; i<inNodeLinks.size();i++) {
+            inNodeLinks.get(i).setSize(dataIn.get(i).getSize());
+        }
+        for (int i=0; i<outNodeLinks.size();i++) {
+            outNodeLinks.get(i).setSize(dataOut.get(i).getSize());
+        }
+        
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        stage.close();
+    }
+    
+    @FXML
+    private void cancel() {
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        stage.close();
+    }
 }
+

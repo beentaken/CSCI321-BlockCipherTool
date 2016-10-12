@@ -47,7 +47,7 @@ public class PboxNode extends DragNode{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/pboxOptions.fxml"));
         fxmlLoader.setController(options);
         Parent root = fxmlLoader.load();
-        options.loadports( this.getInConnections(), this.getOutConnections());
+        options.loadData( this.getInConnections(), this.getOutConnections());
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setOpacity(1);
