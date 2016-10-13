@@ -1,109 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cipher>
-    <function ID="8">
-        <pbox ID="2">
-            <inputs num="1">
-                <input connectorID="1" size="2"/>
-            </inputs>
-            <outputs num="1">
-                <output connectorID="3" size="3"/>
-            </outputs>
-            <table cols="3" rows="5">
-                <rows> 2  , 0 , 1 </rows>
-                <rows> 00 , 00, 01 </rows>
-                <rows> 01 , 00, 00 </rows>
-                <rows> 10 , 00, 10 </rows>
-                <rows> 11 , 00, 11 </rows>
-            </table>
-            <X>500</X>
-            <Y>500</Y>
-        </pbox>
-        <pbox ID="5">
-            <inputs num="1">
-                <input connectorID="5" size="2"/>
-            </inputs>
-            <outputs num="1">
-                <output connectorID="6" size="2"/>
-            </outputs>
-            <table cols="3" rows="5">
-                <rows> 2  , 0 , 1 </rows>
-                <rows> 00 , 00, 01 </rows>
-                <rows> 01 , 00, 00 </rows>
-                <rows> 10 , 00, 10 </rows>
-                <rows> 11 , 00, 11 </rows>
-            </table>
-            <X>600</X>
-            <Y>600</Y>
-        </pbox>
-        <sbox ID="4">
-            <inputs num="1">
-                <input connectorID="4" size="3"/>
-            </inputs>
-            <outputs num="1">
-                <output connectorID="5" size="2"/>
-            </outputs>
-            <table cols="3" rows="5">
-                <rows> 2  , 0 , 1 </rows>
-                <rows> 00 , 00, 01 </rows>
-                <rows> 01 , 00, 00 </rows>
-                <rows> 10 , 00, 10 </rows>
-                <rows> 11 , 00, 11 </rows>
-            </table>
-            <X>700</X>
-            <Y>700</Y>
-        </sbox>
-        <X>900</X>
-        <xor ID="3">
-            <inputs num="2">
-                <input connectorID="3" size="3"/>
-                <input connectorID="k" size="3"/>
-            </inputs>
-            <outputs num="1">
-                <output connectorID="4" size="3"/>
-            </outputs>
-            <X>300</X>
-            <Y>300</Y>
-        </xor>
-        <Y>900</Y>
-    </function>
-    <pbox ID="1">
-        <inputs num="1">
-            <input connectorID="0" size="4"/>
-        </inputs>
-        <outputs num="2">
-            <output connectorID="1" size="2"/>
-            <output connectorID="2" size="2"/>
-        </outputs>
-        <X>240</X>
-        <Y>468</Y>
+    <pbox ID="99fef86d-c867-4df0-9e9d-c7fd367d20eb">
+        <X>452</X>
+        <Y>170</Y>
     </pbox>
-    <pbox ID="7">
-        <inputs num="2">
-            <input connectorID="6" size="2"/>
-            <input connectorID="2" size="2"/>
-        </inputs>
-        <outputs num="1">
-            <output connectorID="7" size="4"/>
-        </outputs>
-        <X>240</X>
-        <Y>468</Y>
-    </pbox>
-    <properties>
-        <blockSize>7</blockSize>
-        <endID>7</endID>
-        <keySize>4</keySize>
-        <numberOfRounds>9</numberOfRounds>
-        <startID>1</startID>
-    </properties>
-    <xor ID="6">
-        <inputs num="2">
-            <input connectorID="6" size="2"/>
-            <input connectorID="2" size="2"/>
-        </inputs>
-        <outputs num="1">
-            <output connectorID="7" size="2"/>
-        </outputs>
-        <X>200</X>
-        <Y>200</Y>
+    <sbox ID="b005974c-1e5f-460e-ad28-3112c2f20edb">
+        <X>800</X>
+        <Y>165</Y>
+    </sbox>
+    <xor ID="77c25268-52a0-4870-9536-b36a0181ba2b">
+        <X>633</X>
+        <Y>268</Y>
     </xor>
 </cipher>

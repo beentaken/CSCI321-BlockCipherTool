@@ -442,12 +442,22 @@ public class MainLayout extends AnchorPane{
     
     public void runConfirm() throws IOException {
         
-        CipherWrapper cWrap = new CipherWrapper();
+	SaveLoadTool saver = new SaveLoadTool();
+	
+	saver.AddPBoxs(pboxs);
+	saver.AddSBoxes(sboxs);
+	saver.AddXors(xors);
+	saver.AddConnections(connections);
+	saver.AddProperties();
+	//saver.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	
+	
+	
         //pass in the lists into a conversion function then store them in cipherwrapper
         //assign conversion function returned lists to 
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
-        RunConfirm confirm = new RunConfirm(cWrap);         //create runconfirm controller objet
+        RunConfirm confirm = new RunConfirm(saver);         //create runconfirm controller objet
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();

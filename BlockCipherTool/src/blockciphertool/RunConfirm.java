@@ -32,14 +32,13 @@ public class RunConfirm extends AnchorPane{
     @FXML Button cancel;
     
      private SaveLoadTool save = null;
-     private CipherWrapper cWrapper = null;
     
     public RunConfirm(){
         
     }
     
-    public RunConfirm(CipherWrapper newCipherWrapper) {
-        cWrapper = newCipherWrapper;
+    public RunConfirm(SaveLoadTool Save) {
+        this.save = Save;
     }
     
     @FXML
@@ -52,13 +51,8 @@ public class RunConfirm extends AnchorPane{
 	    
     @FXML
     private void runButtonAction() {
-	
-	//CipherWrapper cipher = CipherWrapper.generateCipherWrapper();
-	
-	
-	SaveLoadTool saveController = new SaveLoadTool();
-	saveController.saveAsXml("save.xml");
-        
+	System.out.println("Saving");
+	this.save.saveAsXml("ActualSave.xml");
         
     }
     
