@@ -42,6 +42,7 @@ import blockciphertool.wrappers.sboxWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -53,6 +54,9 @@ public class MainLayout extends AnchorPane{
     @FXML SplitPane base_pane;
     @FXML AnchorPane main_window;
     @FXML VBox node_list;
+    @FXML TextField numRounds;
+    @FXML TextField blockSize;
+    @FXML TextField keySize;
     
     private DragIcon mDragOverIcon = null;
     
@@ -449,7 +453,7 @@ public class MainLayout extends AnchorPane{
 	saver.AddXors(xors);
 	saver.AddConnections(connections);
 	saver.AddProperties();
-	//saver.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	//saver.AddProperties(numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
 	
 	
 	

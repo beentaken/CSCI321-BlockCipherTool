@@ -35,7 +35,7 @@
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="200.0">
                                              <children>
-                                                  <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
+                                                  <TextField fx:id="numRounds" layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
                                              </children>
                                           </AnchorPane>
                                     </content>
@@ -44,7 +44,7 @@
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
+                                                <TextField fx:id="blockSize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
                                              </children>
                                           </AnchorPane>
                                     </content>
@@ -53,7 +53,7 @@
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
+                                                <TextField layoutX="13.0" layoutY="14.0" onAction="#keySize" prefHeight="25.0" prefWidth="191.0" />
                                              </children>
                                           </AnchorPane>
                                     </content>

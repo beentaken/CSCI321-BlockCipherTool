@@ -55,4 +55,8 @@ public class PboxNode extends DragNode{
         stage.setScene(new Scene(root, 600, 400));
         stage.showAndWait();
     }
+    
+    public PboxOptions getOptions() {
+	return this.options;
+    }
 }

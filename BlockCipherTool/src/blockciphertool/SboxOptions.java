@@ -60,6 +60,10 @@ public class SboxOptions extends AnchorPane{
         System.out.println("blockciphertool.PboxOptions.PboxOptions()");
     }
     
+    public String getLookupTable() {
+	return LookupText.getText();
+    }
+    
     public void loadData(List <NodeLink> inLinks, List<NodeLink> outLinks) {
         
         if (LookupData != null)

@@ -48,8 +48,11 @@ public class SaveLoadTool {
     
     public void AddPBoxs(List<PboxNode> pboxs) {
 	List<pboxWrapper> convertedPBoxs = new ArrayList<pboxWrapper>();
-	
+		
 	for (int i=0; i<pboxs.size(); i++) {
+	    String outputData[];
+	    outputData = pboxs.get(i).getOptions().getLookupTable().split(",");
+	    
 	    pboxWrapper pbox = new pboxWrapper();
 	    pbox.setId(pboxs.get(i).getId());
 	    pbox.setX(pboxs.get(i).getXString());
@@ -67,9 +70,11 @@ public class SaveLoadTool {
 	    }
 	   
 	    for (int j=0; j<outputs.size(); j++) {
+		
 		output output = new output();
 		output.setConnectorID(outputs.get(j).getLinkID() );
 		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
+		output.setOutputData(outputData[i]);
 		wrapperOutputs.add(output);
 	    }
 	   
@@ -84,6 +89,8 @@ public class SaveLoadTool {
 	    pbox.setInputs(finalInputs);
 	    pbox.setOutputs(finalOutputs);
 	    
+	    
+	    
 	    //pbox.setTable(     );
 	   
 	    convertedPBoxs.add(pbox);
@@ -93,10 +100,14 @@ public class SaveLoadTool {
 	cipher.setPboxs(convertedPBoxs);	    
     }
     
-    public void AddSBoxes(List<SboxNode> sboxs) {
+    public void AddSBoxes(List<SboxNode> sboxs) {	
 	List<sboxWrapper> convertedSBoxs = new ArrayList<sboxWrapper>();
 	
 	for (int i=0; i<sboxs.size(); i++) {
+	    String outputData[];
+	    outputData = sboxs.get(i).getOptions().getLookupTable().split(",\n");
+
+	    
 	    sboxWrapper sbox = new sboxWrapper();
 	    sbox.setId(sboxs.get(i).getId());
 	    sbox.setX(sboxs.get(i).getXString());
@@ -121,6 +132,23 @@ public class SaveLoadTool {
 		wrapperOutputs.add(output);
 	    }
 	   
+	    String tableprops[] = outputData[0].split(" ");
+	    int cols = Integer.parseInt(tableprops[0]);
+	    int rows = Integer.parseInt(tableprops[1]);
+	    
+	    Table sboxTable = new Table();
+	    sboxTable.setCols(cols);
+	    sboxTable.setRows(rows);
+	    
+	    List<Row> rowList = new ArrayList<Row>();
+	    
+	    for (int j=1; j<rows; j++) {
+		Row row = new Row();
+		row.setRowData(outputData[j]);
+		rowList.add(row);
+	    }
+	    sboxTable.setRowData(rowList);
+
 	    inputs finalInputs = new inputs();
 	    Outputs finalOutputs = new Outputs();
 	    
@@ -131,8 +159,7 @@ public class SaveLoadTool {
 	    
 	    sbox.setInputs(finalInputs);
 	    sbox.setOutputs(finalOutputs);
-
-	   //sbox.setTable(     );
+	    sbox.setTable(sboxTable);
 	   
 	   convertedSBoxs.add(sbox);
 	   
