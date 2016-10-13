@@ -58,6 +58,8 @@ public class RunConfirm extends AnchorPane{
 	
 	SaveLoadTool saveController = new SaveLoadTool();
 	saveController.saveAsXml("save.xml");
+        
+        
     }
     
 

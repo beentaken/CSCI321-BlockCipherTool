@@ -60,7 +60,7 @@
             </TitledPane>
         </panes>
       </Accordion>
-      <Button fx:id="run" mnemonicParsing="false" prefHeight="40.0" prefWidth="280.0" text="Run" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" />
+      <Button fx:id="run" mnemonicParsing="false" onAction="#runButtonAction" prefHeight="40.0" prefWidth="280.0" text="Run" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" />
       <Button fx:id="cancel" layoutX="534.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelButtonAction" prefHeight="40.0" prefWidth="280.0" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="10.0" />
    </children>
    <padding>
