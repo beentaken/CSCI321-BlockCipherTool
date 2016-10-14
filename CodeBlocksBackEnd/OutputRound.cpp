@@ -161,21 +161,61 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     ExistingIDs.push_back(counts);
     counts--;
     myfile.open(fname.c_str());
-    myfile << "#include <iostream>\n#include <string>\n#include <boost/dynamic_bitset.hpp>\n#include \"block.h\"\n#include \"GenericFunctions.h\"\nusing namespace std;\nusing namespace boost;\n\nunsigned long Block(unsigned long initial, unsigned long* key) {\n";
-    myfile << "\tdynamic_bitset<> result0 (" << Props.BlockSize << ", initial);\n\tunsigned long returnval;\n";
+    myfile << "#include <iostream>\n#include <string>\n#include <boost/dynamic_bitset.hpp>\n#include \"block.h\"\n#include \"GenericFunctions.h\"\nusing namespace std;\nusing namespace boost;\n\nstring Block(string initial, string* key) {\n";
+    /**< Convert string to bitset */
+    myfile << "\tdynamic_bitset<> result0 (initial.length()*8);\n\n";
+    myfile << "\tfor (int i = 0; i < initial.length(); i++) {\n";
+    myfile << "\t\tunsigned char c = initial[i];\n";
+    myfile << "\t\tfor (int j = 7; j >= 0 && c; j--) {\n";
+    myfile << "\t\t\tif (c & 0x1) {\n";
+    myfile << "\t\t\t\tresult0.set(8*i+j);\n";
+    myfile << "\t\t\t}\n";
+    myfile << "\t\t\tc >>= 1;\n";
+    myfile << "\t\t}\n";
+    myfile << "\t}\n";
+
+    myfile << "\tresult0.resize(" << Props.BlockSize*8 << ");\n\tstring returnval;\n";
     if (Props.NumKey != 0) {
         for (int i = 1; i < Props.NumKey+1; i++) {
-            myfile << "\tdynamic_bitset<> result_" << i << "(" << Props.KeySize << ", key[" << i-1 << "]);\n";
+            myfile << "\tdynamic_bitset<> result_" << i << "(key[" << i-1 << "].length()*8);\n";
+            myfile << "\tfor (int i = 0; i < key[" << i-1 << "].length(); i++) {\n";
+            myfile << "\t\tunsigned char c = key[" << i-1 << "][i];\n";
+            myfile << "\t\tfor (int j = 7; j >= 0 && c; j--) {\n";
+            myfile << "\t\t\tif (c & 0x1) {\n";
+            myfile << "\t\t\t\tresult_" << i << ".set(8*i+j);\n";
+            myfile << "\t\t\t}\n";
+            myfile << "\t\t\tc >>= 1;\n";
+            myfile << "\t\t}\n";
+            myfile << "\t}\n";
+            myfile << "\tresult_" << i << ".resize(" << Props.KeySize*8 << ");\n";
             ExistingIDs.push_back(counts);
             counts--;
         }
     }
+
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
 
     int lastID = AppendFunctionF(Head, myfile, ExistingIDs);
 
-    myfile << "\t\treturnval = result" << KeyIDCheck(lastID) << ".to_ulong();\n";
-    myfile << "\t}";
+    /**< Convert string to bitset */
+    myfile << "\t\treturnval.erase(returnval.begin(), returnval.end());\n";
+    myfile << "\t\tfor (int i = 0; i < initial.length(); i++) {\n";
+    myfile << "\t\t\tdynamic_bitset<> tmp;\n";
+    myfile << "\t\t\tfor (int l = 0; l < 8; l++) {\n";
+    myfile << "\t\t\t\ttmp.push_back(result" << KeyIDCheck(lastID) << "[result" << KeyIDCheck(lastID) << ".size() - l - 1]);\n";
+    myfile << "\t\t\t}\n";
+    myfile << "\t\t\tunsigned long temp = tmp.to_ulong();\n";
+    myfile << "\t\t\tunsigned char ctemp = (unsigned char)temp;\n";
+    myfile << "\t\t\treturnval.insert(returnval.begin(), ctemp);\n";
+    myfile << "\t\t\tdynamic_bitset<> rtemp = result" << KeyIDCheck(lastID) << ";\n";
+    myfile << "\t\t\trtemp.resize(result" << KeyIDCheck(lastID) << ".size() - 8);\n";
+    myfile << "\t\t\tfor (int l = 0; l < rtemp.size(); l++) {\n";
+    myfile << "\t\t\t\trtemp[rtemp.size() - l - 1] = result" << KeyIDCheck(lastID) << "[result" << KeyIDCheck(lastID) << ".size() - l - 1];\n";
+    myfile << "\t\t\t}\n";
+    myfile << "\t\t\tresult" << KeyIDCheck(lastID) << " = rtemp;\n";
+    myfile << "\t\t}\n";
+//    myfile << "to_string(result" << KeyIDCheck(lastID) << ", returnval);\n";
+    myfile << "\t}\n";
 
     myfile << "\n\treturn returnval;\n}";
     myfile.close();
@@ -185,7 +225,7 @@ void OutputRound::OutputMain(vector<Node> Head, Properties Props) {
     hname.append("\\block.h");
     hfile.open(hname.c_str());
     hfile << "#include <iostream>\n#include <string>\n#include <boost/dynamic_bitset.hpp>\nusing namespace boost;\nusing namespace std;\n\n";
-    hfile << "unsigned long Block(unsigned long, unsigned long*);\n";
+    hfile << "string Block(string, string*);\n";
     hfile.close();
 }
 

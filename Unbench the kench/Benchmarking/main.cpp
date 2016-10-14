@@ -8,7 +8,7 @@ int main()
 {
     string filename;
     cout << "Enter executable file path: ";
-    cin >> filename;
+    getline(cin, filename, '\n');
     calculateTime(filename);
 
     return 0;

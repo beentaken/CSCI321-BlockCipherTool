@@ -18,8 +18,8 @@ using namespace std;    /**< Namespace standard */
  * \return
  * Returns all the data gathered in a vector
  */
-vector<Node> ReadXML(string filename, Properties& Props) {
-    vector<Node> result;
+vector<Node> ReadXML(string filename, Properties& Props, vector<Node>& decrypt, vector<Node>& keygen) {
+    vector<Node> encrypt;
 
     /**< File input stream for the xml */
     ifstream XMLfile;
@@ -29,47 +29,31 @@ vector<Node> ReadXML(string filename, Properties& Props) {
     if (XMLfile.good()) {
         /**< Checks that the file is open */
         if (XMLfile.is_open()) {
-            /**< Gets the first line from the file */
-            string line;
-            getline(XMLfile, line);
-            getline(XMLfile, line);
-            /**< Removes any spaces or tabbing */
-            line.erase(remove(line.begin(), line.end(), ' '), line.end());
-            line.erase(remove(line.begin(), line.end(), '\t'), line.end());
+            /**< Continues to cycle through til end of file */
+            while (!XMLfile.eof()) {
+                /**< Gets the first line from the file */
+                string line;
+                getline(XMLfile, line);
+                /**< Removes any spaces or tabbing */
+                line.erase(remove(line.begin(), line.end(), ' '), line.end());
+                line.erase(remove(line.begin(), line.end(), '\t'), line.end());
 
-            /**< Checks that it is reading a cipher in the xml */
-            if (line.compare("<cipher>") == 0) {
-                Node temp;
-                int KeyCount = 0;
-                /**< Will continue to cycle until the end of the cipher in the xml */
-                while (line.compare("</cipher>") != 0) {
-                    /**< Gets a line from the file and removes the spacing and tabbing */
-                    getline(XMLfile, line);
-                    line.erase(remove(line.begin(), line.end(), ' '), line.end());
-                    line.erase(remove(line.begin(), line.end(), '\t'), line.end());
-
-                    if (line.find("<pbox") != string::npos) {
-                        /**< Parses a PBox if the pbox tag is found */
-                        temp = ParseSPBox(XMLfile, line, 0, KeyCount);
-                        result.push_back(temp);
-                    } else if (line.find("<sbox") != string::npos) {
-                        /**< Parses a SBox if the sbox tag is found */
-                        temp = ParseSPBox(XMLfile, line, 1, KeyCount);
-                        result.push_back(temp);
-                    } else if (line.find("<xor") != string::npos) {
-                        /**< Parses an XOR is the xor tag is found */
-                        temp = ParseXOR(XMLfile, line, 2, KeyCount);
-                        result.push_back(temp);
-                    } else if (line.find("<function") != string::npos) {
-                        /**< Parses an F function if the f tag is found */
-                        temp = ParseFFunc(XMLfile, line, 3, KeyCount);
-                        result.push_back(temp);
-                    } else if (line.find("<properties") != string::npos) {
-                        /**< Parses a properties block if the properties tag is found */
-                        Props = ParseProps(XMLfile, line);
+                /**< Checks that it is reading a cipher in the xml */
+                if ((line.compare("<encrypt>") == 0) || (line.compare("<decrypt>") == 0)) {
+                    int KeyCount = 0;
+                    if (line.compare("<encrypt>") == 0) {
+                        encrypt = Cycle(XMLfile, KeyCount);
+                    } else if (line.compare("<decrypt>") == 0) {
+                        decrypt = Cycle(XMLfile, KeyCount);
                     }
+                    Props.NumKey = KeyCount;
+                } else if (line.compare("<keygen>") == 0) {
+                    int KeyCount = 0;
+                    keygen = Cycle(XMLfile, KeyCount);
+                } else if (line.find("<properties") != string::npos) {
+                    /**< Parses a properties block if the properties tag is found */
+                    Props = ParseProps(XMLfile, line);
                 }
-                Props.NumKey = KeyCount;
             }
 
             /**< Closes the file stream */
@@ -77,7 +61,82 @@ vector<Node> ReadXML(string filename, Properties& Props) {
         }
     }
 
+    return encrypt;
+}
+
+vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
+    vector<Node> result;
+    Node temp;
+    string line;
+        /**< Will continue to cycle until the end of the cipher in the xml */
+    while ((line.compare("</encrypt>") != 0) && (line.compare("</decrypt>") != 0) && (line.compare("</keygen>") != 0)) {
+        /**< Gets a line from the file and removes the spacing and tabbing */
+        getline(XMLfile, line);
+        line.erase(remove(line.begin(), line.end(), ' '), line.end());
+        line.erase(remove(line.begin(), line.end(), '\t'), line.end());
+        if (line.find("<pbox") != string::npos) {
+            /**< Parses a PBox if the pbox tag is found */
+            temp = ParseSPBox(XMLfile, line, 0, KeyCount);
+            result.push_back(temp);
+        } else if (line.find("<sbox") != string::npos) {
+            /**< Parses a SBox if the sbox tag is found */
+            temp = ParseSPBox(XMLfile, line, 1, KeyCount);
+            result.push_back(temp);
+        } else if (line.find("<xor") != string::npos) {
+            /**< Parses an XOR is the xor tag is found */
+            temp = ParseXOR(XMLfile, line, 2, KeyCount);
+            result.push_back(temp);
+        } else if (line.find("<function") != string::npos) {
+            /**< Parses an F function if the f tag is found */
+            temp = ParseFFunc(XMLfile, line, 3, KeyCount);
+            result.push_back(temp);
+        } else if (line.find("<subkey") != string::npos) {
+            /**< Parses the subkey identity */
+            temp = ParseSubkey(XMLfile, line, 4);
+            result.push_back(temp);
+        }
+    }
+
     return result;
+}
+
+Node ParseSubkey(ifstream& XMLfile, string line, int type) {
+    Node N;
+    /**< Attempts to find the ID */
+    if (line.find("NUM") != string::npos) {
+        /**< Sets the Node defaults */
+        N.type = type;
+        N.ID = StringToNumber(line);
+        N.inputs = NULL;
+        N.outputs = NULL;
+        N.NumInputs = (-1);
+        N.NumOutputs = (-1);
+        N.rows = (-1);
+
+        while (line.compare("</subkey>") != 0) {
+            /**< Gets a line input and removes the spacing */
+            getline(XMLfile, line);
+            line.erase(remove(line.begin(), line.end(), '\t'), line.end());
+            line.erase(remove(line.begin(), line.end(), ' '), line.end());
+
+            if (line.find("<input") != string::npos) {
+                InOuts * inputs = new InOuts[1];
+
+                /**< Stores the input into the input node */
+                int p = line.find_last_of("=");
+
+                string s = line.substr(p);
+                string s2 = line.substr(0, p);
+
+                /**< Stores the Connection ID the size and the values */
+                inputs[0].InputConID = StringToNumber(s2);
+                inputs[0].InputSizes = StringToNumber(s);
+                N.inputs = inputs;
+            }
+        }
+    }
+
+    return N;
 }
 
 Properties ParseProps(ifstream& XMLfile, string line) {

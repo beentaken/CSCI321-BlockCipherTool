@@ -30,6 +30,8 @@ void PrintNodeList(vector<Node> Head) {
             PrintNodeList(temp.Next);
             cout << "---------------------------------------------------------------------------------------" << endl;
 
+        } else if (temp.type == 4) {
+            cout << "Subkey: " << temp.ID << " is output from KeyGen Node ID: " << temp.inputs[0].InputConID << " of size: " << temp.inputs[0].InputSizes << endl;
         }
         cout << endl;
     }
@@ -154,3 +156,57 @@ string DefaultLocation() {
 
     return DefaultPath;
 }
+
+string UserLocation(string Folder) {
+    // Gets the current working directory
+    char Current[1024];
+    for (int i = 0; i < 1024; i++) {
+        Current[i] = '\0';
+    }
+    GetFullPathName(Current, 1024, Current, 0);
+
+    bool check = false;
+    if (Folder.find("\\") != string::npos) {
+        check = true;
+    }
+
+    string DefaultPath;
+    char* HomePath;
+    char* HomeDrive;
+    string TempHome;
+    string HD;
+
+    if (check == true) {
+        DefaultPath = Folder;
+    } else {
+        // Gets the home path directory
+        HomePath = getenv("HOMEPATH");
+        HomeDrive = getenv("HOMEDRIVE");
+        TempHome = HomePath;
+        HD = HomeDrive;
+        TempHome = HD + TempHome + "\\Documents";
+        DefaultPath = TempHome + "\\" + Folder;
+    }
+
+    // Checks if the default location exists
+    DWORD exists = GetFileAttributes(DefaultPath.c_str());
+
+    if (exists == INVALID_FILE_ATTRIBUTES) {
+        // It Doesn't Exist
+
+        // Change to Documents
+        HomePath = new char[TempHome.length() + 1];
+        strcpy(HomePath, TempHome.c_str());
+
+        SetCurrentDirectory(HomePath);
+
+        // Create Directory
+        CreateDirectory(Folder.c_str(), NULL);
+
+        // Set Directory back to Program Directory
+        SetCurrentDirectory(Current);
+    }
+
+    return DefaultPath;
+}
+

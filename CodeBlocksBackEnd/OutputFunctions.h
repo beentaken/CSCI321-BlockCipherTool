@@ -6,6 +6,7 @@ using namespace std;
 
 #include "XMLParser.h"
 
+string UserLocation(string);
 void Print(Node*, string);
 string SourceLocale();
 string DefaultLocation();

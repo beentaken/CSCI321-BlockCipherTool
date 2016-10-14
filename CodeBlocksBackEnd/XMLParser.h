@@ -35,7 +35,7 @@ struct InOuts {
  *
  */
 struct Node {
-    int type;           /**< 0 is PBox, 1 is SBox, 2 is XOR, 3 is F Function */
+    int type;           /**< 0 is PBox, 1 is SBox, 2 is XOR, 3 is F Function, 4 is Subkey */
     int ID;             /**< The Node ID */
 
     int NumInputs;      /**< The Number of Inputs */
@@ -51,12 +51,14 @@ struct Node {
     vector<Node> Next;  /**< This is for the F Function to specify all parts of the F Function */
 };
 
-vector<Node> ReadXML(string, Properties&);               /**< This function reads the XML Parser */
+vector<Node> ReadXML(string, Properties&, vector<Node>&, vector<Node>&);               /**< This function reads the XML Parser */
+vector<Node> Cycle(ifstream&, int&);
 int StringToNumber(string);                 /**< The function converts the String to a number(int) */
 int* StringToIntArr(string, char);          /**< This function converts the String to an integer array */
 Node ParseSPBox(ifstream&, string, int, int&);    /**< This function parses in a P Box or an S Box */
 Node ParseXOR(ifstream&, string, int, int&);      /**< This function parses in an xor block */
 Node ParseFFunc(ifstream&, string, int, int&);    /**< This function parses in an F Function */
 Properties ParseProps(ifstream&, string);
+Node ParseSubkey(ifstream&, string, int);
 
 #endif // XMLPARSE
