@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.CubicCurve;
+//import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 
 public class NodeLink extends AnchorPane {
     
@@ -29,6 +30,8 @@ public class NodeLink extends AnchorPane {
     private final DoubleProperty mControlDirectionY1 = new SimpleDoubleProperty();
     private final DoubleProperty mControlDirectionX2 = new SimpleDoubleProperty();
     private final DoubleProperty mControlDirectionY2 = new SimpleDoubleProperty();
+    
+    private MainLayout main_parent = null;
     
     private String mSize;
     private String sourceId;
@@ -50,7 +53,13 @@ public class NodeLink extends AnchorPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-	setId(UUID.randomUUID().toString());
+	//setId(UUID.randomUUID().toString());
+    }
+    
+    public void setId(int newId) {
+        setId(String.valueOf(newId));
+        main_parent.updateIdCounter();
+        System.out.println(getId());
     }
     
     @FXML
@@ -127,6 +136,10 @@ public class NodeLink extends AnchorPane {
         
         sourceId = source.getNodeID();
         targetId = target.getNodeID();
+    }
+    
+    public void setParent(MainLayout main) {
+        main_parent = main;
     }
     
     public String getLinkID() {

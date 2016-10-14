@@ -132,9 +132,9 @@ public class SaveLoadTool {
 		wrapperOutputs.add(output);
 	    }
 	   
-	    String tableprops[] = outputData[0].split(" ");
-	    int cols = Integer.parseInt(tableprops[0]);
-	    int rows = Integer.parseInt(tableprops[1]);
+	    //String tableprops[] = outputData[0].split(" ");
+	    int cols = Integer.parseInt(sboxs.get(i).getOptions().getColumns());
+	    int rows = Integer.parseInt(sboxs.get(i).getOptions().getRows());
 	    
 	    Table sboxTable = new Table();
 	    sboxTable.setCols(cols);
@@ -142,7 +142,7 @@ public class SaveLoadTool {
 	    
 	    List<Row> rowList = new ArrayList<Row>();
 	    
-	    for (int j=1; j<rows; j++) {
+	    for (int j=0; j<rows; j++) {
 		Row row = new Row();
 		row.setRowData(outputData[j]);
 		rowList.add(row);

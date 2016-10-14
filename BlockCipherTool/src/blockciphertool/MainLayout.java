@@ -71,6 +71,8 @@ public class MainLayout extends AnchorPane{
     private List<NodeLink> connections;
     private PropertiesWrapper properties;
     
+    private int idCounter;
+    
     public MainLayout() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -86,8 +88,14 @@ public class MainLayout extends AnchorPane{
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        
+        idCounter = 0;
     }
 
+    public void updateIdCounter() {
+        idCounter++;
+    }
+    
     @FXML
     private void initialize() {
 	//nicks code for save/load
@@ -302,6 +310,7 @@ public class MainLayout extends AnchorPane{
                             System.out.print(pnode);
                             pboxs.add(pnode);
                             pnode.setParent(MainLayout.this);
+                            pnode.setId(idCounter);
                         break;
                         
                         case sbox:
@@ -315,6 +324,7 @@ public class MainLayout extends AnchorPane{
                             snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
                             sboxs.add(snode);
                             snode.setParent(MainLayout.this);
+                            snode.setId(idCounter);
                         break;
                         
                         case xor:
@@ -328,6 +338,7 @@ public class MainLayout extends AnchorPane{
                             xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
                             xors.add(xnode);
                             xnode.setParent(MainLayout.this);
+                            xnode.setId(idCounter);
                         break;
                         
                         case end:
@@ -340,6 +351,7 @@ public class MainLayout extends AnchorPane{
 
                             enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                             enode.setParent(MainLayout.this);
+                            enode.setId(idCounter);
                         break;
                         
                         default:
@@ -376,6 +388,8 @@ public class MainLayout extends AnchorPane{
                     if (sourceId != null && targetId != null) {
                         System.out.println(container.getData());
                         NodeLink Link = new NodeLink();
+                        Link.setParent(MainLayout.this);
+                        Link.setId(idCounter);
                         
                         main_window.getChildren().add(0, Link);
                         

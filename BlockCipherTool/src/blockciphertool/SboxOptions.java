@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
@@ -38,6 +39,8 @@ import javax.swing.ProgressMonitorInputStream;
 public class SboxOptions extends AnchorPane{
     
     @FXML private TextArea LookupText;
+    @FXML private TextField rows;
+    @FXML private TextField columns;
     @FXML private TableView<connection> inputTable;
     @FXML private TableView<connection> outputTable;
     @FXML private TableColumn<connection, String> InputIds;
@@ -48,6 +51,8 @@ public class SboxOptions extends AnchorPane{
     @FXML Button cancel;
     
     private String LookupData;
+    private String rowsData;
+    private String columnsData;
     
     private final ObservableList<connection> dataIn = FXCollections.observableArrayList();
     private final ObservableList<connection> dataOut = FXCollections.observableArrayList();
@@ -64,10 +69,23 @@ public class SboxOptions extends AnchorPane{
 	return LookupText.getText();
     }
     
+    public String getRows() {
+        return rows.getText();
+    }
+    
+    public String getColumns() {
+        return columns.getText();
+    }
+    
     public void loadData(List <NodeLink> inLinks, List<NodeLink> outLinks) {
         
         if (LookupData != null)
             LookupText.setText(LookupData);
+        
+        if (rows != null)
+            rows.setText(rowsData);
+        if (columns != null)
+            columns.setText(columnsData);
         
 	dataIn.clear();
         dataOut.clear();
@@ -218,6 +236,8 @@ public class SboxOptions extends AnchorPane{
     @FXML
     private void save() {
         LookupData = LookupText.getText();
+        rowsData = rows.getText();
+        columnsData = columns.getText();
         
         for (int i=0; i<inNodeLinks.size();i++) {
             inNodeLinks.get(i).setSize(dataIn.get(i).getSize());

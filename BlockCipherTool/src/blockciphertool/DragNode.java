@@ -97,7 +97,7 @@ public class DragNode extends AnchorPane{
             throw new RuntimeException(exception);
         }
         */
-        setId(UUID.randomUUID().toString());
+        //setId(UUID.randomUUID().toString());
     }
     
     public void setUp() {
@@ -122,9 +122,13 @@ public class DragNode extends AnchorPane{
             throw new RuntimeException(exception);
         }
         
-        setId(UUID.randomUUID().toString());
+        //setId(UUID.randomUUID().toString());
     }
     
+    public void setId(int newId) {
+        setId(String.valueOf(newId));
+        main_parent.updateIdCounter();
+    }
 
     @FXML
     private void initialize() {
