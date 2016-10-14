@@ -70,11 +70,11 @@ public class SboxOptions extends AnchorPane{
     }
     
     public String getRows() {
-        return rows.getText();
+        return rowsData;
     }
     
     public String getColumns() {
-        return columns.getText();
+        return columnsData;
     }
     
     public void loadData(List <NodeLink> inLinks, List<NodeLink> outLinks) {

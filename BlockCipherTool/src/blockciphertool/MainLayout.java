@@ -73,6 +73,9 @@ public class MainLayout extends AnchorPane{
     
     private int idCounter;
     
+    private boolean startExists;
+    private boolean endExists;
+    
     public MainLayout() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -89,7 +92,9 @@ public class MainLayout extends AnchorPane{
             throw new RuntimeException(exception);
         }
         
-        idCounter = 0;
+        idCounter = 1;
+        startExists = false;
+        endExists = false;
     }
 
     public void updateIdCounter() {
@@ -286,16 +291,19 @@ public class MainLayout extends AnchorPane{
                         switch (DragNodeType.valueOf(container.getValue("type"))) {
                         
                         case Start:
-                            StartNode node = new StartNode();
+                            if (!startExists) {
+                                StartNode node = new StartNode();
 
-                            node.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(node);
-                            
+                                node.setType(DragNodeType.valueOf(container.getValue("type")));
+                                main_window.getChildren().add(node);
 
-                            Point2D cursorPoint = container.getValue("scene_coords");
 
-                            node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
-                            node.setParent(MainLayout.this);
+                                Point2D cursorPoint = container.getValue("scene_coords");
+
+                                node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                                node.setParent(MainLayout.this);
+                                startExists = true;
+                            }
                         break;
                         
                         case pbox:
@@ -342,16 +350,18 @@ public class MainLayout extends AnchorPane{
                         break;
                         
                         case end:
-                            EndNode enode = new EndNode();
+                            if (!endExists) {
+                                EndNode enode = new EndNode();
 
-                            enode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(enode);
+                                enode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                main_window.getChildren().add(enode);
 
-                            Point2D ecursorPoint = container.getValue("scene_coords");
+                                Point2D ecursorPoint = container.getValue("scene_coords");
 
-                            enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
-                            enode.setParent(MainLayout.this);
-                            enode.setId(idCounter);
+                                enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                enode.setParent(MainLayout.this);
+                                endExists = true;
+                            }
                         break;
                         
                         default:

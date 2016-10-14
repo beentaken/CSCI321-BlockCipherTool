@@ -133,6 +133,8 @@ public class SaveLoadTool {
 	    }
 	   
 	    //String tableprops[] = outputData[0].split(" ");
+            System.out.println(sboxs.get(i).getOptions().getColumns());
+            System.out.println(sboxs.get(i).getOptions().getRows());
 	    int cols = Integer.parseInt(sboxs.get(i).getOptions().getColumns());
 	    int rows = Integer.parseInt(sboxs.get(i).getOptions().getRows());
 	    

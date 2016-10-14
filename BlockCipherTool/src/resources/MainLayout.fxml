@@ -62,12 +62,15 @@
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Electronic Codebook" />
-                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" />
-                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" />
-                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" />
-                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" />
-                                                <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" />
+                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="chainMode" />
+                                                   </toggleGroup></RadioButton>
+                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -76,11 +79,14 @@
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Zero padding" />
-                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="PKCS7" />
-                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="ISO 10126" />
-                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" />
-                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="ANSI X.923" />
+                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="Padding" />
+                                                   </toggleGroup></RadioButton>
+                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding" toggleGroup="$Padding" />
                                              </children>
                                           </AnchorPane>
                                        </content>

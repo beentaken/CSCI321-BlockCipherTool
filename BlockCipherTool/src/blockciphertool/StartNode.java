@@ -32,6 +32,7 @@ public class StartNode extends DragNode{
         }
         
         //setId(UUID.randomUUID().toString());
+        setId("0");
     }
     
 }

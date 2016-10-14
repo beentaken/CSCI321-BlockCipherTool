@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cipher>
+    <connection ID="2">
+        <from>
+            <fromId>0</fromId>
+        </from>
+        <to>
+            <toId>1</toId>
+        </to>
+    </connection>
+    <connection ID="3">
+        <from>
+            <fromId>1</fromId>
+        </from>
+        <to>
+            <toId>-1</toId>
+        </to>
+    </connection>
+    <pbox ID="1">
+        <inputs num="1">
+            <input connectorID="2" size="4"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="3" size="4">
+                <outputData>1 2 3 4</outputData>
+            </output>
+        </outputs>
+        <X>587</X>
+        <Y>255</Y>
+    </pbox>
+    <properties>
+        <blockSize>64</blockSize>
+        <chainMode>counter</chainMode>
+        <endID>2</endID>
+        <keySize>16</keySize>
+        <numberOfRounds>2</numberOfRounds>
+        <padding>Zero padding</padding>
+        <startID>1</startID>
+    </properties>
+</cipher>
