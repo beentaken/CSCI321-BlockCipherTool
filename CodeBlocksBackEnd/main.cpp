@@ -27,14 +27,14 @@ int main(int argc, char** argv) {
             filelocation = UserLocation(filelocation);
             OR.ReadDest(filelocation);
             cout << "Using user location: " << filelocation << endl;
-            OR.OutputToFile(Encrypt, Props);
+            OR.OutputToFile(Encrypt, Decrypt, KeyGen, Props);
         } else {
             Encrypt = ReadXML(xmlfile, Props, Decrypt, KeyGen);
             OR.ReadSource(SourceLocale());
             filelocation = DefaultLocation();
             OR.ReadDest(filelocation);
             cout << "Using default location: " << filelocation << endl;
-            OR.OutputToFile(Encrypt, Props);
+            OR.OutputToFile(Encrypt, Decrypt, KeyGen, Props);
         }
     } else {
         cout << "Arguments can be used by CodeBlocksBackEnd xmlfile filelocation" << endl;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
                         }
                         OR.ReadDest(filelocation);
 
-                        OR.OutputToFile(Encrypt,Props);
+                        OR.OutputToFile(Encrypt, Decrypt, KeyGen, Props);
                     }
                     choice = (-1);
                 }

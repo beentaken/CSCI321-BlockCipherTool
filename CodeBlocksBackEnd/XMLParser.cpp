@@ -109,7 +109,7 @@ Node ParseSubkey(ifstream& XMLfile, string line, int type) {
         N.ID = StringToNumber(line);
         N.inputs = NULL;
         N.outputs = NULL;
-        N.NumInputs = (-1);
+        N.NumInputs = 1;
         N.NumOutputs = (-1);
         N.rows = (-1);
 

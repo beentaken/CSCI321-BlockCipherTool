@@ -12,11 +12,11 @@ class OutputRound {
         ~OutputRound();
         bool ReadSource(string);
         bool ReadDest(string);
-        bool OutputToFile(vector<Node>, Properties);
-        void OutputMain(vector<Node>, Properties);
+        bool OutputToFile(vector<Node>, vector<Node>, vector<Node>, Properties);
+        void OutputMain(vector<Node>, vector<Node>, vector<Node>, Properties);
         void OutputGenerics(bool[]);
         void AppendConversions();
-        int AppendFunctionF(vector<Node>, ofstream&, vector<int>&);
+        int AppendFunctionF(vector<Node>, ofstream&, vector<int>&, int);
         vector<Node> SortVec(vector<Node>, int);
         string KeyIDCheck(int);
         void CheckNode(vector<Node>, bool[], vector<Node>&);
