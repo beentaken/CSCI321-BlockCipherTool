@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author csit321lm01a
+ * @author Alex
  */
 public class SboxNode extends DragNode{
     

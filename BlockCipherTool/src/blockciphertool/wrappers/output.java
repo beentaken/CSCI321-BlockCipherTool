@@ -9,8 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 /**
- *
  * @author nick
+ * @class wrapper for outputs, used in most nodes
  */
 @XmlRootElement(name="output")
 public class output {

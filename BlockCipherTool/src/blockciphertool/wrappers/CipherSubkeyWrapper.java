@@ -9,15 +9,17 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class wrapper for subkeys, used in the keygen, not to be confused with cipher keys which are purely for front end visualisation
  */
 public class CipherSubkeyWrapper {
-       
+    
     private String id;
     private String X;
     private String Y;
     private inputs inputs;
+    
+    
     
     @XmlAttribute(name="ID")
     public String getId() {

@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class wrapper for cipher functions, not yet implemented in front end
  */
 public class CipherFunctionWrapper {
     private String id;

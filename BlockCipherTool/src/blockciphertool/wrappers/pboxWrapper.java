@@ -16,8 +16,8 @@ import blockciphertool.wrappers.Outputs;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- *
  * @author nick
+ * @class wrapper for pboxs
  */
 public class pboxWrapper {
     

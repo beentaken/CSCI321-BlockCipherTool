@@ -7,7 +7,7 @@ package blockciphertool;
 
 /**
  *
- * @author Aloe2020
+ * @author Alex
  */
 public enum DragNodeType {
     Start,

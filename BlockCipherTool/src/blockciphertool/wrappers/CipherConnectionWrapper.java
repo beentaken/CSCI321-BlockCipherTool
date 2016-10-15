@@ -9,8 +9,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class wrapper class for connections, containing both a connection from and connection to
  */
 public class CipherConnectionWrapper {
     private String id;

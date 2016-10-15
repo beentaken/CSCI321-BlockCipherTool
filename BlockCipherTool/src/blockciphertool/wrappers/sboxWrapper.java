@@ -16,8 +16,8 @@ import blockciphertool.wrappers.output;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- *
  * @author nick
+ * @class wrapper for sboxs
  */
 public class sboxWrapper {
     

@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class wrapper class for xor nodes
  */
 public class CipherXorWrapper {
     

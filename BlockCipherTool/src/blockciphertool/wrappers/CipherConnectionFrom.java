@@ -8,8 +8,8 @@ package blockciphertool.wrappers;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class a wrapper class for connections coming from a node
  */
 public class CipherConnectionFrom {
     private String connectionPort;

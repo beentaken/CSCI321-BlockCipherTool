@@ -11,7 +11,7 @@ import javafx.fxml.FXMLLoader;
 
 /**
  *
- * @author csit321lm01a
+ * @author Alex
  */
 public class EndNode extends DragNode{
     

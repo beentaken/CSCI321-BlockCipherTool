@@ -7,11 +7,11 @@ package blockciphertool.wrappers;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAttribute;
-/**
- *
- * @author nick
- */
 
+/**
+ * @author nick
+ * @class wrapper for inputs, used in most nodes
+ */
 @XmlRootElement(name="input")
 public class input {
     

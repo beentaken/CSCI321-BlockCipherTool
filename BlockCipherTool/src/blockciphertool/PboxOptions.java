@@ -33,7 +33,8 @@ import javax.swing.ProgressMonitorInputStream;
 
 /**
  *
- * @author csit321lm01a
+ * @author Alex, Nick
+ * @comment all functions worked on by both Alex and Nick.
  */
 public class PboxOptions extends AnchorPane{
     

@@ -10,10 +10,8 @@ import blockciphertool.wrappers.CipherFunctionWrapper;
 import blockciphertool.wrappers.CipherWrapper;
 import blockciphertool.wrappers.CipherXorWrapper;
 import blockciphertool.wrappers.PropertiesWrapper;
-/**
- *
- * @author Aloe2020
- */import java.io.IOException;
+
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventDispatchChain;
 
@@ -47,7 +45,7 @@ import javafx.scene.layout.BorderPane;
 
 /**
  *
- * @author Aloe2020
+ * @author Alex, Nick
  */
 public class MainLayout extends AnchorPane{
     
@@ -76,6 +74,9 @@ public class MainLayout extends AnchorPane{
     private boolean startExists;
     private boolean endExists;
     
+    /**
+    * @author Alex
+    */
     public MainLayout() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(
@@ -96,11 +97,17 @@ public class MainLayout extends AnchorPane{
         startExists = false;
         endExists = false;
     }
-
+    
+    /**
+    * @author Alex
+    */
     public void updateIdCounter() {
         idCounter++;
     }
     
+    /**
+    * @author Alex
+    */
     @FXML
     private void initialize() {
 	//nicks code for save/load
@@ -161,6 +168,9 @@ public class MainLayout extends AnchorPane{
         properties = new PropertiesWrapper();
     }
     
+    /**
+    * @author Alex
+    */
     private void addDragDetectionIcon(DragIcon dragIcon) {
         
         dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
@@ -221,6 +231,9 @@ public class MainLayout extends AnchorPane{
         });
     }*/
     
+    /**
+    * @author Alex
+    */    
     private void buildDragHandlers() {
         mIconDragOverRoot = new EventHandler<DragEvent>() {
             
@@ -439,6 +452,9 @@ public class MainLayout extends AnchorPane{
         });
     }
     
+    /**
+    * @author Alex
+    */    
     public void updateConnections(String id) {
         for (int i=0; i<connections.size(); i++) {
 	    if ( connections.get(i).getId().equals(id) ) {
@@ -468,15 +484,30 @@ public class MainLayout extends AnchorPane{
 	}
     }
     
+    /**
+     * @author Nick
+     */
     public void runConfirm() throws IOException {
         
 	SaveLoadTool saver = new SaveLoadTool();
 	
-	saver.AddPBoxs(pboxs);
-	saver.AddSBoxes(sboxs);
-	saver.AddXors(xors);
-	saver.AddConnections(connections);
-	saver.AddProperties();
+	saver.AddPBoxs("encrypt", pboxs);
+	saver.AddSBoxes("encrypt", sboxs);
+	saver.AddXors("encrypt", xors);
+	saver.AddConnections("encrypt", connections);
+	saver.AddProperties("encrypt");
+	
+	saver.AddPBoxs("decrypt", pboxs);
+	saver.AddSBoxes("decrypt", sboxs);
+	saver.AddXors("decrypt", xors);
+	saver.AddConnections("decrypt", connections);
+	saver.AddProperties("decrypt");
+	
+	saver.AddPBoxs("keygen", pboxs);
+	saver.AddSBoxes("keygen", sboxs);
+	saver.AddXors("keygen", xors);
+	saver.AddConnections("keygen", connections);
+	
 	//saver.AddProperties(numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
 	
 	
@@ -496,6 +527,9 @@ public class MainLayout extends AnchorPane{
         stage.showAndWait();
     }
     
+    /**
+    * @author Alex
+    */    
     public void listpboxes() {
         for (int i = 0; i < pboxs.size(); i++) {
             System.out.println(pboxs.get(i).getCoords());

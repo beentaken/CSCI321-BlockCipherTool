@@ -7,7 +7,7 @@ package blockciphertool;
 
 /**
  *
- * @author Aloe2020
+ * @author Alex
  */
 import java.io.Serializable;
 import java.util.ArrayList;

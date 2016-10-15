@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Aloe2020
+ * @author Alex
  */
 public class BlockCipherTool extends Application {
     

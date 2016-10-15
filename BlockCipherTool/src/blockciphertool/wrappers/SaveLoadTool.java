@@ -19,225 +19,101 @@ import javafx.scene.control.Alert.AlertType;
 import javax.xml.bind.Unmarshaller;
 /**
  *
- * @author Gigabyte
+ * @author Nick
+ * @class save tool to generate or load xml
  */
 public class SaveLoadTool {
-    private CipherWrapper cipher = new CipherWrapper();
+    private SaveWrapper saveWrapper = new SaveWrapper();
     
-    public void AddProperties() {
-	PropertiesWrapper props = new PropertiesWrapper();
-	props.setNumberOfRounds("2");
-	props.setBlockSize("64");
-	props.setKeySize("16");
-	props.setChainMode("counter");
-	props.setPadding("Zero padding");
-	props.setStartId("1");
-	props.setEndId("2");
-	cipher.setProperties(props);
-    }
-    public void AddProperties(String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
-	PropertiesWrapper props = new PropertiesWrapper();
-	props.setNumberOfRounds(NumRounds);
-	props.setBlockSize(BlockSize);
-	props.setKeySize(KeySize);
-	props.setChainMode(ChainMode);
-	props.setPadding(Padding);
-	props.setStartId(StartId);
-	props.setEndId(EndId);
-    }
-    
-    public void AddPBoxs(List<PboxNode> pboxs) {
-	List<pboxWrapper> convertedPBoxs = new ArrayList<pboxWrapper>();
-		
-	for (int i=0; i<pboxs.size(); i++) {
-	    String outputData[];
-	    outputData = pboxs.get(i).getOptions().getLookupTable().split(",");
+    public void AddProperties(String wrapperType) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
 	    
-	    pboxWrapper pbox = new pboxWrapper();
-	    pbox.setId(pboxs.get(i).getId());
-	    pbox.setX(pboxs.get(i).getXString());
-	    pbox.setY(pboxs.get(i).getYString());
-	   
-	    List<NodeLink> inputs = pboxs.get(i).getInConnections();
-	    List<NodeLink> outputs = pboxs.get(i).getOutConnections();
-	    List<input> wrapperInputs = new ArrayList<input>();
-	    List<output> wrapperOutputs = new ArrayList<output>();
-	    for (int j=0; j<inputs.size(); j++) {
-	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
-	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
-	       wrapperInputs.add(input);
-	    }
-	   
-	    for (int j=0; j<outputs.size(); j++) {
-		
-		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
-		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
-		output.setOutputData(outputData[i]);
-		wrapperOutputs.add(output);
-	    }
-	   
-	    inputs finalInputs = new inputs();
-	    Outputs finalOutputs = new Outputs();
-	    
-	    finalInputs.setInputs(wrapperInputs);
-	    finalInputs.setNumInputs(wrapperInputs.size());
-	    finalOutputs.setOutputs(wrapperOutputs);
-	    finalOutputs.setNumOutputs(wrapperOutputs.size());
-	    
-	    pbox.setInputs(finalInputs);
-	    pbox.setOutputs(finalOutputs);
-	    
-	    
-	    
-	    //pbox.setTable(     );
-	   
-	    convertedPBoxs.add(pbox);
-	   
 	}
-	
-	cipher.setPboxs(convertedPBoxs);	    
+    }
+    public void AddProperties(String wrapperType, String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    
+	}
     }
     
-    public void AddSBoxes(List<SboxNode> sboxs) {	
-	List<sboxWrapper> convertedSBoxs = new ArrayList<sboxWrapper>();
-	
-	for (int i=0; i<sboxs.size(); i++) {
-	    String outputData[];
-	    outputData = sboxs.get(i).getOptions().getLookupTable().split(",\n");
-
-	    
-	    sboxWrapper sbox = new sboxWrapper();
-	    sbox.setId(sboxs.get(i).getId());
-	    sbox.setX(sboxs.get(i).getXString());
-	    sbox.setY(sboxs.get(i).getYString());
-	   
-	   
-	    List<NodeLink> inputs = sboxs.get(i).getInConnections();
-	    List<NodeLink> outputs = sboxs.get(i).getOutConnections();
-	    List<input> wrapperInputs = new ArrayList<input>();
-	    List<output> wrapperOutputs = new ArrayList<output>();
-	    for (int j=0; j<inputs.size(); j++) {
-	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
-	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
-	       wrapperInputs.add(input);
-	    }
-	   
-	    for (int j=0; j<outputs.size(); j++) {
-		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
-		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
-		wrapperOutputs.add(output);
-	    }
-	   
-            System.out.println(sboxs.get(i).getOptions().getColumns());
-            System.out.println(sboxs.get(i).getOptions().getRows());
-	    int cols = Integer.parseInt(sboxs.get(i).getOptions().getColumns());
-	    int rows = Integer.parseInt(sboxs.get(i).getOptions().getRows());
-	    
-	    Table sboxTable = new Table();
-	    sboxTable.setCols(cols);
-	    sboxTable.setRows(rows);
-	    
-	    List<Row> rowList = new ArrayList<Row>();
-	    
-	    for (int j=0; j<rows; j++) {
-		Row row = new Row();
-		row.setRowData(outputData[j]);
-		rowList.add(row);
-	    }
-	    sboxTable.setRowData(rowList);
-
-	    inputs finalInputs = new inputs();
-	    Outputs finalOutputs = new Outputs();
-	    
-	    finalInputs.setInputs(wrapperInputs);
-	    finalInputs.setNumInputs(wrapperInputs.size());
-	    finalOutputs.setOutputs(wrapperOutputs);
-	    finalOutputs.setNumOutputs(wrapperOutputs.size());
-	    
-	    sbox.setInputs(finalInputs);
-	    sbox.setOutputs(finalOutputs);
-	    sbox.setTable(sboxTable);
-	   
-	   convertedSBoxs.add(sbox);
-	   
+    public void AddPBoxs(String wrapperType, List<PboxNode> pboxs) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddPBoxs(pboxs);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddPBoxs(pboxs);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddPBoxs(pboxs);
+	    saveWrapper.setDecryptionCipher(temp);
 	}
-	
-	cipher.setSboxs(convertedSBoxs);
     }
     
-    public void AddXors(List<XorNode> xors) {
-	List<CipherXorWrapper> convertedXors = new ArrayList<CipherXorWrapper>();
-	
-	for (int i=0; i<xors.size(); i++) {
-	    CipherXorWrapper xor = new CipherXorWrapper();
-	    xor.setId(xors.get(i).getId());
-	    xor.setX(xors.get(i).getXString());
-	    xor.setY(xors.get(i).getYString());
-	   
-	    List<NodeLink> inputs = xors.get(i).getInConnections();
-	    List<NodeLink> outputs = xors.get(i).getOutConnections();
-	    List<input> wrapperInputs = new ArrayList<input>();
-	    List<output> wrapperOutputs = new ArrayList<output>();
-	    for (int j=0; j<inputs.size(); j++) {
-	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
-	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
-	       wrapperInputs.add(input);
-	    }
-	   
-	    for (int j=0; j<outputs.size(); j++) {
-		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
-		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
-		wrapperOutputs.add(output);
-	    }
-	   
-	    inputs finalInputs = new inputs();
-	    Outputs finalOutputs = new Outputs();
-	    
-	    finalInputs.setInputs(wrapperInputs);
-	    finalInputs.setNumInputs(wrapperInputs.size());
-	    finalOutputs.setOutputs(wrapperOutputs);
-	    finalOutputs.setNumOutputs(wrapperOutputs.size());
-	    
-	    xor.setInputs(finalInputs);
-	    xor.setOutputs(finalOutputs);
-	   
-	    convertedXors.add(xor);
-	   
+    public void AddSBoxes(String wrapperType, List<SboxNode> sboxs) {	
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddSBoxes(sboxs);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddSBoxes(sboxs);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddSBoxes(sboxs);
+	    saveWrapper.setDecryptionCipher(temp);
 	}
-	
-	cipher.setXors(convertedXors);
     }
     
-    public void AddConnections(List<NodeLink> connections) {
-	List<CipherConnectionWrapper> convertedConnections = new ArrayList<CipherConnectionWrapper>();
-		
-	for (int i=0; i<connections.size(); i++) {
-	    CipherConnectionWrapper connection = new CipherConnectionWrapper();
-	    connection.setId(connections.get(i).getId());
-	    
-	    CipherConnectionFrom from = new CipherConnectionFrom();
-	    CipherConnectionTo to = new CipherConnectionTo();
-	    
-	    from.setFromId(connections.get(i).getSourceId());
-	  //  from.setConnectionPort(connections.get(i).g);
-	    
-	    to.setToId(connections.get(i).getTargetId());
-	    
-	    
-	    connection.setTo(to);
-	    connection.setFrom(from);
-
-	   
-	    convertedConnections.add(connection);
+    public void AddXors(String wrapperType, List<XorNode> xors) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddXors(xors);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddXors(xors);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddXors(xors);
+	    saveWrapper.setDecryptionCipher(temp);
 	}
-	
-	cipher.setConnections(convertedConnections);
+    }
+    
+    public void AddConnections(String wrapperType, List<NodeLink> connections) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    temp.AddConnections(connections);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddConnections(connections);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    temp.AddConnections(connections);
+	    saveWrapper.setDecryptionCipher(temp);
+	}
     }
 
     
@@ -268,7 +144,7 @@ public class SaveLoadTool {
     public void saveAsXml(String filename) {
 	try {
 	    
-	    JAXBContext context = JAXBContext.newInstance(CipherWrapper.class);
+	    JAXBContext context = JAXBContext.newInstance(SaveWrapper.class);
 	    Marshaller m = context.createMarshaller();
 	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    
@@ -276,7 +152,7 @@ public class SaveLoadTool {
 	    
 
 	    File file = new File(filename);
-	    m.marshal(cipher, file);
+	    m.marshal(saveWrapper, file);
 	    	    
 	} catch (Exception e) {
 	    e.printStackTrace();

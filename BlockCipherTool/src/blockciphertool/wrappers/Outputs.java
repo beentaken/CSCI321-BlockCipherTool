@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * @class wrapper for outputs so that they are stored in groups
  */
 public class Outputs {
     private List<output> outputData;

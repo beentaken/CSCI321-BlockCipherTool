@@ -33,7 +33,7 @@ import javax.swing.ProgressMonitorInputStream;
 
 /**
  *
- * @author csit321lm01a
+ * @author Alex
  */
 public class XorOptions extends AnchorPane{
     

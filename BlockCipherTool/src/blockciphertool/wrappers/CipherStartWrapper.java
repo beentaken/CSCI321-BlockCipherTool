@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- *
  * @author Nick
  * @class wrapper for start nodes, not used by backend, just for visualisation of gui
  */

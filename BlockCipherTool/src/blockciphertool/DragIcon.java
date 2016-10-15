@@ -18,7 +18,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 /**
  *
- * @author csit321lm01a
+ * @author Alex
  */
 public class DragIcon extends AnchorPane{
     @FXML AnchorPane drag_icon;

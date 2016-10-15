@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author csit321lm01a
+ * @author Alex, Nick
  */
 public class RunConfirm extends AnchorPane{
     
@@ -33,14 +33,24 @@ public class RunConfirm extends AnchorPane{
     
      private SaveLoadTool save = null;
     
+     
+    /**
+    * @author Alex
+    */     
     public RunConfirm(){
         
     }
     
+    /**
+    * @author Alex
+    */    
     public RunConfirm(SaveLoadTool Save) {
         this.save = Save;
     }
     
+    /**
+    * @author Alex
+    */    
     @FXML
     private void cancelButtonAction() {
         Stage stage = (Stage) cancel.getScene().getWindow();
@@ -48,7 +58,9 @@ public class RunConfirm extends AnchorPane{
         stage.close();
     }
 
-	    
+    /**
+    * @author Nick, Alex
+    */	    
     @FXML
     private void runButtonAction() {
 	System.out.println("Saving");

@@ -20,6 +20,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.CubicCurve;
 //import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 
+
+/**
+* @author Alex
+*/
 public class NodeLink extends AnchorPane {
     
     @FXML CubicCurve node_link;

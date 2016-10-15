@@ -8,8 +8,8 @@ package blockciphertool.wrappers;
 import javax.xml.bind.annotation.XmlValue;
 
 /**
- *
- * @author Gigabyte
+ * @author Nick
+ * class wrapper class. stores row data for tables, currently only used in sbox's
  */
 public class Row {
 
