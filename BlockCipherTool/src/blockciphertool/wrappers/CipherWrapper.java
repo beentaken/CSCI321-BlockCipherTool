@@ -10,11 +10,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-
-
 /**
- *
- * @author csit321lm01a
+ * @author Nick
+ * @Class save wrapper class for an encryption, decryption or key cipher
  */
 @XmlRootElement(name = "cipher")
 public class CipherWrapper {
@@ -24,9 +22,11 @@ public class CipherWrapper {
     private List<CipherFunctionWrapper> functions;
     private List<CipherXorWrapper> xors;
     private List<CipherConnectionWrapper> connections;
+    private List<CipherKeyWrapper> keys;
+    
     private PropertiesWrapper properties;
     
-    @XmlElement( name = "properties")
+    @XmlElement( name = "properties" )
     public PropertiesWrapper getProperties() {
         return this.properties;
     }
@@ -35,18 +35,18 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "pbox")
+    @XmlElement( name = "pbox" )
     public List<pboxWrapper> getPboxs() {
-        return pboxs;
+        return this.pboxs;
     }
     public void setPboxs(List<pboxWrapper> pboxs) {
         this.pboxs = pboxs;
     }
     
     
-    @XmlElement( name = "sbox")
+    @XmlElement( name = "sbox" )
     public List<sboxWrapper> getSboxs() {
-        return sboxs;
+        return this.sboxs;
     }
     public void setSboxs(List<sboxWrapper> sboxs) {
         this.sboxs = sboxs;
@@ -55,32 +55,37 @@ public class CipherWrapper {
     
     @XmlElement( name = "function")
     public List<CipherFunctionWrapper> getFunctions() {
-        return functions;
+        return this.functions;
     }
     public void setFunctions(List<CipherFunctionWrapper> functions) {
         this.functions = functions;
     }
     
     
-    @XmlElement( name = "xor")
+    @XmlElement( name = "xor" )
     public List<CipherXorWrapper> getXors() {
-        return xors;
+        return this.xors;
     }
     public void setXors(List<CipherXorWrapper> xors) {
         this.xors = xors;
     }
     
     
-    @XmlElement( name = "connection")
+    @XmlElement( name = "connection" )
     public List<CipherConnectionWrapper> getConnections() {
-        return connections;
+        return this.connections;
     }
     public void setConnections(List<CipherConnectionWrapper> connections) {
         this.connections = connections;
     }
     
+    @XmlElement( name = "keys" )
+    public List<CipherKeyWrapper> getKeys() {
+	return this.keys;
+    }
     
- 
-    
-    
+    public void setKeys(List<CipherKeyWrapper> Keys) {
+	this.keys = Keys;
+    }
+
 }

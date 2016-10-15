@@ -132,7 +132,6 @@ public class SaveLoadTool {
 		wrapperOutputs.add(output);
 	    }
 	   
-	    //String tableprops[] = outputData[0].split(" ");
             System.out.println(sboxs.get(i).getOptions().getColumns());
             System.out.println(sboxs.get(i).getOptions().getRows());
 	    int cols = Integer.parseInt(sboxs.get(i).getOptions().getColumns());
@@ -207,8 +206,6 @@ public class SaveLoadTool {
 	    
 	    xor.setInputs(finalInputs);
 	    xor.setOutputs(finalOutputs);
-
-	    //xor.setSize(xors.get(i).getSize());
 	   
 	    convertedXors.add(xor);
 	   
