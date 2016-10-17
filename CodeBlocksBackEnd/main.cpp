@@ -113,6 +113,7 @@ int main(int argc, char** argv) {
         } while (choice != 0);
 
         cout << "Thank you for using the program" << endl;
+
     }
 
     return 0;
