@@ -62,7 +62,7 @@
                                              <children>
                                                 <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                    <content>
-                                                      <AnchorPane fx:id="main_window" prefHeight="644.0" prefWidth="1104.0" />
+                                                      <AnchorPane fx:id="encrypt_pane" prefHeight="644.0" prefWidth="1104.0" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>
@@ -92,7 +92,7 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0">
                                                                                        <children>
-                                                                                          <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
+                                                                                          <TextField fx:id="roundNum" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -101,7 +101,7 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0">
                                                                                        <children>
-                                                                                          <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
+                                                                                          <TextField fx:id="blockSize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -110,7 +110,7 @@
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
                                                                                        <children>
-                                                                                          <TextField layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
+                                                                                          <TextField fx:id="keySize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
@@ -121,15 +121,15 @@
                                                                                        <children>
                                                                                           <Group>
                                                                                              <children>
-                                                                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
+                                                                                                <RadioButton fx:id="c1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
                                                                                                    <toggleGroup>
                                                                                                       <ToggleGroup fx:id="chainMode" />
                                                                                                    </toggleGroup></RadioButton>
-                                                                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c6" layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode" />
                                                                                              </children>
                                                                                           </Group>
                                                                                        </children>
@@ -142,14 +142,14 @@
                                                                                        <children>
                                                                                           <Group>
                                                                                              <children>
-                                                                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding">
+                                                                                                <RadioButton fx:id="p1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding">
                                                                                                    <toggleGroup>
                                                                                                       <ToggleGroup fx:id="padding" />
                                                                                                    </toggleGroup></RadioButton>
-                                                                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$padding" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$padding" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$padding" />
-                                                                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923" toggleGroup="$padding" />
                                                                                              </children>
                                                                                           </Group>
                                                                                        </children>
@@ -184,7 +184,7 @@
                                              <children>
                                                 <ScrollPane layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                    <content>
-                                                      <AnchorPane fx:id="main_window1" prefHeight="644.0" prefWidth="1104.0" />
+                                                      <AnchorPane fx:id="decrypt_pane" prefHeight="644.0" prefWidth="1104.0" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>
@@ -195,7 +195,7 @@
                                                    <items>
                                                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                          <children>
-                                                            <ScrollPane prefHeight="305.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                                                            <ScrollPane fx:id="dnode_list" prefHeight="305.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                                <content>
                                                                   <VBox fx:id="node_list1" />
                                                                </content>

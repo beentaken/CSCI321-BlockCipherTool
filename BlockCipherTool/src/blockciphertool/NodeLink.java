@@ -7,16 +7,21 @@ package blockciphertool;
 
 import java.io.IOException;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ListIterator;
 import java.util.UUID;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 //import jdk.internal.org.objectweb.asm.commons.StaticInitMerger;
 
@@ -36,6 +41,7 @@ public class NodeLink extends AnchorPane {
     private final DoubleProperty mControlDirectionY2 = new SimpleDoubleProperty();
     
     private MainLayout main_parent = null;
+    private final NodeLink self;
     
     private String mSize;
     private String sourceId;
@@ -58,6 +64,19 @@ public class NodeLink extends AnchorPane {
             throw new RuntimeException(exception);
         }
 	//setId(UUID.randomUUID().toString());
+        
+        self = this;
+        
+        node_link.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                    AnchorPane parent  = (AnchorPane) self.getParent();
+                    parent.getChildren().remove(self);
+                    main_parent.updateConnections(getId());
+                }
+            }
+        });
     }
     
     public void setId(int newId) {

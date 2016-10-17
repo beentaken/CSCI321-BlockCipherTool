@@ -482,6 +482,7 @@ public class DragNode extends AnchorPane{
                 if(!mDragLink.isVisible())
                     mDragLink.setVisible(true);
                 
+                
                 mDragLink.setEnd(new Point2D(event.getX() - 150, event.getY() - 33));
                 
                 event.consume();

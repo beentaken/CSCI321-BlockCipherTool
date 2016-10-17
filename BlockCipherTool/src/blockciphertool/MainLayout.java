@@ -50,7 +50,7 @@ import javafx.scene.layout.BorderPane;
 public class MainLayout extends AnchorPane{
     
     @FXML SplitPane base_pane;
-    @FXML AnchorPane main_window;
+    @FXML AnchorPane encrypt_pane;
     @FXML VBox node_list;
     @FXML TextField numRounds;
     @FXML TextField blockSize;
@@ -179,8 +179,8 @@ public class MainLayout extends AnchorPane{
             public void handle(MouseEvent event) {
                 
                 base_pane.setOnDragOver(mIconDragOverRoot);
-                main_window.setOnDragOver(mIconDragOverLeftPane);
-                main_window.setOnDragDropped(mIconDragDropped);
+                encrypt_pane.setOnDragOver(mIconDragOverLeftPane);
+                encrypt_pane.setOnDragDropped(mIconDragDropped);
                 
                 DragIcon icn = (DragIcon) event.getSource();
                 
@@ -209,8 +209,8 @@ public class MainLayout extends AnchorPane{
             public void handle(MouseEvent event) {
                 
                 base_pane.setOnDragOver(mIconDragOverRoot);
-                main_window.setOnDragOver(mIconDragOverLeftPane);
-                main_window.setOnDragDropped(mIconDragDropped);
+                encrypt_pane.setOnDragOver(mIconDragOverLeftPane);
+                encrypt_pane.setOnDragDropped(mIconDragDropped);
                 
                 DragNode nde = (DragNode) event.getSource();
                 
@@ -239,9 +239,9 @@ public class MainLayout extends AnchorPane{
             
             @Override
             public void handle (DragEvent event) {
-                Point2D p = main_window.sceneToLocal(event.getSceneX(), event.getSceneY());
+                Point2D p = encrypt_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
                 
-                if (!main_window.boundsInLocalProperty().get().contains(p)) {
+                if (!encrypt_pane.boundsInLocalProperty().get().contains(p)) {
                     mDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
                     return;
                 }
@@ -289,8 +289,8 @@ public class MainLayout extends AnchorPane{
             @Override
             public void handle (DragEvent event) {
 
-                main_window.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverLeftPane);
-                main_window.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
+                encrypt_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverLeftPane);
+                encrypt_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
                 base_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRoot);
 
                 mDragOverIcon.setVisible(false);
@@ -308,7 +308,7 @@ public class MainLayout extends AnchorPane{
                                 StartNode node = new StartNode();
 
                                 node.setType(DragNodeType.valueOf(container.getValue("type")));
-                                main_window.getChildren().add(node);
+                                encrypt_pane.getChildren().add(node);
 
 
                                 Point2D cursorPoint = container.getValue("scene_coords");
@@ -323,7 +323,7 @@ public class MainLayout extends AnchorPane{
                             PboxNode pnode = new PboxNode();
 
                             pnode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(pnode);
+                            encrypt_pane.getChildren().add(pnode);
 
                             Point2D pcursorPoint = container.getValue("scene_coords");
 
@@ -338,7 +338,7 @@ public class MainLayout extends AnchorPane{
                             SboxNode snode = new SboxNode();
 
                             snode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(snode);
+                            encrypt_pane.getChildren().add(snode);
 
                             Point2D scursorPoint = container.getValue("scene_coords");
 
@@ -352,7 +352,7 @@ public class MainLayout extends AnchorPane{
                             XorNode xnode = new XorNode();
 
                             xnode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(xnode);
+                            encrypt_pane.getChildren().add(xnode);
 
                             Point2D xcursorPoint = container.getValue("scene_coords");
 
@@ -367,7 +367,7 @@ public class MainLayout extends AnchorPane{
                                 EndNode enode = new EndNode();
 
                                 enode.setType(DragNodeType.valueOf(container.getValue("type")));
-                                main_window.getChildren().add(enode);
+                                encrypt_pane.getChildren().add(enode);
 
                                 Point2D ecursorPoint = container.getValue("scene_coords");
 
@@ -383,7 +383,7 @@ public class MainLayout extends AnchorPane{
                             node1.setUp();
 
                             node1.setType(DragNodeType.valueOf(container.getValue("type")));
-                            main_window.getChildren().add(node1);
+                            encrypt_pane.getChildren().add(node1);
 
                             Point2D cursorPoint1 = container.getValue("scene_coords");
 
@@ -414,12 +414,12 @@ public class MainLayout extends AnchorPane{
                         Link.setParent(MainLayout.this);
                         Link.setId(idCounter);
                         
-                        main_window.getChildren().add(0, Link);
+                        encrypt_pane.getChildren().add(0, Link);
                         
                         DragNode source = null;
                         DragNode target = null;
                         
-                        for (Node n: main_window.getChildren()) {
+                        for (Node n: encrypt_pane.getChildren()) {
                             if (n.getId() == null)
                                 continue;
                             if (n.getId().equals(sourceId))
@@ -431,9 +431,25 @@ public class MainLayout extends AnchorPane{
                         if (source != null && target != null)
                             Link.bindEnds(source, target);
                         
-			source.addConnection(Link);
-			target.addConnection(Link);
-                        connections.add(Link);
+                        boolean linkExists = false;
+                       
+                        for (int i = 0; i < connections.size() && !linkExists; i++) {
+                            if (connections.get(i).getSourceId().equals(source.getId())) {
+                                if(connections.get(i).getTargetId().equals(target.getId())) {
+                                    linkExists = true;
+                                }
+                            }
+                        }
+                        
+                        if (source != null && target != null)
+                            Link.bindEnds(source, target);
+                            
+                        if (!linkExists) {
+                            
+                            source.addConnection(Link);
+                            target.addConnection(Link);
+                            connections.add(Link);
+                        }
                     }
                 }
 
@@ -441,7 +457,7 @@ public class MainLayout extends AnchorPane{
             }
         });
         
-        main_window.setOnMouseClicked(new EventHandler <MouseEvent> (){
+        encrypt_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
             
             @Override
             public void handle (MouseEvent event) {
