@@ -524,6 +524,7 @@ public class MainLayout extends AnchorPane{
 	saver.AddXors("keygen", xors);
 	saver.AddConnections("keygen", connections);
 	
+	saver.AddProperties(properties);
 	//saver.AddProperties(numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
 	
 	

@@ -65,7 +65,13 @@ public class RunConfirm extends AnchorPane{
     private void runButtonAction() {
 	System.out.println("Saving");
 	this.save.saveAsXml("ActualSave.xml");
-        
+	
+	
+	ProcessBuilder launcher = new ProcessBuilder("CodeBlocksBackEnd", "save.xml", output.getText());
+	
+//	launcher.directory(directory);
+	System.out.println(launcher.directory().getAbsolutePath());
+
     }
     
 

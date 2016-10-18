@@ -11,11 +11,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author nick
  * @class wrapper class for properties, used in encrypt and decrypt, and also stored as a top level xml element
  */
+@XmlRootElement
 public class PropertiesWrapper {
     
     private String startId;

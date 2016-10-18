@@ -11,28 +11,32 @@ import blockciphertool.SboxNode;
 import blockciphertool.XorNode;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 /**
  * @author Nick
  * @Class save wrapper class for an encryption, decryption or key cipher
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "cipherWrapper", propOrder = {"pboxs", "sboxs", "functions", "xors", "connections", "keys", "properties"})
 public class CipherWrapper {
  
-    private List<pboxWrapper> pboxs;
-    private List<sboxWrapper> sboxs;
-    private List<CipherFunctionWrapper> functions;
-    private List<CipherXorWrapper> xors;
-    private List<CipherConnectionWrapper> connections;
-    private List<CipherKeyWrapper> keys;
+    private List<pboxWrapper> pboxs = new ArrayList<pboxWrapper>();
+    private List<sboxWrapper> sboxs = new ArrayList<sboxWrapper>();
+    private List<CipherFunctionWrapper> functions = new ArrayList<CipherFunctionWrapper>();
+    private List<CipherXorWrapper> xors = new ArrayList<CipherXorWrapper>();
+    private List<CipherConnectionWrapper> connections = new ArrayList<CipherConnectionWrapper>();
+    private List<CipherKeyWrapper> keys = new ArrayList<CipherKeyWrapper>();
     
-    private PropertiesWrapper properties;
+    private PropertiesWrapper properties = new PropertiesWrapper();
     
     
     
-    @XmlElement( name = "properties" )
     public PropertiesWrapper getProperties() {
         return this.properties;
     }
@@ -41,7 +45,6 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "pbox" )
     public List<pboxWrapper> getPboxs() {
         return this.pboxs;
     }
@@ -50,7 +53,6 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "sbox" )
     public List<sboxWrapper> getSboxs() {
         return this.sboxs;
     }
@@ -59,7 +61,6 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "function")
     public List<CipherFunctionWrapper> getFunctions() {
         return this.functions;
     }
@@ -68,7 +69,6 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "xor" )
     public List<CipherXorWrapper> getXors() {
         return this.xors;
     }
@@ -77,7 +77,6 @@ public class CipherWrapper {
     }
     
     
-    @XmlElement( name = "connection" )
     public List<CipherConnectionWrapper> getConnections() {
         return this.connections;
     }
@@ -85,7 +84,6 @@ public class CipherWrapper {
         this.connections = connections;
     }
     
-    @XmlElement( name = "keys" )
     public List<CipherKeyWrapper> getKeys() {
 	return this.keys;
     }

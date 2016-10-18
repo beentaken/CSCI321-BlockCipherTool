@@ -14,6 +14,8 @@ import javax.xml.bind.Marshaller;
 import blockciphertool.PboxNode;
 import blockciphertool.SboxNode;
 import blockciphertool.XorNode;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javax.xml.bind.Unmarshaller;
@@ -28,10 +30,16 @@ public class SaveLoadTool {
     public void AddProperties(String wrapperType) {
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
@@ -41,10 +49,16 @@ public class SaveLoadTool {
     public void AddProperties(String wrapperType, String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
@@ -55,14 +69,23 @@ public class SaveLoadTool {
     public void AddPBoxs(String wrapperType, List<PboxNode> pboxs) {
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddPBoxs(pboxs);
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddPBoxs(pboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddPBoxs(pboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	}
@@ -71,14 +94,23 @@ public class SaveLoadTool {
     public void AddSBoxes(String wrapperType, List<SboxNode> sboxs) {	
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddSBoxes(sboxs);
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddSBoxes(sboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddSBoxes(sboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	}
@@ -87,14 +119,23 @@ public class SaveLoadTool {
     public void AddXors(String wrapperType, List<XorNode> xors) {
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddXors(xors);
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddXors(xors);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddXors(xors);
 	    saveWrapper.setDecryptionCipher(temp);
 	}
@@ -103,19 +144,31 @@ public class SaveLoadTool {
     public void AddConnections(String wrapperType, List<NodeLink> connections) {
 	if ( wrapperType.equals( "encrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddConnections(connections);
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddConnections(connections);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
 	    temp.AddConnections(connections);
 	    saveWrapper.setDecryptionCipher(temp);
 	}
     }
 
+    public void AddProperties(PropertiesWrapper Properties) {
+	this.saveWrapper.setProperties(Properties);
+    }
     
     public void loadAsXml(String filename) {
 	try {
@@ -144,15 +197,20 @@ public class SaveLoadTool {
     public void saveAsXml(String filename) {
 	try {
 	    
-	    JAXBContext context = JAXBContext.newInstance(SaveWrapper.class);
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Marshaller m = context.createMarshaller();
 	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 	    
 	    
 	    
-
 	    File file = new File(filename);
-	    m.marshal(saveWrapper, file);
+	    OutputStream os = new FileOutputStream(file);
+
+	    
+	    m.marshal(saveWrapper.getEncryptionWrappedCipher(), os);
+	    m.marshal(saveWrapper.getDecryptionWrappedCipher(), os);
+	    m.marshal(saveWrapper.getWrappedKeygen(), os);
+	    m.marshal(saveWrapper.getProperties(), os);
 	    	    
 	} catch (Exception e) {
 	    e.printStackTrace();
