@@ -115,6 +115,7 @@ public class MainLayout extends AnchorPane{
     //private List<CipherFunctionWrapper> keyfunctions;
     private List<XorNode> keyxors;
     private List<NodeLink> keyconnections;
+    private List<subKey> subKeys;
     
     private int idCounter;
     private int keyIdCounter;
@@ -122,13 +123,17 @@ public class MainLayout extends AnchorPane{
     //for encrypt cipher
     private boolean startExists;
     private boolean endExists;
+    private boolean eKeyExists;
     
     //for decrypt cipher
     private boolean decstartExists;
     private boolean decendExists;
+    private boolean dKeyExists;
     
-    //for decrypt cipher
+    //for key generator
     private boolean keystartExists;
+    
+    
     
     /**
     * @author Alex
@@ -156,6 +161,8 @@ public class MainLayout extends AnchorPane{
         decstartExists = false;
         decendExists = false;
         keystartExists = false;
+        eKeyExists = false;
+        dKeyExists = false;
         tabMode = tabType.encrypt;
     }
     
@@ -210,7 +217,7 @@ public class MainLayout extends AnchorPane{
         getChildren().add(mKeyDragOverIcon);  
 
         //populate left pane of encrypt tab with multiple colored icons for testing
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
 
             DragIcon icn = new DragIcon();
             addDragDetectionIcon(icn);
@@ -232,6 +239,9 @@ public class MainLayout extends AnchorPane{
                 case 4:
                     icn.Icon_Tooltip.setText("End: Node that represents the output for the cipher. (Required in cipher)");
                 break;
+                case 5:
+                    icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
+                break;
                     
             }
             
@@ -239,7 +249,7 @@ public class MainLayout extends AnchorPane{
         }
         
         //populate left pane of encrypt tab with multiple colored icons for testing
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
 
             DragIcon icn = new DragIcon();
             addDecDragDetectionIcon(icn);
@@ -261,6 +271,9 @@ public class MainLayout extends AnchorPane{
                 case 4:
                     icn.Icon_Tooltip.setText("End: Node that represents the output for the cipher. (Required in cipher)");
                 break;
+                case 5:
+                    icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
+                break;
                     
             }
             
@@ -273,7 +286,7 @@ public class MainLayout extends AnchorPane{
             addKeyDragDetectionIcon(icn);
             icn.setType(DragNodeType.values()[i]);
             if (i == 4)
-                icn.setType(DragNodeType.values()[i+1]);
+                icn.setType(DragNodeType.values()[i+2]);
             
             switch (i) {
                 case 0:
@@ -319,6 +332,7 @@ public class MainLayout extends AnchorPane{
         keysboxs = new ArrayList<SboxNode>();
         keyxors = new ArrayList<XorNode>();
         keyconnections = new ArrayList<NodeLink>();
+        subKeys = new ArrayList<subKey>();
     }
     
     /**
@@ -570,6 +584,22 @@ public class MainLayout extends AnchorPane{
                                     endExists = true;
                                 }
                             break;
+                            
+                            case key:
+                                if (!eKeyExists) {
+                                    Key knode = new Key();
+
+                                    knode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    encrypt_pane.getChildren().add(knode);
+
+                                    Point2D ecursorPoint = container.getValue("scene_coords");
+
+                                    knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                    knode.setParent(MainLayout.this);
+                                    knode.setId("ek");
+                                    dKeyExists = true;
+                                }
+                            break;
 
                             default:
                                 DragNode node1 = new DragNode();
@@ -737,6 +767,22 @@ public class MainLayout extends AnchorPane{
                                     decendExists = true;
                                 }
                             break;
+                            
+                            case key:
+                                if (!dKeyExists) {
+                                    Key knode = new Key();
+
+                                    knode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    decrypt_pane.getChildren().add(knode);
+
+                                    Point2D ecursorPoint = container.getValue("scene_coords");
+
+                                    knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                    knode.setParent(MainLayout.this);
+                                    knode.setId("dk");
+                                    dKeyExists = true;
+                                }
+                            break;
 
                             default:
                                 DragNode node1 = new DragNode();
@@ -840,6 +886,7 @@ public class MainLayout extends AnchorPane{
 
                                 knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                                 knode.setParent(MainLayout.this);
+                                subKeys.add(knode);
                                 knode.setParentMain();
                                 knode.setId(keyIdCounter);
 
@@ -1144,6 +1191,12 @@ public class MainLayout extends AnchorPane{
                         keyxors.get(j).removeConnection(id);
                     if(keyxors.get(j).getId().equals(tId))
                         keyxors.get(j).removeConnection(id);
+                }
+                for (int j=0; j<subKeys.size(); j++) {
+                    if(subKeys.get(j).getId().equals(sId))
+                        subKeys.get(j).removeConnection(id);
+                    if(subKeys.get(j).getId().equals(tId))
+                        subKeys.get(j).removeConnection(id);
                 }
 		keyconnections.remove(i);
 		return;

@@ -318,6 +318,10 @@ public class DragNode extends AnchorPane{
         getStyleClass().add("node-subKey");
         break;
         
+        case key:
+        getStyleClass().add("node-Key");
+        break;
+        
 
         default:
         break;
