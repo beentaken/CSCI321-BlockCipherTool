@@ -597,7 +597,7 @@ public class MainLayout extends AnchorPane{
                                     knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                                     knode.setParent(MainLayout.this);
                                     knode.setId("ek");
-                                    dKeyExists = true;
+                                    eKeyExists = true;
                                 }
                             break;
 
