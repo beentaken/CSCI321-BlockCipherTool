@@ -98,6 +98,10 @@ public class DragIcon extends AnchorPane{
         getStyleClass().add("node-endIcon");
         break;
         
+        case subkey:
+        getStyleClass().add("node-subKeyIcon");
+        break;
+        
         default:
         break;
         }

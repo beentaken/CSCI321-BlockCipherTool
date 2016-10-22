@@ -15,6 +15,7 @@ public enum DragNodeType {
     sbox,
     xor,
     end,
+    subkey,
     yellow,
     purple,
     grey,

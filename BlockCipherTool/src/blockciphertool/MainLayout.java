@@ -52,22 +52,27 @@ public class MainLayout extends AnchorPane{
     
     @FXML SplitPane base_pane;
     @FXML SplitPane decbase_pane;
+    @FXML SplitPane keybase_pane;
     @FXML AnchorPane decrypt_pane;
     @FXML AnchorPane encrypt_pane;
+    @FXML AnchorPane key_pane;
     @FXML VBox node_list;
     @FXML VBox dnode_list;
+    @FXML VBox key_list;
     @FXML TextField numRounds;
     @FXML TextField blockSize;
     @FXML TextField keySize;
     @FXML TextField numRounds2;
     @FXML TextField blockSize2;
     @FXML TextField keySize2;
+    @FXML TextField keyNum;
     @FXML Tab encrypt_tab;
     @FXML Tab decrypt_tab;
     @FXML Tab key_tab;
     
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
+    private DragIcon mKeyDragOverIcon = null;
     
     public enum tabType {
         encrypt, decrypt, key
@@ -84,6 +89,11 @@ public class MainLayout extends AnchorPane{
     private EventHandler<DragEvent> mDecIconDragDropped=null;
     private EventHandler<DragEvent> mDecIconDragOverLeftPane=null;
     
+    //event handlers form dragging in key pane
+    private EventHandler<DragEvent> mKeyIconDragOverRoot=null;
+    private EventHandler<DragEvent> mKeyIconDragDropped=null;
+    private EventHandler<DragEvent> mKeyIconDragOverLeftPane=null;
+    
     //for encrypt cipher
     private List<PboxNode> pboxs;
     private List<SboxNode> sboxs;
@@ -99,7 +109,15 @@ public class MainLayout extends AnchorPane{
     private List<XorNode> decxors;
     private List<NodeLink> decconnections;
     
+    //for key generator
+    private List<PboxNode> keypboxs;
+    private List<SboxNode> keysboxs;
+    //private List<CipherFunctionWrapper> keyfunctions;
+    private List<XorNode> keyxors;
+    private List<NodeLink> keyconnections;
+    
     private int idCounter;
+    private int keyIdCounter;
     
     //for encrypt cipher
     private boolean startExists;
@@ -108,6 +126,10 @@ public class MainLayout extends AnchorPane{
     //for decrypt cipher
     private boolean decstartExists;
     private boolean decendExists;
+    
+    //for decrypt cipher
+    private boolean keystartExists;
+    
     /**
     * @author Alex
     */
@@ -128,10 +150,12 @@ public class MainLayout extends AnchorPane{
         }
         
         idCounter = 1;
+        keyIdCounter = 1;
         startExists = false;
         endExists = false;
         decstartExists = false;
         decendExists = false;
+        keystartExists = false;
         tabMode = tabType.encrypt;
     }
     
@@ -140,6 +164,13 @@ public class MainLayout extends AnchorPane{
     */
     public void updateIdCounter() {
         idCounter++;
+    }
+    
+    /**
+    * @author Alex
+    */
+    public void updateKeyIdCounter() {
+        keyIdCounter++;
     }
     
     /**
@@ -170,6 +201,13 @@ public class MainLayout extends AnchorPane{
         mDecDragOverIcon.setVisible(false);
         mDecDragOverIcon.setOpacity(0.65);
         getChildren().add(mDecDragOverIcon);  
+        
+        //same for keygen
+        mKeyDragOverIcon = new DragIcon();
+	
+        mKeyDragOverIcon.setVisible(false);
+        mKeyDragOverIcon.setOpacity(0.65);
+        getChildren().add(mKeyDragOverIcon);  
 
         //populate left pane of encrypt tab with multiple colored icons for testing
         for (int i = 0; i < 5; i++) {
@@ -229,11 +267,42 @@ public class MainLayout extends AnchorPane{
             dnode_list.getChildren().add(icn);
         }
         
+        for (int i = 0; i < 5; i++) {
+
+            DragIcon icn = new DragIcon();
+            addKeyDragDetectionIcon(icn);
+            icn.setType(DragNodeType.values()[i]);
+            if (i == 4)
+                icn.setType(DragNodeType.values()[i+1]);
+            
+            switch (i) {
+                case 0:
+                    icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
+                break;
+                case 1:
+                    icn.Icon_Tooltip.setText("Permutation box: used to permute or transpose bits from input(s) to output(s)");
+                break;
+                case 2:
+                    icn.Icon_Tooltip.setText("Substitution box: takes some input bits and replaces them with different output bits");
+                break;
+                case 3:
+                    icn.Icon_Tooltip.setText("XOR: a bitwise XOR across two inputs");
+                break;
+                case 4:
+                    icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
+                break;
+                    
+            }
+            
+            key_list.getChildren().add(icn);
+        }
+        
         
         
         
         buildDragHandlers();
         buildDecDragHandlers();
+        buildKeyDragHandlers();
         
         pboxs = new ArrayList<PboxNode>();
         sboxs = new ArrayList<SboxNode>();
@@ -245,6 +314,11 @@ public class MainLayout extends AnchorPane{
         decsboxs = new ArrayList<SboxNode>();
         decxors = new ArrayList<XorNode>();
         decconnections = new ArrayList<NodeLink>();
+        
+        keypboxs = new ArrayList<PboxNode>();
+        keysboxs = new ArrayList<SboxNode>();
+        keyxors = new ArrayList<XorNode>();
+        keyconnections = new ArrayList<NodeLink>();
     }
     
     /**
@@ -310,6 +384,40 @@ public class MainLayout extends AnchorPane{
                 mDecDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
                 mDecDragOverIcon.setVisible(true);
                 mDecDragOverIcon.setMouseTransparent(true);
+                event.consume();
+            }
+        });
+    }
+    
+    /**
+    * @author Alex
+    * Adds Drag detection to the drag nodes in the decrypt tab
+    */
+    private void addKeyDragDetectionIcon(DragIcon dragIcon) {
+        
+        dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
+            
+            @Override
+            public void handle(MouseEvent event) {
+                
+                keybase_pane.setOnDragOver(mKeyIconDragOverRoot);
+                key_pane.setOnDragOver(mKeyIconDragOverLeftPane);
+                key_pane.setOnDragDropped(mKeyIconDragDropped);
+                
+                DragIcon icn = (DragIcon) event.getSource();
+                
+                mKeyDragOverIcon.setType(icn.getType());
+                mKeyDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
+                
+                ClipboardContent content = new ClipboardContent();
+                DragContainer container = new DragContainer();
+                
+                container.addData ("type", mKeyDragOverIcon.getType().toString());
+                content.put(DragContainer.AddNode, container);
+                
+                mKeyDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
+                mKeyDragOverIcon.setVisible(true);
+                mKeyDragOverIcon.setMouseTransparent(true);
                 event.consume();
             }
         });
@@ -645,6 +753,113 @@ public class MainLayout extends AnchorPane{
                             break;
                             }
 
+                        }       
+                    }
+                }
+                else if (tabMode == tabType.key) {
+                    key_pane.removeEventHandler(DragEvent.DRAG_OVER, mKeyIconDragOverLeftPane);
+                    key_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mKeyIconDragDropped);
+                    key_pane.removeEventHandler(DragEvent.DRAG_OVER, mKeyIconDragOverRoot);
+
+                    mKeyDragOverIcon.setVisible(false);
+
+                    DragContainer container = 
+                            (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
+
+
+                    if (container != null) {
+                        if (container.getValue("scene_coords") != null) {
+                            switch (DragNodeType.valueOf(container.getValue("type"))) {
+
+                            case Start:
+                                if (!keystartExists) {
+                                    StartNode node = new StartNode();
+
+                                    node.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    key_pane.getChildren().add(node);
+
+
+                                    Point2D cursorPoint = container.getValue("scene_coords");
+
+                                    node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                                    node.setParent(MainLayout.this);
+                                    keystartExists = true;
+                                }
+                            break;
+
+                            case pbox:
+                                PboxNode pnode = new PboxNode();
+
+                                pnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                key_pane.getChildren().add(pnode);
+
+                                Point2D pcursorPoint = container.getValue("scene_coords");
+
+                                pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
+                                System.out.print(pnode);
+                                keypboxs.add(pnode);
+                                pnode.setParent(MainLayout.this);
+                                pnode.setId(idCounter);
+                            break;
+
+                            case sbox:
+                                SboxNode snode = new SboxNode();
+
+                                snode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                key_pane.getChildren().add(snode);
+
+                                Point2D scursorPoint = container.getValue("scene_coords");
+
+                                snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
+                                keysboxs.add(snode);
+                                snode.setParent(MainLayout.this);
+                                snode.setId(idCounter);
+                            break;
+
+                            case xor:
+                                XorNode xnode = new XorNode();
+
+                                xnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                key_pane.getChildren().add(xnode);
+
+                                Point2D xcursorPoint = container.getValue("scene_coords");
+
+                                xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
+                                keyxors.add(xnode);
+                                xnode.setParent(MainLayout.this);
+                                xnode.setId(idCounter);
+                            break;
+
+                            case subkey:
+                                subKey knode = new subKey();
+
+                                knode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                key_pane.getChildren().add(knode);
+
+                                Point2D ecursorPoint = container.getValue("scene_coords");
+
+                                knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                knode.setParent(MainLayout.this);
+                                knode.setParentMain();
+                                knode.setId(keyIdCounter);
+
+                            break;
+
+                            default:
+                                DragNode node1 = new DragNode();
+
+                                node1.setUp();
+
+                                node1.setType(DragNodeType.valueOf(container.getValue("type")));
+                                key_pane.getChildren().add(node1);
+
+                                Point2D cursorPoint1 = container.getValue("scene_coords");
+
+                                node1.relocateToPoint(new Point2D(cursorPoint1.getX()- 50, cursorPoint1.getY() - 50));
+
+                            break;
+                            }
+
                         }
                     }
 
@@ -667,12 +882,12 @@ public class MainLayout extends AnchorPane{
                             Link.setParent(MainLayout.this);
                             Link.setId(idCounter);
 
-                            decrypt_pane.getChildren().add(0, Link);
+                            key_pane.getChildren().add(0, Link);
 
                             DragNode source = null;
                             DragNode target = null;
 
-                            for (Node n: decrypt_pane.getChildren()) {
+                            for (Node n: key_pane.getChildren()) {
                                 if (n.getId() == null)
                                     continue;
                                 if (n.getId().equals(sourceId))
@@ -686,9 +901,9 @@ public class MainLayout extends AnchorPane{
 
                             boolean linkExists = false;
 
-                            for (int i = 0; i < decconnections.size() && !linkExists; i++) {
-                                if (decconnections.get(i).getSourceId().equals(source.getId())) {
-                                    if(decconnections.get(i).getTargetId().equals(target.getId())) {
+                            for (int i = 0; i < keyconnections.size() && !linkExists; i++) {
+                                if (keyconnections.get(i).getSourceId().equals(source.getId())) {
+                                    if(keyconnections.get(i).getTargetId().equals(target.getId())) {
                                         linkExists = true;
                                     }
                                 }
@@ -701,7 +916,7 @@ public class MainLayout extends AnchorPane{
 
                                 source.addConnection(Link);
                                 target.addConnection(Link);
-                                decconnections.add(Link);
+                                keyconnections.add(Link);
                             }
                         }
                     }
@@ -789,6 +1004,69 @@ public class MainLayout extends AnchorPane{
         });
     }
     
+    private void buildKeyDragHandlers() {
+        mKeyIconDragOverRoot = new EventHandler<DragEvent>() {
+            
+            @Override
+            public void handle (DragEvent event) {
+                Point2D p = key_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
+                
+                if (!key_pane.boundsInLocalProperty().get().contains(p)) {
+                    mKeyDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
+                    return;
+                }
+                
+                event.consume();
+            }
+        };
+        
+        mKeyIconDragOverLeftPane = new EventHandler <DragEvent> () {
+
+            @Override
+            public void handle(DragEvent event) {
+
+                event.acceptTransferModes(TransferMode.ANY);
+
+                mKeyDragOverIcon.relocateToPoint(
+                    new Point2D(event.getSceneX() - 50, event.getSceneY() - 50)
+                );
+
+                event.consume();
+            }
+        };
+        
+        mKeyIconDragDropped = new EventHandler <DragEvent> () {
+
+            @Override
+            public void handle(DragEvent event) {
+                
+                DragContainer container = 
+                        (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
+                
+                container.addData("scene_coords", 
+                        new Point2D(event.getSceneX(), event.getSceneY()));
+
+                ClipboardContent content = new ClipboardContent();
+                content.put(DragContainer.AddNode, container);
+
+                event.getDragboard().setContent(content);
+                event.setDropCompleted(true);
+            }
+        };
+        
+        
+        
+        key_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
+            
+            @Override
+            public void handle (MouseEvent event) {
+                System.out.print(new Point2D(event.getX(), event.getY()));
+                event.consume();
+            }
+            
+        });
+    }
+    
     /**
     * @author Alex
     */    
@@ -842,6 +1120,32 @@ public class MainLayout extends AnchorPane{
                         decxors.get(j).removeConnection(id);
                 }
 		decconnections.remove(i);
+		return;
+	    }
+	}
+        for (int i=0; i<keyconnections.size(); i++) {
+	    if ( keyconnections.get(i).getId().equals(id) ) {
+                String sId = keyconnections.get(i).getSourceId();
+                String tId = keyconnections.get(i).getTargetId();
+                for (int j=0; j<keypboxs.size(); j++) {
+                    if(keypboxs.get(j).getId().equals(sId))
+                        keypboxs.get(j).removeConnection(id);
+                    if(keypboxs.get(j).getId().equals(tId))
+                        keypboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<keysboxs.size(); j++) {
+                    if(keysboxs.get(j).getId().equals(sId))
+                        keysboxs.get(j).removeConnection(id);
+                    if(keysboxs.get(j).getId().equals(tId))
+                        keysboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<keyxors.size(); j++) {
+                    if(keyxors.get(j).getId().equals(sId))
+                        keyxors.get(j).removeConnection(id);
+                    if(keyxors.get(j).getId().equals(tId))
+                        keyxors.get(j).removeConnection(id);
+                }
+		keyconnections.remove(i);
 		return;
 	    }
 	}
@@ -915,7 +1219,7 @@ public class MainLayout extends AnchorPane{
             tabMode = tabType.decrypt;
         else if (key_tab.isSelected())
             tabMode = tabType.key;
-        //System.out.println(tabMode);
+        System.out.println(tabMode);
     }
     
 }

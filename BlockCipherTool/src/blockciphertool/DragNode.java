@@ -70,8 +70,6 @@ public class DragNode extends AnchorPane{
     
     private List <NodeLink> connections = new ArrayList<NodeLink> ();
     
-    private List <DragNode> connectedFromNodes = new ArrayList<DragNode> ();
-    
     private int xCoord;
     private int yCoord;
     
@@ -159,6 +157,10 @@ public class DragNode extends AnchorPane{
     
     public void setParent(MainLayout main) {
         main_parent = main;
+    }
+    
+    public MainLayout getParentMain() {
+        return main_parent;
     }
     
     public void registerLink(String linkId) {
@@ -310,6 +312,10 @@ public class DragNode extends AnchorPane{
 
         case end:
         getStyleClass().add("node-end");
+        break;
+        
+        case subkey:
+        getStyleClass().add("node-subKey");
         break;
         
 
