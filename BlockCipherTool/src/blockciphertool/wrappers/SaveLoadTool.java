@@ -14,6 +14,7 @@ import javax.xml.bind.Marshaller;
 import blockciphertool.PboxNode;
 import blockciphertool.SboxNode;
 import blockciphertool.XorNode;
+import blockciphertool.subKey;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import javafx.scene.control.Alert;
@@ -166,6 +167,32 @@ public class SaveLoadTool {
 	}
     }
 
+    public void AddSubkeys(String wrapperType, List<subKey> subkeys) {
+	if ( wrapperType.equals( "encrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
+	    temp.AddKeys(subkeys);
+	    saveWrapper.setEncryptionCipher(temp);
+	} else if( wrapperType.equals( "decrypt" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
+	    temp.AddKeys(subkeys);
+	    saveWrapper.setDecryptionCipher(temp);
+	} else if( wrapperType.equals( "keygen" ) ) {
+	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
+	    temp.AddKeys(subkeys);
+	    saveWrapper.setDecryptionCipher(temp);
+	}
+	
+    }
+    
     public void AddProperties(PropertiesWrapper Properties) {
 	this.saveWrapper.setProperties(Properties);
     }

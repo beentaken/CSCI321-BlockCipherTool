@@ -70,7 +70,7 @@ public class RunConfirm extends AnchorPane{
 	ProcessBuilder launcher = new ProcessBuilder("CodeBlocksBackEnd", "save.xml", output.getText());
 	
 //	launcher.directory(directory);
-	System.out.println(launcher.directory().getAbsolutePath());
+	//System.out.println(launcher.directory().getAbsolutePath());
 
     }
     

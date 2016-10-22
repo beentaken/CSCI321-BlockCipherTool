@@ -9,6 +9,7 @@ import blockciphertool.NodeLink;
 import blockciphertool.PboxNode;
 import blockciphertool.SboxNode;
 import blockciphertool.XorNode;
+import blockciphertool.subKey;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,7 +32,7 @@ public class CipherWrapper {
     private List<CipherFunctionWrapper> functions = new ArrayList<CipherFunctionWrapper>();
     private List<CipherXorWrapper> xors = new ArrayList<CipherXorWrapper>();
     private List<CipherConnectionWrapper> connections = new ArrayList<CipherConnectionWrapper>();
-    private List<CipherKeyWrapper> keys = new ArrayList<CipherKeyWrapper>();
+    private List<CipherSubkeyWrapper> keys = new ArrayList<CipherSubkeyWrapper>();
     
     private PropertiesWrapper properties = new PropertiesWrapper();
     
@@ -84,11 +85,11 @@ public class CipherWrapper {
         this.connections = connections;
     }
     
-    public List<CipherKeyWrapper> getKeys() {
+    public List<CipherSubkeyWrapper> getKeys() {
 	return this.keys;
     }
     
-    public void setKeys(List<CipherKeyWrapper> Keys) {
+    public void setKeys(List<CipherSubkeyWrapper> Keys) {
 	this.keys = Keys;
     }
 
@@ -281,6 +282,41 @@ public class CipherWrapper {
 	
 	setXors(convertedXors);
     }
+
+    public void AddKeys(List<subKey> subkeys) {
+	List<CipherSubkeyWrapper> convertedSubkeys = new ArrayList<CipherSubkeyWrapper>();
+	
+	for (int i=0; i<subkeys.size(); i++) {
+	    CipherSubkeyWrapper subkey = new CipherSubkeyWrapper();
+	    subkey.setId(subkeys.get(i).getId());
+	    subkey.setX(subkeys.get(i).getXString());
+	    subkey.setY(subkeys.get(i).getYString());
+	   
+	    List<NodeLink> inputs = subkeys.get(i).getInConnections();
+	    List<input> wrapperInputs = new ArrayList<input>();
+	    for (int j=0; j<inputs.size(); j++) {
+	       input input = new input();
+	       input.setConnectorID( inputs.get(j).getLinkID() );
+	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
+	       wrapperInputs.add(input);
+	    }
+	   
+	    inputs finalInputs = new inputs();
+	    
+	    finalInputs.setInputs(wrapperInputs);
+	    finalInputs.setNumInputs(wrapperInputs.size());
+
+	    
+	    subkey.setInputs(finalInputs);
+	   
+	    convertedSubkeys.add(subkey);
+	   
+	}
+	
+	setKeys(convertedSubkeys);
+    }
+
+    
     
     public void AddConnections(List<NodeLink> connections) {
 	List<CipherConnectionWrapper> convertedConnections = new ArrayList<CipherConnectionWrapper>();

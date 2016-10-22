@@ -1217,16 +1217,18 @@ public class MainLayout extends AnchorPane{
 	saver.AddConnections("encrypt", connections);
 	saver.AddProperties("encrypt");
 	
-	saver.AddPBoxs("decrypt", pboxs);
-	saver.AddSBoxes("decrypt", sboxs);
-	saver.AddXors("decrypt", xors);
-	saver.AddConnections("decrypt", connections);
+	
+	saver.AddPBoxs("decrypt", decpboxs);
+	saver.AddSBoxes("decrypt", decsboxs);
+	saver.AddXors("decrypt", decxors);
+	saver.AddConnections("decrypt", decconnections);
 	saver.AddProperties("decrypt");
 	
-	saver.AddPBoxs("keygen", pboxs);
-	saver.AddSBoxes("keygen", sboxs);
-	saver.AddXors("keygen", xors);
-	saver.AddConnections("keygen", connections);
+	saver.AddPBoxs("keygen", keypboxs);
+	saver.AddSBoxes("keygen", keysboxs);
+	saver.AddXors("keygen", keyxors);
+	saver.AddConnections("keygen", keyconnections);
+	saver.AddSubkeys("keygen", subKeys);
 	
 	saver.AddProperties(properties);
 	//saver.AddProperties(numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");

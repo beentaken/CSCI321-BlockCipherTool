@@ -28,7 +28,6 @@ public class CipherKeyWrapper {
     private String X;
     private String Y;
     private inputs inputs;
-    private Outputs outputs;
     
     @XmlAttribute(name="ID")
     public String getId() {
@@ -66,13 +65,5 @@ public class CipherKeyWrapper {
 	this.inputs = Inputs;
     }
     
-    @XmlElement(name="outputs")
-    public Outputs getOutputs() {
-        return this.outputs;
-    }
-    
-    public void setOutputs(Outputs Outputs) {
-	this.outputs = Outputs;
-    }
-    
+
 }
