@@ -801,6 +801,67 @@ public class MainLayout extends AnchorPane{
 
                         }       
                     }
+                    
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
+                    
+                    if (container != null) {
+                        if (container.getValue("type") != null)
+                            System.out.println("Moved node " + container.getValue("type"));
+                    }
+                    
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
+                    
+                    if (container != null) {
+                        String sourceId = container.getValue("source");
+                        String targetId = container.getValue("target");
+                        
+                        if (sourceId != null && targetId != null) {
+                            System.out.println(container.getData());
+                            NodeLink Link = new NodeLink();
+                            Link.setParent(MainLayout.this);
+                            Link.setId(idCounter);
+                            
+                            decrypt_pane.getChildren().add(0, Link);
+                            
+                            DragNode source = null;
+                            DragNode target = null;
+                            
+                            for (Node n: decrypt_pane.getChildren()) {
+                                if (n.getId() == null)
+                                    continue;
+                                if (n.getId().equals(sourceId))
+                                    source = (DragNode) n;
+                                if (n.getId().equals(targetId))
+                                    target = (DragNode) n;
+                            }
+                            
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+                            
+                            boolean linkExists = false;
+                            
+                            for (int i = 0; i < decconnections.size() && !linkExists; i++) {
+                                if (decconnections.get(i).getSourceId().equals(source.getId())) {
+                                    if(decconnections.get(i).getTargetId().equals(target.getId())) {
+                                        linkExists = true;
+                                    }
+                                }
+                            }
+                            
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+                            
+                            if (!linkExists) {
+                                
+                                source.addConnection(Link);
+                                target.addConnection(Link);
+                                decconnections.add(Link);
+                            }
+                        }
+                    }
+                    
+                    event.consume();
+
                 }
                 else if (tabMode == tabType.key) {
                     key_pane.removeEventHandler(DragEvent.DRAG_OVER, mKeyIconDragOverLeftPane);
@@ -906,7 +967,6 @@ public class MainLayout extends AnchorPane{
 
                             break;
                             }
-
                         }
                     }
 
