@@ -40,6 +40,7 @@ import blockciphertool.wrappers.sboxWrapper;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
@@ -50,18 +51,40 @@ import javafx.scene.layout.BorderPane;
 public class MainLayout extends AnchorPane{
     
     @FXML SplitPane base_pane;
+    @FXML SplitPane decbase_pane;
+    @FXML AnchorPane decrypt_pane;
     @FXML AnchorPane encrypt_pane;
     @FXML VBox node_list;
+    @FXML VBox dnode_list;
     @FXML TextField numRounds;
     @FXML TextField blockSize;
     @FXML TextField keySize;
+    @FXML TextField numRounds2;
+    @FXML TextField blockSize2;
+    @FXML TextField keySize2;
+    @FXML Tab encrypt_tab;
+    @FXML Tab decrypt_tab;
+    @FXML Tab key_tab;
     
     private DragIcon mDragOverIcon = null;
+    private DragIcon mDecDragOverIcon = null;
     
+    public enum tabType {
+        encrypt, decrypt, key
+    }
+    private tabType tabMode;
+    
+    //event handlers for encrypt pane
     private EventHandler<DragEvent> mIconDragOverRoot=null;
     private EventHandler<DragEvent> mIconDragDropped=null;
     private EventHandler<DragEvent> mIconDragOverLeftPane=null;
     
+    //event handlers form dragging in decrypt pane
+    private EventHandler<DragEvent> mDecIconDragOverRoot=null;
+    private EventHandler<DragEvent> mDecIconDragDropped=null;
+    private EventHandler<DragEvent> mDecIconDragOverLeftPane=null;
+    
+    //for encrypt cipher
     private List<PboxNode> pboxs;
     private List<SboxNode> sboxs;
     //private List<CipherFunctionWrapper> functions;
@@ -69,11 +92,22 @@ public class MainLayout extends AnchorPane{
     private List<NodeLink> connections;
     private PropertiesWrapper properties;
     
+    //for decrypt cipher
+    private List<PboxNode> decpboxs;
+    private List<SboxNode> decsboxs;
+    //private List<CipherFunctionWrapper> decfunctions;
+    private List<XorNode> decxors;
+    private List<NodeLink> decconnections;
+    
     private int idCounter;
     
+    //for encrypt cipher
     private boolean startExists;
     private boolean endExists;
     
+    //for decrypt cipher
+    private boolean decstartExists;
+    private boolean decendExists;
     /**
     * @author Alex
     */
@@ -96,6 +130,9 @@ public class MainLayout extends AnchorPane{
         idCounter = 1;
         startExists = false;
         endExists = false;
+        decstartExists = false;
+        decendExists = false;
+        tabMode = tabType.encrypt;
     }
     
     /**
@@ -126,14 +163,19 @@ public class MainLayout extends AnchorPane{
         mDragOverIcon.setVisible(false);
         mDragOverIcon.setOpacity(0.65);
         getChildren().add(mDragOverIcon);  
+        
+        //same for decrypt
+        mDecDragOverIcon = new DragIcon();
+	
+        mDecDragOverIcon.setVisible(false);
+        mDecDragOverIcon.setOpacity(0.65);
+        getChildren().add(mDecDragOverIcon);  
 
-        //populate left pane with multiple colored icons for testing
+        //populate left pane of encrypt tab with multiple colored icons for testing
         for (int i = 0; i < 5; i++) {
 
             DragIcon icn = new DragIcon();
-            
             addDragDetectionIcon(icn);
-
             icn.setType(DragNodeType.values()[i]);
             
             switch (i) {
@@ -158,18 +200,56 @@ public class MainLayout extends AnchorPane{
             node_list.getChildren().add(icn);
         }
         
+        //populate left pane of encrypt tab with multiple colored icons for testing
+        for (int i = 0; i < 5; i++) {
+
+            DragIcon icn = new DragIcon();
+            addDecDragDetectionIcon(icn);
+            icn.setType(DragNodeType.values()[i]);
+            
+            switch (i) {
+                case 0:
+                    icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
+                break;
+                case 1:
+                    icn.Icon_Tooltip.setText("Permutation box: used to permute or transpose bits from input(s) to output(s)");
+                break;
+                case 2:
+                    icn.Icon_Tooltip.setText("Substitution box: takes some input bits and replaces them with different output bits");
+                break;
+                case 3:
+                    icn.Icon_Tooltip.setText("XOR: a bitwise XOR across two inputs");
+                break;
+                case 4:
+                    icn.Icon_Tooltip.setText("End: Node that represents the output for the cipher. (Required in cipher)");
+                break;
+                    
+            }
+            
+            dnode_list.getChildren().add(icn);
+        }
+        
+        
+        
         
         buildDragHandlers();
+        buildDecDragHandlers();
         
         pboxs = new ArrayList<PboxNode>();
         sboxs = new ArrayList<SboxNode>();
         xors = new ArrayList<XorNode>();
         connections = new ArrayList<NodeLink>();
         properties = new PropertiesWrapper();
+        
+        decpboxs = new ArrayList<PboxNode>();
+        decsboxs = new ArrayList<SboxNode>();
+        decxors = new ArrayList<XorNode>();
+        decconnections = new ArrayList<NodeLink>();
     }
     
     /**
     * @author Alex
+    * Adds Drag detection to the drag nodes in the encrypt tab
     */
     private void addDragDetectionIcon(DragIcon dragIcon) {
         
@@ -201,38 +281,43 @@ public class MainLayout extends AnchorPane{
         });
     }
     
-    /*private void addDragDetection(DragNode dragNode) {
+    /**
+    * @author Alex
+    * Adds Drag detection to the drag nodes in the decrypt tab
+    */
+    private void addDecDragDetectionIcon(DragIcon dragIcon) {
         
-        dragNode.setOnDragDetected(new EventHandler <MouseEvent> () {
+        dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
             
             @Override
             public void handle(MouseEvent event) {
                 
-                base_pane.setOnDragOver(mIconDragOverRoot);
-                encrypt_pane.setOnDragOver(mIconDragOverLeftPane);
-                encrypt_pane.setOnDragDropped(mIconDragDropped);
+                decbase_pane.setOnDragOver(mDecIconDragOverRoot);
+                decrypt_pane.setOnDragOver(mDecIconDragOverLeftPane);
+                decrypt_pane.setOnDragDropped(mDecIconDragDropped);
                 
-                DragNode nde = (DragNode) event.getSource();
+                DragIcon icn = (DragIcon) event.getSource();
                 
-                mDragOverIcon.setType(nde.getType());
-                mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
+                mDecDragOverIcon.setType(icn.getType());
+                mDecDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
                 
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
                 
-                container.addData ("type", mDragOverIcon.getType().toString());
+                container.addData ("type", mDecDragOverIcon.getType().toString());
                 content.put(DragContainer.AddNode, container);
                 
-                mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
-                mDragOverIcon.setVisible(true);
-                mDragOverIcon.setMouseTransparent(true);
+                mDecDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
+                mDecDragOverIcon.setVisible(true);
+                mDecDragOverIcon.setMouseTransparent(true);
                 event.consume();
             }
         });
-    }*/
+    }
     
     /**
     * @author Alex
+    * Event Handlers for encrypt pane
     */    
     private void buildDragHandlers() {
         mIconDragOverRoot = new EventHandler<DragEvent>() {
@@ -289,175 +374,411 @@ public class MainLayout extends AnchorPane{
             @Override
             public void handle (DragEvent event) {
 
-                encrypt_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverLeftPane);
-                encrypt_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
-                base_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRoot);
+                if (tabMode == tabType.encrypt) {
+                    encrypt_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverLeftPane);
+                    encrypt_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mIconDragDropped);
+                    base_pane.removeEventHandler(DragEvent.DRAG_OVER, mIconDragOverRoot);
 
-                mDragOverIcon.setVisible(false);
-                
-                DragContainer container = 
-                        (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
-                
-                
-                if (container != null) {
-                    if (container.getValue("scene_coords") != null) {
-                        switch (DragNodeType.valueOf(container.getValue("type"))) {
-                        
-                        case Start:
-                            if (!startExists) {
-                                StartNode node = new StartNode();
+                    mDragOverIcon.setVisible(false);
 
-                                node.setType(DragNodeType.valueOf(container.getValue("type")));
-                                encrypt_pane.getChildren().add(node);
+                    DragContainer container = 
+                            (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 
 
-                                Point2D cursorPoint = container.getValue("scene_coords");
+                    if (container != null) {
+                        if (container.getValue("scene_coords") != null) {
+                            switch (DragNodeType.valueOf(container.getValue("type"))) {
 
-                                node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
-                                node.setParent(MainLayout.this);
-                                startExists = true;
+                            case Start:
+                                if (!startExists) {
+                                    StartNode node = new StartNode();
+
+                                    node.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    encrypt_pane.getChildren().add(node);
+
+
+                                    Point2D cursorPoint = container.getValue("scene_coords");
+
+                                    node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                                    node.setParent(MainLayout.this);
+                                    startExists = true;
+                                }
+                            break;
+
+                            case pbox:
+                                PboxNode pnode = new PboxNode();
+
+                                pnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                encrypt_pane.getChildren().add(pnode);
+
+                                Point2D pcursorPoint = container.getValue("scene_coords");
+
+                                pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
+                                System.out.print(pnode);
+                                pboxs.add(pnode);
+                                pnode.setParent(MainLayout.this);
+                                pnode.setId(idCounter);
+                            break;
+
+                            case sbox:
+                                SboxNode snode = new SboxNode();
+
+                                snode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                encrypt_pane.getChildren().add(snode);
+
+                                Point2D scursorPoint = container.getValue("scene_coords");
+
+                                snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
+                                sboxs.add(snode);
+                                snode.setParent(MainLayout.this);
+                                snode.setId(idCounter);
+                            break;
+
+                            case xor:
+                                XorNode xnode = new XorNode();
+
+                                xnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                encrypt_pane.getChildren().add(xnode);
+
+                                Point2D xcursorPoint = container.getValue("scene_coords");
+
+                                xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
+                                xors.add(xnode);
+                                xnode.setParent(MainLayout.this);
+                                xnode.setId(idCounter);
+                            break;
+
+                            case end:
+                                if (!endExists) {
+                                    EndNode enode = new EndNode();
+
+                                    enode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    encrypt_pane.getChildren().add(enode);
+
+                                    Point2D ecursorPoint = container.getValue("scene_coords");
+
+                                    enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                    enode.setParent(MainLayout.this);
+                                    endExists = true;
+                                }
+                            break;
+
+                            default:
+                                DragNode node1 = new DragNode();
+
+                                node1.setUp();
+
+                                node1.setType(DragNodeType.valueOf(container.getValue("type")));
+                                encrypt_pane.getChildren().add(node1);
+
+                                Point2D cursorPoint1 = container.getValue("scene_coords");
+
+                                node1.relocateToPoint(new Point2D(cursorPoint1.getX()- 50, cursorPoint1.getY() - 50));
+
+                            break;
                             }
-                        break;
-                        
-                        case pbox:
-                            PboxNode pnode = new PboxNode();
 
-                            pnode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            encrypt_pane.getChildren().add(pnode);
-
-                            Point2D pcursorPoint = container.getValue("scene_coords");
-
-                            pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
-                            System.out.print(pnode);
-                            pboxs.add(pnode);
-                            pnode.setParent(MainLayout.this);
-                            pnode.setId(idCounter);
-                        break;
-                        
-                        case sbox:
-                            SboxNode snode = new SboxNode();
-
-                            snode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            encrypt_pane.getChildren().add(snode);
-
-                            Point2D scursorPoint = container.getValue("scene_coords");
-
-                            snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
-                            sboxs.add(snode);
-                            snode.setParent(MainLayout.this);
-                            snode.setId(idCounter);
-                        break;
-                        
-                        case xor:
-                            XorNode xnode = new XorNode();
-
-                            xnode.setType(DragNodeType.valueOf(container.getValue("type")));
-                            encrypt_pane.getChildren().add(xnode);
-
-                            Point2D xcursorPoint = container.getValue("scene_coords");
-
-                            xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
-                            xors.add(xnode);
-                            xnode.setParent(MainLayout.this);
-                            xnode.setId(idCounter);
-                        break;
-                        
-                        case end:
-                            if (!endExists) {
-                                EndNode enode = new EndNode();
-
-                                enode.setType(DragNodeType.valueOf(container.getValue("type")));
-                                encrypt_pane.getChildren().add(enode);
-
-                                Point2D ecursorPoint = container.getValue("scene_coords");
-
-                                enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
-                                enode.setParent(MainLayout.this);
-                                endExists = true;
-                            }
-                        break;
-                        
-                        default:
-                            DragNode node1 = new DragNode();
-                            
-                            node1.setUp();
-
-                            node1.setType(DragNodeType.valueOf(container.getValue("type")));
-                            encrypt_pane.getChildren().add(node1);
-
-                            Point2D cursorPoint1 = container.getValue("scene_coords");
-
-                            node1.relocateToPoint(new Point2D(cursorPoint1.getX()- 50, cursorPoint1.getY() - 50));
-                            
-                        break;
                         }
-                                
                     }
-                }
-                
-                container = (DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
-                
-                if (container != null) {
-                    if (container.getValue("type") != null)
-                        System.out.println("Moved node " + container.getValue("type"));
-                }
-                
-                container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
-                
-                if (container != null) {
-                    String sourceId = container.getValue("source");
-                    String targetId = container.getValue("target");
-                    
-                    if (sourceId != null && targetId != null) {
-                        System.out.println(container.getData());
-                        NodeLink Link = new NodeLink();
-                        Link.setParent(MainLayout.this);
-                        Link.setId(idCounter);
-                        
-                        encrypt_pane.getChildren().add(0, Link);
-                        
-                        DragNode source = null;
-                        DragNode target = null;
-                        
-                        for (Node n: encrypt_pane.getChildren()) {
-                            if (n.getId() == null)
-                                continue;
-                            if (n.getId().equals(sourceId))
-                                source = (DragNode) n;
-                            if (n.getId().equals(targetId))
-                                target = (DragNode) n;
-                        }
-                        
-                        if (source != null && target != null)
-                            Link.bindEnds(source, target);
-                        
-                        boolean linkExists = false;
-                       
-                        for (int i = 0; i < connections.size() && !linkExists; i++) {
-                            if (connections.get(i).getSourceId().equals(source.getId())) {
-                                if(connections.get(i).getTargetId().equals(target.getId())) {
-                                    linkExists = true;
+
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
+
+                    if (container != null) {
+                        if (container.getValue("type") != null)
+                            System.out.println("Moved node " + container.getValue("type"));
+                    }
+
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
+
+                    if (container != null) {
+                        String sourceId = container.getValue("source");
+                        String targetId = container.getValue("target");
+
+                        if (sourceId != null && targetId != null) {
+                            System.out.println(container.getData());
+                            NodeLink Link = new NodeLink();
+                            Link.setParent(MainLayout.this);
+                            Link.setId(idCounter);
+
+                            encrypt_pane.getChildren().add(0, Link);
+
+                            DragNode source = null;
+                            DragNode target = null;
+
+                            for (Node n: encrypt_pane.getChildren()) {
+                                if (n.getId() == null)
+                                    continue;
+                                if (n.getId().equals(sourceId))
+                                    source = (DragNode) n;
+                                if (n.getId().equals(targetId))
+                                    target = (DragNode) n;
+                            }
+
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+
+                            boolean linkExists = false;
+
+                            for (int i = 0; i < connections.size() && !linkExists; i++) {
+                                if (connections.get(i).getSourceId().equals(source.getId())) {
+                                    if(connections.get(i).getTargetId().equals(target.getId())) {
+                                        linkExists = true;
+                                    }
                                 }
                             }
-                        }
-                        
-                        if (source != null && target != null)
-                            Link.bindEnds(source, target);
-                            
-                        if (!linkExists) {
-                            
-                            source.addConnection(Link);
-                            target.addConnection(Link);
-                            connections.add(Link);
+
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+
+                            if (!linkExists) {
+
+                                source.addConnection(Link);
+                                target.addConnection(Link);
+                                connections.add(Link);
+                            }
                         }
                     }
-                }
 
-                event.consume();
+                    event.consume();
+                }
+                else if (tabMode == tabType.decrypt) {
+                    decrypt_pane.removeEventHandler(DragEvent.DRAG_OVER, mDecIconDragOverLeftPane);
+                    decrypt_pane.removeEventHandler(DragEvent.DRAG_DROPPED, mDecIconDragDropped);
+                    decbase_pane.removeEventHandler(DragEvent.DRAG_OVER, mDecIconDragOverRoot);
+
+                    mDecDragOverIcon.setVisible(false);
+
+                    DragContainer container = 
+                            (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
+
+
+                    if (container != null) {
+                        if (container.getValue("scene_coords") != null) {
+                            switch (DragNodeType.valueOf(container.getValue("type"))) {
+
+                            case Start:
+                                if (!decstartExists) {
+                                    StartNode node = new StartNode();
+
+                                    node.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    decrypt_pane.getChildren().add(node);
+
+
+                                    Point2D cursorPoint = container.getValue("scene_coords");
+
+                                    node.relocateToPoint(new Point2D(cursorPoint.getX()- 50, cursorPoint.getY() - 50));
+                                    node.setParent(MainLayout.this);
+                                    decstartExists = true;
+                                }
+                            break;
+
+                            case pbox:
+                                PboxNode pnode = new PboxNode();
+
+                                pnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                decrypt_pane.getChildren().add(pnode);
+
+                                Point2D pcursorPoint = container.getValue("scene_coords");
+
+                                pnode.relocateToPoint(new Point2D(pcursorPoint.getX()- 50, pcursorPoint.getY() - 50));
+                                System.out.print(pnode);
+                                decpboxs.add(pnode);
+                                pnode.setParent(MainLayout.this);
+                                pnode.setId(idCounter);
+                            break;
+
+                            case sbox:
+                                SboxNode snode = new SboxNode();
+
+                                snode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                decrypt_pane.getChildren().add(snode);
+
+                                Point2D scursorPoint = container.getValue("scene_coords");
+
+                                snode.relocateToPoint(new Point2D(scursorPoint.getX()- 50, scursorPoint.getY() - 50));
+                                decsboxs.add(snode);
+                                snode.setParent(MainLayout.this);
+                                snode.setId(idCounter);
+                            break;
+
+                            case xor:
+                                XorNode xnode = new XorNode();
+
+                                xnode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                decrypt_pane.getChildren().add(xnode);
+
+                                Point2D xcursorPoint = container.getValue("scene_coords");
+
+                                xnode.relocateToPoint(new Point2D(xcursorPoint.getX()- 50, xcursorPoint.getY() - 50));
+                                decxors.add(xnode);
+                                xnode.setParent(MainLayout.this);
+                                xnode.setId(idCounter);
+                            break;
+
+                            case end:
+                                if (!decendExists) {
+                                    EndNode enode = new EndNode();
+
+                                    enode.setType(DragNodeType.valueOf(container.getValue("type")));
+                                    decrypt_pane.getChildren().add(enode);
+
+                                    Point2D ecursorPoint = container.getValue("scene_coords");
+
+                                    enode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
+                                    enode.setParent(MainLayout.this);
+                                    decendExists = true;
+                                }
+                            break;
+
+                            default:
+                                DragNode node1 = new DragNode();
+
+                                node1.setUp();
+
+                                node1.setType(DragNodeType.valueOf(container.getValue("type")));
+                                decrypt_pane.getChildren().add(node1);
+
+                                Point2D cursorPoint1 = container.getValue("scene_coords");
+
+                                node1.relocateToPoint(new Point2D(cursorPoint1.getX()- 50, cursorPoint1.getY() - 50));
+
+                            break;
+                            }
+
+                        }
+                    }
+
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
+
+                    if (container != null) {
+                        if (container.getValue("type") != null)
+                            System.out.println("Moved node " + container.getValue("type"));
+                    }
+
+                    container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
+
+                    if (container != null) {
+                        String sourceId = container.getValue("source");
+                        String targetId = container.getValue("target");
+
+                        if (sourceId != null && targetId != null) {
+                            System.out.println(container.getData());
+                            NodeLink Link = new NodeLink();
+                            Link.setParent(MainLayout.this);
+                            Link.setId(idCounter);
+
+                            decrypt_pane.getChildren().add(0, Link);
+
+                            DragNode source = null;
+                            DragNode target = null;
+
+                            for (Node n: decrypt_pane.getChildren()) {
+                                if (n.getId() == null)
+                                    continue;
+                                if (n.getId().equals(sourceId))
+                                    source = (DragNode) n;
+                                if (n.getId().equals(targetId))
+                                    target = (DragNode) n;
+                            }
+
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+
+                            boolean linkExists = false;
+
+                            for (int i = 0; i < decconnections.size() && !linkExists; i++) {
+                                if (decconnections.get(i).getSourceId().equals(source.getId())) {
+                                    if(decconnections.get(i).getTargetId().equals(target.getId())) {
+                                        linkExists = true;
+                                    }
+                                }
+                            }
+
+                            if (source != null && target != null)
+                                Link.bindEnds(source, target);
+
+                            if (!linkExists) {
+
+                                source.addConnection(Link);
+                                target.addConnection(Link);
+                                decconnections.add(Link);
+                            }
+                        }
+                    }
+
+                    event.consume();
+                }
             }
         });
         
         encrypt_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
+            
+            @Override
+            public void handle (MouseEvent event) {
+                System.out.print(new Point2D(event.getX(), event.getY()));
+                event.consume();
+            }
+            
+        });
+    }
+    
+    /**
+    * @author Alex
+    * Event Handlers for decrypt pane
+    */    
+    private void buildDecDragHandlers() {
+        mDecIconDragOverRoot = new EventHandler<DragEvent>() {
+            
+            @Override
+            public void handle (DragEvent event) {
+                Point2D p = decrypt_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
+                
+                if (!decrypt_pane.boundsInLocalProperty().get().contains(p)) {
+                    mDecDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
+                    return;
+                }
+                
+                event.consume();
+            }
+        };
+        
+        mDecIconDragOverLeftPane = new EventHandler <DragEvent> () {
+
+            @Override
+            public void handle(DragEvent event) {
+
+                event.acceptTransferModes(TransferMode.ANY);
+
+                mDecDragOverIcon.relocateToPoint(
+                    new Point2D(event.getSceneX() - 50, event.getSceneY() - 50)
+                );
+
+                event.consume();
+            }
+        };
+        
+        mDecIconDragDropped = new EventHandler <DragEvent> () {
+
+            @Override
+            public void handle(DragEvent event) {
+                
+                DragContainer container = 
+                        (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
+                
+                container.addData("scene_coords", 
+                        new Point2D(event.getSceneX(), event.getSceneY()));
+
+                ClipboardContent content = new ClipboardContent();
+                content.put(DragContainer.AddNode, container);
+
+                event.getDragboard().setContent(content);
+                event.setDropCompleted(true);
+            }
+        };
+        
+        
+        
+        decrypt_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
             
             @Override
             public void handle (MouseEvent event) {
@@ -495,6 +816,32 @@ public class MainLayout extends AnchorPane{
                         xors.get(j).removeConnection(id);
                 }
 		connections.remove(i);
+		return;
+	    }
+	}
+        for (int i=0; i<decconnections.size(); i++) {
+	    if ( decconnections.get(i).getId().equals(id) ) {
+                String sId = decconnections.get(i).getSourceId();
+                String tId = decconnections.get(i).getTargetId();
+                for (int j=0; j<decpboxs.size(); j++) {
+                    if(decpboxs.get(j).getId().equals(sId))
+                        decpboxs.get(j).removeConnection(id);
+                    if(decpboxs.get(j).getId().equals(tId))
+                        decpboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<decsboxs.size(); j++) {
+                    if(decsboxs.get(j).getId().equals(sId))
+                        decsboxs.get(j).removeConnection(id);
+                    if(decsboxs.get(j).getId().equals(tId))
+                        decsboxs.get(j).removeConnection(id);
+                }
+                for (int j=0; j<decxors.size(); j++) {
+                    if(decxors.get(j).getId().equals(sId))
+                        decxors.get(j).removeConnection(id);
+                    if(decxors.get(j).getId().equals(tId))
+                        decxors.get(j).removeConnection(id);
+                }
+		decconnections.remove(i);
 		return;
 	    }
 	}
@@ -554,6 +901,21 @@ public class MainLayout extends AnchorPane{
         for (int i = 0; i < connections.size(); i++) {
             System.out.println(connections.get(i).getSourceId());
         }
+    }
+    
+    
+    /**
+    * @author Alex
+    */    
+    @FXML
+    public void switchTab() {
+        if (encrypt_tab.isSelected())
+            tabMode = tabType.encrypt;
+        else if (decrypt_tab.isSelected())
+            tabMode = tabType.decrypt;
+        else if (key_tab.isSelected())
+            tabMode = tabType.key;
+        //System.out.println(tabMode);
     }
     
 }
