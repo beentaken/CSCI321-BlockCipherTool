@@ -751,105 +751,139 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
     hfile.open(Shfile.c_str());
     cfile.open(Scppfile.c_str());
 
-    /**< Header file copy start */
-    for (int i = 0; i < 12; i++) {
-        getline(hfile, str);
-        headerfile << str;
-        headerfile << "\n";
-    }
+    /**< Checks files are open */
+    if (headerfile.is_open() && hfile.is_open() && codefile.is_open() && cfile.is_open()) {
 
-    /**< Cpp file copy start */
-    for (int i = 0; i < 16; i++) {
-        getline(cfile, str);
-        codefile << str;
-        codefile << "\n";
-    }
+        /**< Header file copy start */
+        for (int i = 0; i < 12; i++) {
+            getline(hfile, str);
+            headerfile << str;
+            headerfile << "\n";
+        }
 
-    /**< Check Node present and outputs related function */
-     if (NodeTypes[2] == true) {
-        /**< Header file copy XOR*/
-        getline(hfile, str);
-        headerfile << str;
-        headerfile << "\n";
-
-        /**< Cpp file copy */
-        for (int i = 0; i < 19; i++) {
+        /**< Cpp file copy start */
+        for (int i = 0; i < 16; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
         }
-    } else {
-        /**< Skips the xor block */
-        getline(hfile, str);
 
-        for (int i = 0; i < 19; i++) {
-            getline(cfile, str);
+        /**< Check Node present and outputs related function */
+         if (NodeTypes[2] == true) {
+            /**< Header file copy XOR*/
+            getline(hfile, str);
+            headerfile << str;
+            headerfile << "\n";
+
+            /**< Cpp file copy */
+            for (int i = 0; i < 19; i++) {
+                getline(cfile, str);
+                codefile << str;
+                codefile << "\n";
+            }
+        } else {
+            /**< Skips the xor block */
+            getline(hfile, str);
+
+            for (int i = 0; i < 19; i++) {
+                getline(cfile, str);
+            }
         }
-    }
 
-    if (NodeTypes[1] == true) {
-        /**< Header file copy SBOX*/
-        getline(hfile, str);
-        headerfile << str;
-        headerfile << "\n";
+        if (NodeTypes[1] == true) {
+            /**< Header file copy SBOX*/
+            getline(hfile, str);
+            headerfile << str;
+            headerfile << "\n";
 
-        /**< Cpp file copy */
-        for (int i = 0; i < 71; i++) {
-            getline(cfile, str);
-            codefile << str;
-            codefile << "\n";
+            /**< Cpp file copy */
+            for (int i = 0; i < 71; i++) {
+                getline(cfile, str);
+                codefile << str;
+                codefile << "\n";
+            }
+        } else {
+            /**< Skips SBOX block */
+            getline(hfile, str);
+
+            for (int i = 0; i < 71; i++) {
+                getline(cfile, str);
+            }
         }
-    } else {
-        /**< Skips SBOX block */
-        getline(hfile, str);
 
-        for (int i = 0; i < 71; i++) {
-            getline(cfile, str);
+        if (NodeTypes[0] == true) {
+            /**< Header file copy PBOX*/
+            for (int i = 0; i < 3; i++) {
+                getline(hfile, str);
+                headerfile << str;
+                headerfile << "\n";
+            }
+
+            /**< Cpp file copy */
+            for (int i = 0; i < 121; i++) {
+                getline(cfile, str);
+                codefile << str;
+                codefile << "\n";
+            }
+        } else {
+            /**< Skip PBox */
+            for (int i = 0; i < 3; i++) {
+                getline(hfile, str);
+            }
+
+            for (int i = 0; i < 121; i++) {
+                getline(cfile, str);
+            }
         }
-    }
 
-    if (NodeTypes[0] == true) {
-        /**< Header file copy PBOX*/
-        for (int i = 0; i < 3; i++) {
+        /**< Header file copy end*/
+        while(!hfile.eof()) {
             getline(hfile, str);
             headerfile << str;
             headerfile << "\n";
         }
 
         /**< Cpp file copy */
-        for (int i = 0; i < 121; i++) {
+        while (!cfile.eof()) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
         }
-    } else {
-        /**< Skip PBox */
-        for (int i = 0; i < 3; i++) {
-            getline(hfile, str);
+
+        /**< Closes all files */
+        hfile.close();
+        headerfile.close();
+        cfile.close();
+        codefile.close();
+    }
+
+    /**< Copies main file for modes */
+    ifstream modesfile;
+    ofstream modefile;
+
+    /**< Filenames for destination and source */
+    string mainmode = SourceLocale;
+    string copymode = DestLocale;
+
+    mainmode.append("\\main.cpp");
+    copymode.append("\\main.cpp");
+
+    /**< Opens the reader and writer */
+    modesfile.open(mainmode.c_str());
+    modefile.open(copymode.c_str());
+
+    /**< Checks if open */
+    if ((modesfile.is_open() && modefile.is_open())) {
+        /**< Copies file */
+        while (!modesfile.eof()) {
+            getline(modesfile, str);
+            modefile << str;
+            modefile << "\n";
         }
 
-        for (int i = 0; i < 121; i++) {
-            getline(cfile, str);
-        }
+        /**< Closes files */
+        modesfile.close();
+        modefile.close();
     }
 
-    /**< Header file copy end*/
-    while(!hfile.eof()) {
-        getline(hfile, str);
-        headerfile << str;
-        headerfile << "\n";
-    }
-
-    /**< Cpp file copy */
-    while (!cfile.eof()) {
-        getline(cfile, str);
-        codefile << str;
-        codefile << "\n";
-    }
-
-    /**< Closes all files */
-    hfile.close();
-    headerfile.close();
-    cfile.close();
-    codefile.close();
 }
