@@ -569,7 +569,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                     /**< Every time it finds a row */
                     if (line.find("<rows") != string::npos) {
                         /**< Store the column values into the appropriate row on the table */
-                        int * temp = StringToIntArr(line, ',');
+                        int * temp = StringToIntArr(line, ' ');
                         N.table[counter] = new int[N.cols];
                         for (int i = 0; i < N.cols; i++) {
                             N.table[counter][i] = temp[i+1];
