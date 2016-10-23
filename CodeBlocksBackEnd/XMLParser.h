@@ -1,26 +1,33 @@
-#ifndef XMLPARSE
-#define XMLPARSE
+/**
+ * Author: Christopher Mellon of CryptoScythe
+ * Filename: XMLParser.h
+ *
+ * Parses the custom XML file created from the Front End
+ */
 
-#include <iostream>
-#include <string>
-#include <vector>
-using namespace std;
+#ifndef XMLPARSE            /**< Header Guards */
+#define XMLPARSE            /**< Define Header Guard XMLPARSE */
+
+#include <iostream>         /**< includes iostream library */
+#include <string>           /**< includes string library */
+#include <vector>           /**< includes vector library */
+using namespace std;        /**< Uses a standard namespace */
 
 /** \brief
- * Properties is the node that contains all the properties for the output
+ * Properties is the struct that contains all the properties for the output
  *
  */
 struct Properties {
-    int StartID;
-    int EndID;
-    int NumRounds;
-    int BlockSize;
-    int KeySize;
-    int NumKey;
+    int StartID;        /**< The start nodes ID */
+    int EndID;          /**< The end nodes ID */
+    int NumRounds;      /**< The number of rounds to perform the block encryption/decryption */
+    int BlockSize;      /**< The size of the block in bits */
+    int KeySize;        /**< The size of the keys in bits */
+    int NumKey;         /**< The number of keys in the key generation */
 };
 
 /** \brief
- * InOuts is the node that contains the inputs and outputs for various xml nodes
+ * InOuts is the struct that contains the inputs and outputs for various xml nodes
  *
  */
 struct InOuts {
@@ -31,7 +38,7 @@ struct InOuts {
 
 /** \brief
  * Node contains all the information for the possible nodes in the XML file.
- * The possible nodes include S Box, P Box, XOR, Connection, F Function
+ * The possible nodes include S Box, P Box, XOR, Connection, F Function and Subkey
  *
  */
 struct Node {
@@ -51,14 +58,14 @@ struct Node {
     vector<Node> Next;  /**< This is for the F Function to specify all parts of the F Function */
 };
 
-vector<Node> ReadXML(string, Properties&, vector<Node>&, vector<Node>&);               /**< This function reads the XML Parser */
-vector<Node> Cycle(ifstream&, int&);
-int StringToNumber(string);                 /**< The function converts the String to a number(int) */
-int* StringToIntArr(string, char);          /**< This function converts the String to an integer array */
-Node ParseSPBox(ifstream&, string, int, int&);    /**< This function parses in a P Box or an S Box */
-Node ParseXOR(ifstream&, string, int, int&);      /**< This function parses in an xor block */
-Node ParseFFunc(ifstream&, string, int, int&);    /**< This function parses in an F Function */
-Properties ParseProps(ifstream&, string);
-Node ParseSubkey(ifstream&, string, int);
+vector<Node> ReadXML(string, Properties&, vector<Node>&, vector<Node>&);        /**< This function reads the XML file and parses all the nodes into the program */
+vector<Node> Cycle(ifstream&, int&);                                            /**< Is responsible for reading in encryption, decryption and keygen blocks */
+int StringToNumber(string);                                                     /**< The function converts the String to a number(int) */
+int* StringToIntArr(string, char);                                              /**< This function converts the String to an integer array */
+Node ParseSPBox(ifstream&, string, int);                                        /**< This function parses in a P Box or an S Box */
+Node ParseXOR(ifstream&, string, int);                                          /**< This function parses in an xor block */
+Node ParseFFunc(ifstream&, string, int, int&);                                  /**< This function parses in an F Function */
+Properties ParseProps(ifstream&, string);                                       /**< This function parses in a Properties node */
+Node ParseSubkey(ifstream&, string, int, int&);                                 /**< This function parses in the subkey */
 
-#endif // XMLPARSE
+#endif /**< Header Guard end for XMLPARSE */

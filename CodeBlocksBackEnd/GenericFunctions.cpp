@@ -1,8 +1,8 @@
-/*
- * File:   GenericFunctions.cpp
- * Author: SirhCloud
+/**
+ * Author: Christopher Mellon of CryptoScythe
+ * Filename: GenericFunctions.cpp
  *
- * Created on 23 July 2016, 10:29 AM
+ * Contains all generic functions for the cipher
  */
 
 #include "GenericFunctions.h"       /**< Includes Generic Functions headers */
@@ -25,7 +25,7 @@ using namespace boost;              /**< Uses the boost namespace */
  * B is input two
  *
  * \return
- * Returns the string that has the result of A XOR B
+ * Returns dynamic bitset that has the result of A XOR B
  *
  */
 
@@ -34,7 +34,7 @@ dynamic_bitset<> CustomXOR(dynamic_bitset<> A, dynamic_bitset<> B) {
 }
 
 /** \brief
- * CustomSBoxSearch takes in the SBOX table, the input and the table rows and columns
+ * CustomSBoxSearch takes in the SBOX table, the input and the table rows and columns and output size
  *
  * \param
  * Sbox is the table that holds all the values and look ups
@@ -52,7 +52,7 @@ dynamic_bitset<> CustomXOR(dynamic_bitset<> A, dynamic_bitset<> B) {
  * outputsize is the length of the output
  *
  * \return
- * Returns an int with the value at the table position where the row value and column value meet
+ * Returns a dynamic bitset with the value at the table position where the row value and column value meet
  *
  */
 
@@ -99,7 +99,7 @@ dynamic_bitset<> CustomSBoxSearch(unsigned long** Sbox, dynamic_bitset<> input, 
         binary /= 10;
     }
 
-    /**< Return the value at the table position */
+    /**< Return the value at the table position needs decimal*/
     dynamic_bitset<> res(outputsize, decimal);
     return res;
 }
@@ -122,6 +122,7 @@ dynamic_bitset<> CustomSBoxSearch(unsigned long** Sbox, dynamic_bitset<> input, 
  */
 
 dynamic_bitset<> PBoxOneToOne(unsigned long* tablepos, dynamic_bitset<> input, int outsize) {
+    /**< Creates a bitset of appropriate length */
     dynamic_bitset<> result(outsize);
 
     /**< Creates the output by appending the value at the position of the input to the result string  */
@@ -175,7 +176,7 @@ unsigned long* PBoxMultiOuts(dynamic_bitset<> input, int numofOutputs, int outpu
         result[i] = temp.to_ulong();
     }
 
-    /**< Return result */
+    /**< Returns result */
     return result;
 }
 
@@ -203,13 +204,15 @@ unsigned long* PBoxMultiOuts(dynamic_bitset<> input, int numofOutputs, int outpu
  *
  */
 dynamic_bitset<> PBoxSingleOut(unsigned long* inputs, int numofInputs, int inputsize, int outputsize, unsigned long* tablepos) {
+    /**< Creates dynamic bitset with appropriate size */
     dynamic_bitset<> result (outputsize);
+    /**< A position counter of where to insert the bits */
     int counter = result.size();
     counter--;
 
     /**< Creates one massive input */
     for (int i = 0; i < numofInputs; i++) {
-        /**< Clears stream and inserts next input */
+        /**< Creates new bitset with the next input */
         dynamic_bitset<> temp(inputsize, inputs[i]);
         /**< Inserts 0 at start if not the right length */
         for (long i = temp.size()-1; i >= 0; i--) {
@@ -218,6 +221,7 @@ dynamic_bitset<> PBoxSingleOut(unsigned long* inputs, int numofInputs, int input
         }
     }
 
+    /**< Returns result */
     return result;
 }
 

@@ -1,51 +1,86 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * File:   OutputCode.cpp
- * Author: SirhCloud
+/**
+ * Author: Christopher Mellon of CryptoScythe
+ * Filename: OutputRound.cpp
  *
- * Created on 23 July 2016, 12:48 PM
+ * Contains all functions necessary for outputting the round to cpp files
  */
 
-#include "OutputRound.h"
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <algorithm>
-#include <stdlib.h>
-#include <unistd.h>
-#include <windows.h>
-using namespace std;
+#include "OutputRound.h"        /**< Includes the OutputRound header file */
+#include <iostream>             /**< iostream library */
+#include <fstream>              /**< file io library */
+#include <string>               /**< string library */
+#include <sstream>              /**< stringstream library */
+#include <algorithm>            /**< algorithm library */
+using namespace std;            /**< Uses the standard namespace */
 
+/** \brief
+ * Constructor
+ *
+ */
 OutputRound::OutputRound() {
-
+    /**< Sets them to default values */
+    SourceLocale = "";
+    DestLocale = "";
 }
 
+/** \brief
+ * Destructor
+ *
+ */
 OutputRound::~OutputRound() {
 
 }
 
+/** \brief
+ * ReadSource sets the SourceLocale variable
+ *
+ * \param
+ * input is the variable to be passed in
+ *
+ * \return
+ * Returns true for successful read in, false for unsuccessful read in
+ *
+ */
 bool OutputRound::ReadSource(string input) {
     SourceLocale = input;
 
     return true;
 }
 
+/** \brief
+ * ReadDest sets the DestLocale variable
+ *
+ * \param
+ * input is the variable to be set
+ *
+ * \return
+ * returns true for successful input, false for unsuccessful input
+ *
+ */
 bool OutputRound::ReadDest(string input) {
     DestLocale = input;
 
     return true;
 }
 
+/** \brief
+ * SorcVec sorts the vector according to the inputs already declared and are usable.
+ *
+ * \param
+ * NumOfKeys is the number of subkeys for the cipher
+ *
+ * \param
+ * Head is the vector to be sorted
+ *
+ * \return
+ * Returns a vector of sorted nodes
+ *
+ */
 vector<Node> OutputRound::SortVec(vector<Node> Head, int NumOfKeys) {
-    vector<Node> result;
+    vector<Node> result;    /**< The vector result */
     vector<int> ConnIDs;    /**< connection IDs created */
 
+    /**< Stores the keys and starting input IDs into the ConnIDs vector */
     ConnIDs.push_back(0);
     int counter = 0;
     counter--;
@@ -61,7 +96,6 @@ vector<Node> OutputRound::SortVec(vector<Node> Head, int NumOfKeys) {
         for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
             /**< Gets Node */
             Node temp = *it;
-
             /**< Checks that input exists */
             if (temp.NumInputs != (-1)) {
                 /**< Cycles through all connections and check that all input connections exist */
@@ -91,15 +125,19 @@ vector<Node> OutputRound::SortVec(vector<Node> Head, int NumOfKeys) {
                     if (!result.empty()) {
                         for (vector<Node>::iterator it3 = result.begin(); it3 != result.end(); it3++) {
                             Node t = *it3;
+                            /**< If the same ID and node type is not a Subkey */
                             if (temp.ID == t.ID && temp.type != 4) {
                                 added = true;
                             }
+
+                            /**< If the same ID and added node type is a subkey */
                             if (temp.ID == t.ID && t.type == 4) {
                                 added = true;
                             }
                         }
                     }
 
+                    /**< Add output IDs */
                     if (added == false) {
                         result.push_back(temp);
                         for (int l = 0; l < temp.NumOutputs; l++) {
@@ -111,31 +149,71 @@ vector<Node> OutputRound::SortVec(vector<Node> Head, int NumOfKeys) {
         }
     }
 
+    /**< Return vector of sorted nodes */
     return result;
 }
 
+/** \brief
+ * CheckNode checks which nodetypes are present within the vector of nodes.
+ * It also extracts nodes from functions and places them in a long vector of nodes, to make it easier to output
+ *
+ * \param
+ * Head is the vector of nodes that are checked
+ *
+ * \param
+ * NodeTypes is a boolean array signalling which nodetypes are present
+ *
+ * \param
+ * H is the vector of Nodes that have been extracted from the original vector
+ *
+ */
 void OutputRound::CheckNode(vector<Node> Head, bool NodeTypes[], vector<Node>& H) {
 
+    /**< Cycles through the vector of nodes */
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node Temp = *it;
 
         if (Temp.type == 0) {
+            /**< Adds the node to the H vector and assigns the Pbox NodeTypes to true */
             H.push_back(Temp);
             NodeTypes[0] = true;
         } else if (Temp.type == 1) {
+            /**< Adds the node to the H vector and assigns the Sbox NodeTypes to true */
             NodeTypes[1] = true;
             H.push_back(Temp);
         } else if (Temp.type == 2) {
+            /**< Adds the node to the H vector and assigns the XOR NodeTypes to true */
             NodeTypes[2] = true;
             H.push_back(Temp);
         } else if (Temp.type == 3) {
+            /**< Cycles through the function vector of nodes */
             CheckNode(Temp.Next, NodeTypes, H);
         } else if (Temp.type == 4) {
+            /**< Adds the node to the H vector */
             H.push_back(Temp);
         }
     }
 }
 
+/** \brief
+ * OutputToFile outputs the encypt, decrypt and keygen vectors to created files.
+ *
+ * \param
+ * Encrypt holds the encryption nodes
+ *
+ * \param
+ * Decrypt holds the decryption nodes
+ *
+ * \param
+ * KeyGen holds the key generation nodes
+ *
+ * \param
+ * Props holds the cipher properties
+ *
+ * \return
+ * Returns true if successully output, false if not successfully output
+ *
+ */
 bool OutputRound::OutputToFile(vector<Node> Encrypt, vector<Node> Decrypt, vector<Node> KeyGen, Properties Props) {
     vector<Node> E;
     vector<Node> D;
@@ -146,23 +224,43 @@ bool OutputRound::OutputToFile(vector<Node> Encrypt, vector<Node> Decrypt, vecto
         NodeTypes[i] = false;
     }
 
+    /**< Checks which nodes are present in the vectors */
     CheckNode(Encrypt, NodeTypes, E);
     CheckNode(Decrypt, NodeTypes, D);
     CheckNode(KeyGen, NodeTypes, K);
-
+    /**< Sorts the vectors */
     E = SortVec(E, Props.NumKey);
     D = SortVec(D, Props.NumKey);
     K = SortVec(K, Props.NumKey);
 
+    /**< Copies the Generics files */
     OutputGenerics(NodeTypes);
+    /**< Creates the main file */
     OutputMain(E, D, K, Props);
 
     return true;
 }
 
+/** \brief
+ * OutputMain outputs the main file for the cipher that runs the round encryption, decryption and keygeneration
+ *
+ * \param
+ * Encrypt holds the encryption nodes
+ *
+ * \param
+ * Decrypt holds the decryption nodes
+ *
+ * \param
+ * KeyGen holds the key generation nodes
+ *
+ * \param
+ * Props holds the cipher properties
+ *
+ */
 void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<Node> KeyGen, Properties Props) {
     vector<int> ExistingIDs;
     int counts = 0;
+    /**< Creates the file for the output of the round */
     ofstream myfile;
     string fname = DestLocale;
     fname.append("\\block.cpp");
@@ -170,10 +268,10 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     ExistingIDs.push_back(counts);
     counts--;
     myfile.open(fname.c_str());
-    /**< ENCRYPT */
+    /**< ENCRYPT output*/
 
     myfile << "#include <iostream>\n#include <string>\n#include <boost/dynamic_bitset.hpp>\n#include \"block.h\"\n#include \"GenericFunctions.h\"\nusing namespace std;\nusing namespace boost;\n\nstring Encrypt(string initial, string initialkey) {\n";
-    /**< Convert string to bitset */
+    /**< Convert string to bitset for the initial input and the keys*/
     myfile << "\tdynamic_bitset<> result0 (initial.length()*8);\n\n";
     myfile << "\tstring * key = Keygen(initialkey);\n";
     myfile << "\tfor (int i = 0; i < initial.length(); i++) {\n";
@@ -205,8 +303,10 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
         }
     }
 
+    /**< Specifies a for loop for the number of rounds */
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
 
+    /**< Outputs the encrypt nodes to the file */
     int lastID = AppendFunctionF(Encrypt, myfile, ExistingIDs, Props.KeySize);
 
     /**< Convert string to bitset */
@@ -230,7 +330,7 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
 
     myfile << "\n\treturn returnval;\n}\n";
 
-    /**< DECRYPT */
+    /**< DECRYPT block*/
     ExistingIDs.clear();
     counts = 0;
 
@@ -238,7 +338,7 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     counts--;
 
     myfile << "\nstring Decrypt(string initial, string initialkey) {\n";
-    /**< Convert string to bitset */
+    /**< Convert string to bitset for initial input and keys */
     myfile << "\tdynamic_bitset<> result0 (initial.length()*8);\n\n";
     myfile << "\tstring * key = Keygen(initialkey);\n";
     myfile << "\tfor (int i = 0; i < initial.length(); i++) {\n";
@@ -270,8 +370,10 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
         }
     }
 
+    /**< Specify number of rounds */
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
 
+    /**< Output Decrypt Nodes */
     lastID = AppendFunctionF(Decrypt, myfile, ExistingIDs, Props.KeySize);
 
     /**< Convert string to bitset */
@@ -295,7 +397,7 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
 
     myfile << "\n\treturn returnval;\n}\n";
 
-    /**< KEYGEN */
+    /**< KEYGEN Block */
     ExistingIDs.clear();
     counts = 0;
 
@@ -303,7 +405,7 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     counts--;
 
     myfile << "\nstring* Keygen(string initial) {\n";
-    /**< Convert string to bitset */
+    /**< Convert string to bitset for input*/
     myfile << "\tdynamic_bitset<> result0 (initial.length()*8);\n\n";
     myfile << "\tfor (int i = 0; i < initial.length(); i++) {\n";
     myfile << "\t\tunsigned char c = initial[i];\n";
@@ -318,12 +420,15 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     myfile << "\tresult0.resize(initial.length()*8);\n\tstring * returnval = new string[" << Props.NumKey << "];\n";
     myfile << "\tint counter = 0;\n";
 
+    /**< Outputs key generation functions */
     lastID = AppendFunctionF(KeyGen, myfile, ExistingIDs, Props.KeySize);
 
     myfile << "\n\treturn returnval;\n}\n";
 
+    /**< Closes the created file */
     myfile.close();
 
+    /**< Outputs the header file for the main driver cpp file */
     ofstream hfile;
     string hname = DestLocale;
     hname.append("\\block.h");
@@ -335,12 +440,24 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     hfile.close();
 }
 
+/** \brief
+ * KeyIDCheck checks whether the ID is negative and fixes it so it can be used as a variable identifier
+ *
+ * \param
+ * ID is the id to be checked
+ *
+ * \return
+ * The string of the fixed ID
+ *
+ */
 string OutputRound::KeyIDCheck(int ID) {
     string result;
     stringstream ss;
+    /**< Converts the ID to a string */
     ss << ID;
     result = ss.str();
 
+    /**< Replaces - with _ */
     if (ID < 0) {
         replace(result.begin(), result.end(), '-', '_');
     }
@@ -348,9 +465,28 @@ string OutputRound::KeyIDCheck(int ID) {
     return result;
 }
 
+/** \brief
+ * AppendFunctionF outputs the nodes from the vector to the main cpp file
+ *
+ * \param
+ * Head is the vector of nodes to output
+ *
+ * \param
+ * myfile is the file output stream to the created cpp file
+ *
+ * \param
+ * ExistingIDs is a vector of IDs that already exist, so the same ID is not declared multiple times
+ *
+ * \param
+ * KeySize is the size of the key
+ *
+ * \return
+ *
+ */
 int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int>& ExistingIDs, int KeySize) {
     int ID;
 
+    /**< Cycles through the vector of nodes */
     for (vector<Node>::iterator it = Head.begin(); it != Head.end(); it++) {
         Node temp = *it;
 
@@ -374,6 +510,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
                 }
                 myfile << "\t\t";
                 if (ExistCheck == false) {
+                    /**< If it doesnt exist, declare it */
                     myfile << "dynamic_bitset<> ";
                     ExistingIDs.push_back(temp.outputs[0].InputConID);
                 }
@@ -410,6 +547,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
                     }
                     myfile << "\t\t";
                     if (ExistCheck == false) {
+                        /**< If it doesnt exist declare it */
                         myfile << "dynamic_bitset<> ";
                         ExistingIDs.push_back(temp.outputs[0].InputConID);
                     }
@@ -451,6 +589,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
                         }
                         myfile << "\t\t";
                         if (ExistCheck == false) {
+                            /**< If it doesnt exist declare it */
                             myfile << "dynamic_bitset<> ";
                             ExistingIDs.push_back(temp.outputs[i].InputConID);
                         }
@@ -489,6 +628,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
             }
             myfile << "\t\t";
             if (ExistCheck == false) {
+                /**< If it doesnt exist, declare it */
                 myfile << "dynamic_bitset<> ";
                 ExistingIDs.push_back(temp.outputs[0].InputConID);
             }
@@ -516,6 +656,7 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
             }
             myfile << "\t\t";
             if (ExistCheck == false) {
+                /**< If it doesnt exist, declare it */
                 myfile << "dynamic_bitset<> ";
                 ExistingIDs.push_back(temp.outputs[0].InputConID);
             }
@@ -525,8 +666,10 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
 
             ID = temp.outputs[0].InputConID;
         } else if (temp.type == 3) {
+            /**< Call the function */
             ID = AppendFunctionF(temp.Next, myfile, ExistingIDs, KeySize);
         } else if (temp.type == 4) {
+            /**< Assign subkey to a string */
             /**< Convert string to bitset */
             myfile << "\t\tdynamic_bitset<> temporaryres" << KeyIDCheck(temp.inputs[0].InputConID) << " = result" << KeyIDCheck(temp.inputs[0].InputConID) << ";\n";
             myfile << "\t\tfor (int i = 0; i < " << KeySize << "; i++) {\n";
@@ -548,9 +691,17 @@ int OutputRound::AppendFunctionF(vector<Node> Head, ofstream& myfile, vector<int
         }
     }
 
+    /**< Returns the last node outputted ID */
     return ID;
 }
 
+/** \brief
+ * OutputGenerics copies the generic files from the source path to the  destination path
+ *
+ * \param
+ * NodeTypes tells us which parts of the Generics file we can copy
+ *
+ */
 void OutputRound::OutputGenerics(bool NodeTypes[]) {
     string str;
     ifstream hfile;
@@ -645,7 +796,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         }
 
         /**< Cpp file copy */
-        for (int i = 0; i < 117; i++) {
+        for (int i = 0; i < 121; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
@@ -656,7 +807,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
             getline(hfile, str);
         }
 
-        for (int i = 0; i < 117; i++) {
+        for (int i = 0; i < 121; i++) {
             getline(cfile, str);
         }
     }
@@ -675,6 +826,7 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         codefile << "\n";
     }
 
+    /**< Closes all files */
     hfile.close();
     headerfile.close();
     cfile.close();
