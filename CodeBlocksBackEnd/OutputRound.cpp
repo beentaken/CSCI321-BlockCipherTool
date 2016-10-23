@@ -223,19 +223,21 @@ bool OutputRound::OutputToFile(vector<Node> Encrypt, vector<Node> Decrypt, vecto
     for (int i = 0; i < 3; i++) {
         NodeTypes[i] = false;
     }
-
+cout << "CHECKNODE" << endl;
     /**< Checks which nodes are present in the vectors */
     CheckNode(Encrypt, NodeTypes, E);
     CheckNode(Decrypt, NodeTypes, D);
     CheckNode(KeyGen, NodeTypes, K);
+cout << "SORTVEC" << endl;
     /**< Sorts the vectors */
     E = SortVec(E, Props.NumRounds);
     D = SortVec(D, Props.NumRounds);
     K = SortVec(K, Props.NumRounds);
-
+cout << "GENERICS" << endl;
     /**< Copies the Generics files */
     OutputGenerics(NodeTypes);
     /**< Creates the main file */
+cout << "BLOCK" << endl;
     OutputMain(E, D, K, Props);
 
     return true;
