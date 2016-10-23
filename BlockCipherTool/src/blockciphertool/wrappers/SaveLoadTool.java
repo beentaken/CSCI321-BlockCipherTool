@@ -62,8 +62,13 @@ public class SaveLoadTool {
 	    }
 	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
 	    saveWrapper.setDecryptionCipher(temp);
-	} else if( wrapperType.equals( "keygen" ) ) {
-	    
+	} else if( wrapperType.equals( "save" ) ) {
+	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
+	    if (temp == null) {
+		temp = new CipherWrapper();
+	    }
+	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	    saveWrapper.setProperties(temp.getProperties());
 	}
     }
     
@@ -88,7 +93,7 @@ public class SaveLoadTool {
 		temp = new CipherWrapper();
 	    }
 	    temp.AddPBoxs(pboxs);
-	    saveWrapper.setDecryptionCipher(temp);
+	    saveWrapper.setKeygenCipher(temp);
 	}
     }
     
@@ -113,7 +118,7 @@ public class SaveLoadTool {
 		temp = new CipherWrapper();
 	    }
 	    temp.AddSBoxes(sboxs);
-	    saveWrapper.setDecryptionCipher(temp);
+	    saveWrapper.setKeygenCipher(temp);
 	}
     }
     
@@ -138,7 +143,7 @@ public class SaveLoadTool {
 		temp = new CipherWrapper();
 	    }
 	    temp.AddXors(xors);
-	    saveWrapper.setDecryptionCipher(temp);
+	    saveWrapper.setKeygenCipher(temp);
 	}
     }
     
@@ -163,7 +168,7 @@ public class SaveLoadTool {
 		temp = new CipherWrapper();
 	    }
 	    temp.AddConnections(connections);
-	    saveWrapper.setDecryptionCipher(temp);
+	    saveWrapper.setKeygenCipher(temp);
 	}
     }
 
@@ -188,7 +193,7 @@ public class SaveLoadTool {
 		temp = new CipherWrapper();
 	    }
 	    temp.AddKeys(subkeys);
-	    saveWrapper.setDecryptionCipher(temp);
+	    saveWrapper.setKeygenCipher(temp);
 	}
 	
     }
@@ -238,6 +243,33 @@ public class SaveLoadTool {
 	    m.marshal(saveWrapper.getDecryptionWrappedCipher(), os);
 	    m.marshal(saveWrapper.getWrappedKeygen(), os);
 	    m.marshal(saveWrapper.getProperties(), os);
+	    	    
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+    
+    public void saveMultipleAsXml(String encryptFilename, String decryptFilename, String keygenFilename, String PropertiesFilename) {
+	try {
+	    
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
+	    Marshaller m = context.createMarshaller();
+	    m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+	    
+	    
+	    
+	    File encryptFile = new File(encryptFilename);
+	    File decryptFile = new File(decryptFilename);
+	    File keygenFile = new File(keygenFilename);
+	    File propertiesFile = new File(PropertiesFilename);
+	    
+	    
+
+	    
+	    m.marshal(saveWrapper.getEncryptionWrappedCipher(), encryptFile);
+	    m.marshal(saveWrapper.getDecryptionWrappedCipher(), decryptFile);
+	    m.marshal(saveWrapper.getWrappedKeygen(), keygenFile);
+	    m.marshal(saveWrapper.getProperties(), propertiesFile);
 	    	    
 	} catch (Exception e) {
 	    e.printStackTrace();

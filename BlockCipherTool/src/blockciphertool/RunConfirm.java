@@ -7,6 +7,7 @@ package blockciphertool;
 
 import blockciphertool.wrappers.CipherWrapper;
 import blockciphertool.wrappers.SaveLoadTool;
+import java.io.File;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
@@ -65,10 +66,22 @@ public class RunConfirm extends AnchorPane{
     private void runButtonAction() {
 	System.out.println("Saving");
 	this.save.saveAsXml("ActualSave.xml");
+	this.save.saveMultipleAsXml("CipherEncrypt.xml", "CipherDecrypt.xml", "CipherKeygen.xml", "CipherProperties.xml");
+	
+	File directory = new File("./../CodeBlocksBackEnd/");
+	ProcessBuilder launcher = new ProcessBuilder("CodeBlocksBackEnd.exe", "save.xml");
+	launcher.directory(directory);
 	
 	
-	ProcessBuilder launcher = new ProcessBuilder("CodeBlocksBackEnd", "save.xml", output.getText());
 	
+	try {
+	    	System.out.println(launcher.directory().getCanonicalPath());
+
+	    //launcher.start();
+	} catch (Exception e) {
+	    //do nothing
+	    e.printStackTrace();
+	}
 //	launcher.directory(directory);
 	//System.out.println(launcher.directory().getAbsolutePath());
 

@@ -1291,7 +1291,7 @@ public class MainLayout extends AnchorPane{
 	saver.AddSubkeys("keygen", subKeys);
 	
 	saver.AddProperties(properties);
-	//saver.AddProperties(numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
+	//saver.AddProperties("save", numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
 	
 	
 	
