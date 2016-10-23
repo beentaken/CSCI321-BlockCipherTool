@@ -12,46 +12,71 @@
 #include <windows.h>
 #include <wincrypt.h>
 
-#include "cipherBlock.h"
+#include "block.h"
+#include "keygen.h"
+#include "GenericFunctions.h"
+
+#include <boost/dynamic_bitset/dynamic_bitset.hpp>
+#include <cstdlib>
 
 using namespace std;
+using namespace boost;
+
+
 
 /** \brief This is a driver program for a generic block cipher
  *
  *  This file drives an external block cipher, and implements various
  *  modes of operation (ECB, CBC, CFB, OFB, CTR)
+ *
+ *  Aidan Pond
  */
 
 
 
 
+//long binconv(long num){
+//long bin, dec = 0, rem, base = 1;
+//bin = num;
+//    while (num > 0)
+//    {
+//        rem = num % 10;
+//        dec = dec + rem * base;
+//        base = base * 2;
+//        num = num / 10;
+//    }
+//
+//    return dec;
+//
+//};
 
-
-string ECB_Encrypt(string s, int bl, cipherBlock cipher)
+string ECB_Encrypt(string s, int bl, cipherBlock cipher, string* keys)
 {
     /** \fn ECB
      *  \brief  electronic codebook
      *  Does nothing, just encrypts each block
      *
      */
-    return cipher.encryptBlock(s, bl);
+
+
+    return cipher.encryptBlock(s, keys);
 }
 
-string ECB_Decrypt(string s, int bl, cipherBlock cipher)
+string ECB_Decrypt(string s, int bl, cipherBlock cipher, string* keys)
 {
     /** \fn ECB
      *  \brief  electronic codebook
      *  Does nothing, just decrypts each block
      *
      */
-    return cipher.decryptBlock(s, bl);
+    return cipher.decryptBlock(s, keys);
 }
 
 
 
 
 
-string CBC_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string CBC_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
 
     /** \fn CBC
@@ -66,7 +91,7 @@ string CBC_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
         s[j] = s[j]^iv[j]; //XOR byte with IV (or last blocks ciphertext)
     }
 
-    string ctb = cipher.encryptBlock(s, bl); //send to cipher
+    string ctb = cipher.encryptBlock(s, keys); //send to cipher
 
     for (int j=0; j<bl; j++) //write ciphertext into iv variable
     {
@@ -76,7 +101,7 @@ string CBC_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
     return ctb;
 }
 
-string CBC_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string CBC_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
 
     /** \fn CBC
@@ -87,7 +112,7 @@ string CBC_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
      */
 
 
-    string ctb = cipher.decryptBlock(s, bl); //send to cipher
+    string ctb = cipher.decryptBlock(s, keys); //send to cipher
 
     for (int j=0; j<bl; j++)
     {
@@ -112,7 +137,7 @@ string CBC_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
 
 
 
-string CFB_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string CFB_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
 
     /** \fn CFB
@@ -128,7 +153,7 @@ string CFB_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
     {
         ivString[j] = iv[j];
     }
-    string ctb = cipher.encryptBlock(ivString, bl);
+    string ctb = cipher.encryptBlock(ivString, keys);
 
     for (int j=0; j<bl; j++)
     {
@@ -143,7 +168,7 @@ string CFB_Encrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
     return ctb;
 }
 
-string CFB_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string CFB_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
 
     /** \fn CFB
@@ -159,7 +184,7 @@ string CFB_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
     {
         ivString[j] = iv[j];
     }
-    string ctb = cipher.encryptBlock(ivString, bl);
+    string ctb = cipher.encryptBlock(ivString, keys);
 
     for (int j=0; j<bl; j++)
     {
@@ -178,7 +203,7 @@ string CFB_Decrypt(string s, int bl, unsigned char* iv, cipherBlock cipher)
 
 
 
-string OFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string OFB(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
     /** \fn OFB
      *  \brief  output feedback
@@ -193,7 +218,7 @@ string OFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
     {
         ivString[j] = iv[j];
     }
-    string ctb = cipher.encryptBlock(ivString, bl);
+    string ctb = cipher.encryptBlock(ivString, keys);
 
     for (int j=0; j<bl; j++)
     {
@@ -208,7 +233,7 @@ string OFB(string s, int bl, unsigned char* iv, cipherBlock cipher)
     return ctb;
 
 }
-string CTR(string s, int bl, unsigned char* iv, cipherBlock cipher)
+string CTR(string s, int bl, unsigned char* iv, cipherBlock cipher, string* keys)
 {
 
     /** \fn CTR
@@ -225,7 +250,7 @@ string CTR(string s, int bl, unsigned char* iv, cipherBlock cipher)
     {
         ivString[j] = iv[j];
     }
-    string ctb = cipher.encryptBlock(ivString, bl);
+    string ctb = cipher.encryptBlock(ivString, keys);
 
     for (int j=0; j<bl; j++)
     {
@@ -305,7 +330,7 @@ string paddingEncrypt(int pad, int blocksize, int paddingMode)
 
 
 
-int encrypt(string filename, int blocksize, int mode, int paddingMode)
+int encrypt(string filename, int blocksize, int mode, int paddingMode, string* keys)
 {
 
     string block; ///< used to store plaintext blocks
@@ -321,9 +346,9 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
         HCRYPTPROV hCryptProv;
         iv = new unsigned char[blocksize];
 
-///well seems like cryptgenrandom hates me and refuses to work
-///i fucking hate microsoft
-///fuck this bullshit
+///well seems like cryptgenrandom refuses to work
+///i hate microsoft
+///
 ///rand() it is
 
 //        if (!CryptGenRandom(hCryptProv, blocksize, iv))
@@ -342,7 +367,8 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
         //but more secure than CryptGenRandom not actually working
         //and giving nonrandom output
         //
-        //fucking microsoft
+        //classic microsoft stitch up
+
         srand(time(NULL));
         for (int i=0; i<blocksize; i++)
             iv[i] = rand()%255;
@@ -380,6 +406,11 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
                                     ///< NB: the number of bytes to add is BlockLength - pad
     string out = ""; ///< string for output
 
+
+    dynamic_bitset<> blockSet(blocksize*8);
+    dynamic_bitset<> fileSet(blocksize*8);
+
+
     cipherBlock cipher; ///< a single block of a cipher
 
     ///process each full sized block
@@ -387,6 +418,7 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
     for (i; i<(fileLen/blocksize); i++)
     {
         string cipherTextBlock; ///< stores a single block of ciphertext
+
         block.clear();
         for (int j=0; j<blocksize; j++)
         {
@@ -394,21 +426,23 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
         }
 
 
+
+
         if (mode==1)
         {///ECB
-            cipherTextBlock = ECB_Encrypt(block, blocksize, cipher);
+            cipherTextBlock = ECB_Encrypt(block, blocksize, cipher, keys);
         }
         else if (mode==2)
         {///CBC
-            cipherTextBlock = CBC_Encrypt(block, blocksize, iv, cipher);
+            cipherTextBlock = CBC_Encrypt(block, blocksize, iv, cipher, keys);
         }
         else if (mode==3)
         {///CFB
-            cipherTextBlock = CFB_Encrypt(block, blocksize, iv, cipher);
+            cipherTextBlock = CFB_Encrypt(block, blocksize, iv, cipher, keys);
         }
         else if (mode==4)
         {///OFB
-            cipherTextBlock = OFB(block, blocksize, iv, cipher);
+            cipherTextBlock = OFB(block, blocksize, iv, cipher, keys);
         }
         else if (mode==5)
         {///CTR
@@ -420,8 +454,10 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
             memcpy(ivCounter, iv, blocksize);
             ivCounter[(blocksize-1)] = ivCounter[(blocksize-1)]^counter;
 
-            cipherTextBlock = CTR(block, blocksize, ivCounter, cipher);
+            cipherTextBlock = CTR(block, blocksize, ivCounter, cipher, keys);
         }
+
+
 
         //add the encrypted block to the out string
         for (int k=0; k<blocksize; k++)
@@ -436,7 +472,7 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
 
     ///process last block
     //the last block needs padding before it can be encrypted
-
+/*
     block.clear();
     for (int j=0; j<pad; j++)
     {//reading the rest of the file
@@ -446,18 +482,31 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
 
 
     block.append(paddingEncrypt(pad, blocksize, paddingMode));
-
+*/
     string lastCipherBlock = block;
 
+//
+//    ///kludge
+//        block.clear();
+//        block.push_back(infile.get());
+//        string s2 = block;
+//        block.clear();
+//        for (int i=0; i<s2.length(); i++)
+//        {
+//            bitset<8> b(s2.c_str()[i]);
+//            block+=b.to_string();
+//        }
+////        cout << block << " | " << s2 << endl;
+//    ///end kludge
 
     if (mode==1)
-        block = ECB_Encrypt(lastCipherBlock, blocksize, cipher);
+        block = ECB_Encrypt(lastCipherBlock, blocksize, cipher, keys);
     else if (mode==2)
-        block = CBC_Encrypt(lastCipherBlock, blocksize, iv, cipher);
+        block = CBC_Encrypt(lastCipherBlock, blocksize, iv, cipher, keys);
     else if (mode==3)
-        block = CFB_Encrypt(lastCipherBlock, blocksize, iv, cipher);
+        block = CFB_Encrypt(lastCipherBlock, blocksize, iv, cipher, keys);
     else if (mode==4)
-        block = OFB(lastCipherBlock, blocksize, iv, cipher);
+        block = OFB(lastCipherBlock, blocksize, iv, cipher, keys);
     else if (mode==5)
     {
         unsigned char counter = i;
@@ -465,8 +514,9 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
         memcpy(ivCounter, iv, blocksize);
         ivCounter[(blocksize-1)] = ivCounter[(blocksize-1)]^counter;
 
-        block = CTR(lastCipherBlock, blocksize, ivCounter, cipher);
+        block = CTR(lastCipherBlock, blocksize, ivCounter, cipher, keys);
     }
+
 
     for (int k=0; k<blocksize; k++)
     {
@@ -485,7 +535,7 @@ int encrypt(string filename, int blocksize, int mode, int paddingMode)
 
 
 
-int decrypt(string filename, int blocksize, int mode, int paddingMode)
+int decrypt(string filename, int blocksize, int mode, int paddingMode, string* keys)
 {
 
     string block; ///< used to store ciphertext blocks
@@ -536,6 +586,8 @@ int decrypt(string filename, int blocksize, int mode, int paddingMode)
     for (i; i<(fileLen/blocksize); i++)
     {
         string plainTextBlock; ///< stores a single block of plaintext
+
+
         block.clear();
         for (int j=0; j<blocksize; j++)
         {
@@ -545,19 +597,19 @@ int decrypt(string filename, int blocksize, int mode, int paddingMode)
 
         if (mode==1)
         {///ECB
-            plainTextBlock = ECB_Decrypt(block, blocksize, cipher);
+            plainTextBlock = ECB_Decrypt(block, blocksize, cipher, keys);
         }
         else if (mode==2)
         {///CBC
-            plainTextBlock = CBC_Decrypt(block, blocksize, iv, cipher);
+            plainTextBlock = CBC_Decrypt(block, blocksize, iv, cipher, keys);
         }
         else if (mode==3)
         {///CFB
-            plainTextBlock = CFB_Decrypt(block, blocksize, iv, cipher);
+            plainTextBlock = CFB_Decrypt(block, blocksize, iv, cipher, keys);
         }
         else if (mode==4)
         {///OFB
-            plainTextBlock = OFB(block, blocksize, iv, cipher);
+            plainTextBlock = OFB(block, blocksize, iv, cipher, keys);
         }
         else if (mode==5)
         {///CTR
@@ -569,7 +621,7 @@ int decrypt(string filename, int blocksize, int mode, int paddingMode)
             memcpy(ivCounter, iv, blocksize);
             ivCounter[(blocksize-1)] = ivCounter[(blocksize-1)]^counter;
 
-            plainTextBlock = CTR(block, blocksize, ivCounter, cipher);
+            plainTextBlock = CTR(block, blocksize, ivCounter, cipher, keys);
         }
 
         //add the encrypted block to the out string
@@ -578,11 +630,6 @@ int decrypt(string filename, int blocksize, int mode, int paddingMode)
             out.push_back(plainTextBlock[k]);
         }
     }
-
-
-
-
-
 
 
     ///write ciphertext to file
@@ -605,6 +652,7 @@ int main(int argc, char** argv)
     int paddingMode=0; ///< selects mode of padding
     int ED;
     string filename;
+    string mainKey;
 
     if (argc==1)
     {
@@ -613,7 +661,7 @@ int main(int argc, char** argv)
         cout << ">> ";
         cin >> ED;
 
-        cout << "block size: ";
+        cout << "Block Size (bytes): ";
         cin >> blocksize;
 
         //open file
@@ -630,36 +678,45 @@ int main(int argc, char** argv)
         cout << "Mode: ";
         cin >> mode;
 
+        if (ED == 1)
+        {
+            cout << "1) ANSI X.923" << endl;
+            cout << "2) ISO 10126" << endl;
+            cout << "3) PKCS7" << endl;
+            cout << "4) ISO/IEC 7816-4" << endl;
+            cout << "5) Zero padding" << endl;
+            cout << "Padding mode: ";
+            cin >> paddingMode;
+        }
 
-        cout << "1) ANSI X.923" << endl;
-        cout << "2) ISO 10126" << endl;
-        cout << "3) PKCS7" << endl;
-        cout << "4) ISO/IEC 7816-4" << endl;
-        cout << "5) Zero padding" << endl;
-        cout << "Padding mode: ";
-        cin >> paddingMode;
+        cout << "Enter Key: ";
+        cin >> mainKey;
     }
-    else if (argc == 6)
+    else if (argc == 7)
     {
         stringstream ss;
         string sString;
-        for (int i=1; i<6; i++)
+        for (int i=1; i<7; i++)
         {
             sString.append(argv[i]);
             ss << sString << " ";
             sString.clear();
         }
-        ss >> ED >> blocksize >> filename >> mode >> paddingMode;
+        ss >> ED >> blocksize >> filename >> mode >> paddingMode >> mainKey;
 
     }
+
+    string* keys;
+    keygen k;
+    keys = k.keySchedule(mainKey);
 
     if (ED==1)
     {
-        encrypt(filename, blocksize, mode, paddingMode);
+        encrypt(filename, blocksize, mode, paddingMode, keys);
     }
     else if (ED==2)
     {
-        decrypt(filename, blocksize, mode, paddingMode);
+        decrypt(filename, blocksize, mode, paddingMode, keys);
     }
 
 
