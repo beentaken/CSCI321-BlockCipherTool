@@ -159,7 +159,7 @@ vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
 Node ParseSubkey(ifstream& XMLfile, string line, int type, int& KeyCount) {
     Node N;
     /**< Attempts to find the subkey number */
-    if (line.find("NUM") != string::npos) {
+    if (line.find("ID") != string::npos) {
         /**< Sets the Node defaults */
         N.type = type;
         N.ID = StringToNumber(line);
