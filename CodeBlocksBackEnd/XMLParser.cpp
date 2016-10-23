@@ -35,7 +35,6 @@ using namespace std;    /**< standard namespace */
  */
 vector<Node> ReadXML(string filename, Properties& Props, vector<Node>& decrypt, vector<Node>& keygen) {
     vector<Node> encrypt;
-    int KeyCount = 0;
 
     /**< File input stream for the xml */
     ifstream XMLfile;
@@ -59,23 +58,21 @@ vector<Node> ReadXML(string filename, Properties& Props, vector<Node>& decrypt, 
                     /**< Encrypt block */
                     if (line.compare("<encrypt>") == 0) {
                         /**< Parses all encrypt nodes */
-                        encrypt = Cycle(XMLfile, KeyCount);
+                        encrypt = Cycle(XMLfile);
                     } else if (line.compare("<decrypt>") == 0) {
                         /**< Decrypt block */
                         /**< Parses all decrypt nodes */
-                        decrypt = Cycle(XMLfile, KeyCount);
+                        decrypt = Cycle(XMLfile);
                     }
                 } else if (line.compare("<keygen>") == 0) {
                     /**< Checks that it is the key generation block */
                     /**< Parses all key generation nodes */
-                    keygen = Cycle(XMLfile, KeyCount);
-                } else if (line.find("<properties") != string::npos) {
+                    keygen = Cycle(XMLfile);
+                } else if (line.find("<propertiesWrapper>") != string::npos) {
                     /**< Parses a properties block if the properties tag is found */
                     Props = ParseProps(XMLfile, line);
                 }
             }
-            /**< Stores the number of keys created */
-            Props.NumKey = KeyCount;
             /**< Closes the file stream */
             XMLfile.close();
         }
@@ -99,7 +96,7 @@ vector<Node> ReadXML(string filename, Properties& Props, vector<Node>& decrypt, 
  *
  */
 
-vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
+vector<Node> Cycle(ifstream& XMLfile) {
     vector<Node> result;
     Node temp;
     string line;
@@ -123,11 +120,11 @@ vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
             result.push_back(temp);
         } else if (line.find("<functions") != string::npos) {
             /**< Parses an F function if the f tag is found */
-            temp = ParseFFunc(XMLfile, line, 3, KeyCount);
+            temp = ParseFFunc(XMLfile, line, 3);
             result.push_back(temp);
         } else if (line.find("<keys") != string::npos) {
             /**< Parses the subkey identity */
-            temp = ParseSubkey(XMLfile, line, 4, KeyCount);
+            temp = ParseSubkey(XMLfile, line, 4);
             result.push_back(temp);
         }
     }
@@ -156,7 +153,7 @@ vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
  *
  */
 
-Node ParseSubkey(ifstream& XMLfile, string line, int type, int& KeyCount) {
+Node ParseSubkey(ifstream& XMLfile, string line, int type) {
     Node N;
     /**< Attempts to find the subkey number */
     if (line.find("ID") != string::npos) {
@@ -191,7 +188,6 @@ Node ParseSubkey(ifstream& XMLfile, string line, int type, int& KeyCount) {
                 inputs[0].InputConID = StringToNumber(s2);
                 inputs[0].InputSizes = StringToNumber(s);
                 N.inputs = inputs;
-                KeyCount++;
             }
         }
     }
@@ -218,7 +214,7 @@ Properties ParseProps(ifstream& XMLfile, string line) {
     Properties Props;
 
     /**< Continues to cycle through until the properties block is completely parsed in */
-    while (line.compare("</properties>") != 0) {
+    while (line.compare("</propertiesWrapper>") != 0) {
         /**< Gets a line of input and removes all spacing */
         getline(XMLfile, line);
         line.erase(remove(line.begin(), line.end(), ' '), line.end());
@@ -265,7 +261,7 @@ Properties ParseProps(ifstream& XMLfile, string line) {
  * Returns a node with the xml
  *
  */
-Node ParseFFunc(ifstream& XMLfile, string line, int type, int& KeyCount) {
+Node ParseFFunc(ifstream& XMLfile, string line, int type) {
     Node N;
     /**< Attempts to find the ID */
     if (line.find("ID") != string::npos) {
@@ -299,11 +295,11 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type, int& KeyCount) {
                 N.Next.push_back(temp);
             } else if (line.find("<functions") != string::npos) {
                 /**< Parses in an f function and adds it to the end of the vector */
-                Node temp = ParseFFunc(XMLfile, line, 3, KeyCount);
+                Node temp = ParseFFunc(XMLfile, line, 3);
                 N.Next.push_back(temp);
             } else if (line.find("<keys") != string::npos) {
                 /**< Parses the subkey and adds it to the end of the vector */
-                Node temp = ParseSubkey(XMLfile, line, 4, KeyCount);
+                Node temp = ParseSubkey(XMLfile, line, 4);
                 N.Next.push_back(temp);
             }
         }
@@ -569,7 +565,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
                     /**< Every time it finds a row */
                     if (line.find("<rows") != string::npos) {
                         /**< Store the column values into the appropriate row on the table */
-                        int * temp = StringToIntArr(line, ' ');
+                        int * temp = StringToIntArr(line, ',');
                         N.table[counter] = new int[N.cols];
                         for (int i = 0; i < N.cols; i++) {
                             N.table[counter][i] = temp[i+1];
@@ -652,7 +648,6 @@ int* StringToIntArr(string input, char delimeter) {
     int realcount = 0;
     int counter = 1;
     convert << input;
-
     /**< Checks how many delimeters are present */
     for (size_t i = 0; i < input.length(); i++) {
         if (input[i] == delimeter) {

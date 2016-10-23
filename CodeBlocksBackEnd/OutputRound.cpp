@@ -229,9 +229,9 @@ bool OutputRound::OutputToFile(vector<Node> Encrypt, vector<Node> Decrypt, vecto
     CheckNode(Decrypt, NodeTypes, D);
     CheckNode(KeyGen, NodeTypes, K);
     /**< Sorts the vectors */
-    E = SortVec(E, Props.NumKey);
-    D = SortVec(D, Props.NumKey);
-    K = SortVec(K, Props.NumKey);
+    E = SortVec(E, Props.NumRounds);
+    D = SortVec(D, Props.NumRounds);
+    K = SortVec(K, Props.NumRounds);
 
     /**< Copies the Generics files */
     OutputGenerics(NodeTypes);
@@ -285,8 +285,8 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     myfile << "\t}\n";
 
     myfile << "\tresult0.resize(" << Props.BlockSize*8 << ");\n\tstring returnval;\n";
-    if (Props.NumKey != 0) {
-        for (int i = 1; i < Props.NumKey+1; i++) {
+    if (Props.NumRounds != 0) {
+        for (int i = 1; i < Props.NumRounds+1; i++) {
             myfile << "\tdynamic_bitset<> result_" << i << "(key[" << i-1 << "].length()*8);\n";
             myfile << "\tfor (int i = 0; i < key[" << i-1 << "].length(); i++) {\n";
             myfile << "\t\tunsigned char c = key[" << i-1 << "][i];\n";
@@ -303,8 +303,18 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
         }
     }
 
+    /**< Create RoundKey */
+    myfile << "\tdynamic_bitset<> resultKey;\n\n";
+
     /**< Specifies a for loop for the number of rounds */
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
+
+    /**< Assign Key for each Round */
+    for (int i = 0; i < Props.NumRounds; i++) {
+        myfile << "\t\tif (round == " << i << ") {\n";
+        myfile << "\t\t\t resultKey = result_" << i+1 << ";\n";
+        myfile << "\t\t}\n";
+    }
 
     /**< Outputs the encrypt nodes to the file */
     int lastID = AppendFunctionF(Encrypt, myfile, ExistingIDs, Props.KeySize);
@@ -352,8 +362,8 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     myfile << "\t}\n";
 
     myfile << "\tresult0.resize(" << Props.BlockSize*8 << ");\n\tstring returnval;\n";
-    if (Props.NumKey != 0) {
-        for (int i = 1; i < Props.NumKey+1; i++) {
+    if (Props.NumRounds != 0) {
+        for (int i = 1; i < Props.NumRounds+1; i++) {
             myfile << "\tdynamic_bitset<> result_" << i << "(key[" << i-1 << "].length()*8);\n";
             myfile << "\tfor (int i = 0; i < key[" << i-1 << "].length(); i++) {\n";
             myfile << "\t\tunsigned char c = key[" << i-1 << "][i];\n";
@@ -370,8 +380,18 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
         }
     }
 
-    /**< Specify number of rounds */
+    /**< Create RoundKey */
+    myfile << "\tdynamic_bitset<> resultKey;\n\n";
+
+    /**< Specifies a for loop for the number of rounds */
     myfile << "\tfor (int round = 0; round < " << Props.NumRounds << "; round++) {\n";
+
+    /**< Assign Key for each Round */
+    for (int i = 0; i < Props.NumRounds; i++) {
+        myfile << "\t\tif (round == " << i << ") {\n";
+        myfile << "\t\t\t resultKey = result_" << i+1 << ";\n";
+        myfile << "\t\t}\n";
+    }
 
     /**< Output Decrypt Nodes */
     lastID = AppendFunctionF(Decrypt, myfile, ExistingIDs, Props.KeySize);
@@ -417,7 +437,7 @@ void OutputRound::OutputMain(vector<Node> Encrypt, vector<Node> Decrypt, vector<
     myfile << "\t\t}\n";
     myfile << "\t}\n";
 
-    myfile << "\tresult0.resize(initial.length()*8);\n\tstring * returnval = new string[" << Props.NumKey << "];\n";
+    myfile << "\tresult0.resize(initial.length()*8);\n\tstring * returnval = new string[" << Props.NumRounds << "];\n";
     myfile << "\tint counter = 0;\n";
 
     /**< Outputs key generation functions */
@@ -459,7 +479,7 @@ string OutputRound::KeyIDCheck(int ID) {
 
     /**< Replaces - with _ */
     if (ID < 0) {
-        replace(result.begin(), result.end(), '-', '_');
+        result = "Key";
     }
 
     return result;

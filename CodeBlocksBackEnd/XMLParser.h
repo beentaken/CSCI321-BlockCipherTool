@@ -20,10 +20,9 @@ using namespace std;        /**< Uses a standard namespace */
 struct Properties {
     int StartID;        /**< The start nodes ID */
     int EndID;          /**< The end nodes ID */
-    int NumRounds;      /**< The number of rounds to perform the block encryption/decryption */
+    int NumRounds;      /**< The number of rounds to perform the block encryption/decryption and is the number of keys used */
     int BlockSize;      /**< The size of the block in bits */
     int KeySize;        /**< The size of the keys in bits */
-    int NumKey;         /**< The number of keys in the key generation */
 };
 
 /** \brief
@@ -59,13 +58,13 @@ struct Node {
 };
 
 vector<Node> ReadXML(string, Properties&, vector<Node>&, vector<Node>&);        /**< This function reads the XML file and parses all the nodes into the program */
-vector<Node> Cycle(ifstream&, int&);                                            /**< Is responsible for reading in encryption, decryption and keygen blocks */
+vector<Node> Cycle(ifstream&);                                            /**< Is responsible for reading in encryption, decryption and keygen blocks */
 int StringToNumber(string);                                                     /**< The function converts the String to a number(int) */
 int* StringToIntArr(string, char);                                              /**< This function converts the String to an integer array */
 Node ParseSPBox(ifstream&, string, int);                                        /**< This function parses in a P Box or an S Box */
 Node ParseXOR(ifstream&, string, int);                                          /**< This function parses in an xor block */
-Node ParseFFunc(ifstream&, string, int, int&);                                  /**< This function parses in an F Function */
+Node ParseFFunc(ifstream&, string, int);                                  /**< This function parses in an F Function */
 Properties ParseProps(ifstream&, string);                                       /**< This function parses in a Properties node */
-Node ParseSubkey(ifstream&, string, int, int&);                                 /**< This function parses in the subkey */
+Node ParseSubkey(ifstream&, string, int);                                 /**< This function parses in the subkey */
 
 #endif /**< Header Guard end for XMLPARSE */
