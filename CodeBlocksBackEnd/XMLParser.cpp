@@ -109,23 +109,23 @@ vector<Node> Cycle(ifstream& XMLfile, int& KeyCount) {
         getline(XMLfile, line);
         line.erase(remove(line.begin(), line.end(), ' '), line.end());
         line.erase(remove(line.begin(), line.end(), '\t'), line.end());
-        if (line.find("<pbox") != string::npos) {
+        if (line.find("<pboxs") != string::npos) {
             /**< Parses a PBox if the pbox tag is found */
             temp = ParseSPBox(XMLfile, line, 0);
             result.push_back(temp);
-        } else if (line.find("<sbox") != string::npos) {
+        } else if (line.find("<sboxs") != string::npos) {
             /**< Parses a SBox if the sbox tag is found */
             temp = ParseSPBox(XMLfile, line, 1);
             result.push_back(temp);
-        } else if (line.find("<xor") != string::npos) {
+        } else if (line.find("<xors") != string::npos) {
             /**< Parses an XOR is the xor tag is found */
             temp = ParseXOR(XMLfile, line, 2);
             result.push_back(temp);
-        } else if (line.find("<function") != string::npos) {
+        } else if (line.find("<functions") != string::npos) {
             /**< Parses an F function if the f tag is found */
             temp = ParseFFunc(XMLfile, line, 3, KeyCount);
             result.push_back(temp);
-        } else if (line.find("<subkey") != string::npos) {
+        } else if (line.find("<keys") != string::npos) {
             /**< Parses the subkey identity */
             temp = ParseSubkey(XMLfile, line, 4, KeyCount);
             result.push_back(temp);
@@ -170,7 +170,7 @@ Node ParseSubkey(ifstream& XMLfile, string line, int type, int& KeyCount) {
         N.rows = (-1);
 
         /**< Continues to cycle until the end of the subkey block */
-        while (line.compare("</subkey>") != 0) {
+        while (line.compare("</keys>") != 0) {
             /**< Gets a line input and removes the spacing */
             getline(XMLfile, line);
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
@@ -279,29 +279,29 @@ Node ParseFFunc(ifstream& XMLfile, string line, int type, int& KeyCount) {
         N.rows = (-1);
 
         /**< Continues to cycle until the end of the F function */
-        while(line.compare("</function>") != 0) {
+        while(line.compare("</functions>") != 0) {
             /**< Gets a line input and removes the spacing */
             getline(XMLfile, line);
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
             line.erase(remove(line.begin(), line.end(), ' '), line.end());
 
-            if (line.find("<pbox") != string::npos) {
+            if (line.find("<pboxs") != string::npos) {
                 /**< Parses in a p box and adds it to the end of the vector */
                 Node temp = ParseSPBox(XMLfile, line, 0);
                 N.Next.push_back(temp);
-            } else if (line.find("<sbox") != string::npos) {
+            } else if (line.find("<sboxs") != string::npos) {
                 /**< Parses in a s box and adds it to the end of the vector */
                 Node temp = ParseSPBox(XMLfile, line, 1);
                 N.Next.push_back(temp);
-            } else if (line.find("<xor") != string::npos) {
+            } else if (line.find("<xors") != string::npos) {
                 /**< Parses in an xor and adds it to the end of the vector */
                 Node temp = ParseXOR(XMLfile, line, 2);
                 N.Next.push_back(temp);
-            } else if (line.find("<function") != string::npos) {
+            } else if (line.find("<functions") != string::npos) {
                 /**< Parses in an f function and adds it to the end of the vector */
                 Node temp = ParseFFunc(XMLfile, line, 3, KeyCount);
                 N.Next.push_back(temp);
-            } else if (line.find("<subkey") != string::npos) {
+            } else if (line.find("<keys") != string::npos) {
                 /**< Parses the subkey and adds it to the end of the vector */
                 Node temp = ParseSubkey(XMLfile, line, 4, KeyCount);
                 N.Next.push_back(temp);
@@ -342,7 +342,7 @@ Node ParseXOR(ifstream& XMLfile, string line, int type) {
         N.rows = (-1);
 
         /**< Continues to cycle until the end of the xor block */
-        while (line.compare("</xor>") != 0) {
+        while (line.compare("</xors>") != 0) {
             /**< Gets a line of input and erases the spacing */
             getline(XMLfile, line);
             line.erase(remove(line.begin(), line.end(), '\t'), line.end());
@@ -455,7 +455,7 @@ Node ParseSPBox(ifstream& XMLfile, string line, int type) {
         N.rows = (-1);
 
         /**< Cycles until the end of the box */
-        while ((line.compare("</pbox>") != 0) && (line.compare("</sbox>") != 0)) {
+        while ((line.compare("</pboxs>") != 0) && (line.compare("</sboxs>") != 0)) {
             /**< Gets a line from the xml file and removes the spacing */
             getline(XMLfile, line);
             line.erase(remove(line.begin(), line.end(), ' '), line.end());
