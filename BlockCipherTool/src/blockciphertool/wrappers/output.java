@@ -39,7 +39,7 @@ public class output {
         this.size = Size;
     }
     
-
+    @XmlValue
     public String getOutputData() {
         return this.outputData;
     }

@@ -44,10 +44,11 @@ public class RunConfirm extends AnchorPane{
     
     /**
     * @author Alex
-    */    
-    public RunConfirm(SaveLoadTool Save) {
+    */     
+    public RunConfirm(SaveLoadTool Save){
         this.save = Save;
     }
+    
     
     /**
     * @author Alex
@@ -64,26 +65,28 @@ public class RunConfirm extends AnchorPane{
     */	    
     @FXML
     private void runButtonAction() {
-	System.out.println("Saving");
-	this.save.saveAsXml("ActualSave.xml");
-	this.save.saveMultipleAsXml("CipherEncrypt.xml", "CipherDecrypt.xml", "CipherKeygen.xml", "CipherProperties.xml");
-	
-	File directory = new File("./../CodeBlocksBackEnd/");
-	ProcessBuilder launcher = new ProcessBuilder("CodeBlocksBackEnd.exe", "save.xml");
-	launcher.directory(directory);
-	
-	
-	
-	try {
-	    	System.out.println(launcher.directory().getCanonicalPath());
 
-	    //launcher.start();
+	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
+	ProcessBuilder launcher;
+	try {
+		//Process should be  "full path to cipher.exe", "get mode from toggle buttons", "blocksize from properties" ,
+		    //"filename of file to encrypt", "chain from props", "padding from props", "key to use in plaintext"
+	    launcher = new ProcessBuilder( directory.getCanonicalPath() + "/Cipher.exe", directory.getCanonicalPath() + "/save.xml");
+	    launcher.directory(directory);
+	    
+	    try {
+		System.out.println(launcher.directory().getCanonicalPath());
+		launcher.start();
+	    } catch (Exception e) {
+		//do nothing
+		e.printStackTrace();
+	    } finally {
+		
+	    }
+	    
 	} catch (Exception e) {
-	    //do nothing
-	    e.printStackTrace();
+	    
 	}
-//	launcher.directory(directory);
-	//System.out.println(launcher.directory().getAbsolutePath());
 
     }
     

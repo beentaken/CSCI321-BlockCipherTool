@@ -37,9 +37,11 @@ import javafx.stage.Stage;
 import blockciphertool.wrappers.SaveLoadTool;
 import blockciphertool.wrappers.pboxWrapper;
 import blockciphertool.wrappers.sboxWrapper;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -69,6 +71,21 @@ public class MainLayout extends AnchorPane{
     @FXML Tab encrypt_tab;
     @FXML Tab decrypt_tab;
     @FXML Tab key_tab;
+    
+    //Chain Mode Radio Buttons
+    @FXML RadioButton c1;
+    @FXML RadioButton c2;
+    @FXML RadioButton c3;
+    @FXML RadioButton c4;
+    @FXML RadioButton c5;
+    @FXML RadioButton c6;
+    
+    //Padding Radio Buttons
+    @FXML RadioButton p1;
+    @FXML RadioButton p2;
+    @FXML RadioButton p3;
+    @FXML RadioButton p4;
+    @FXML RadioButton p5;
     
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
@@ -133,6 +150,7 @@ public class MainLayout extends AnchorPane{
     //for key generator
     private boolean keystartExists;
     
+
     
     
     /**
@@ -596,7 +614,7 @@ public class MainLayout extends AnchorPane{
 
                                     knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                                     knode.setParent(MainLayout.this);
-                                    knode.setId("ek");
+                                    knode.setId("k1");
                                     eKeyExists = true;
                                 }
                             break;
@@ -779,7 +797,7 @@ public class MainLayout extends AnchorPane{
 
                                     knode.relocateToPoint(new Point2D(ecursorPoint.getX()- 50, ecursorPoint.getY() - 50));
                                     knode.setParent(MainLayout.this);
-                                    knode.setId("dk");
+                                    knode.setId("k1");
                                     dKeyExists = true;
                                 }
                             break;
@@ -1269,37 +1287,11 @@ public class MainLayout extends AnchorPane{
      */
     public void runConfirm() throws IOException {
         
-	SaveLoadTool saver = new SaveLoadTool();
-	
-	saver.AddPBoxs("encrypt", pboxs);
-	saver.AddSBoxes("encrypt", sboxs);
-	saver.AddXors("encrypt", xors);
-	saver.AddConnections("encrypt", connections);
-	saver.AddProperties("encrypt");
-	
-	
-	saver.AddPBoxs("decrypt", decpboxs);
-	saver.AddSBoxes("decrypt", decsboxs);
-	saver.AddXors("decrypt", decxors);
-	saver.AddConnections("decrypt", decconnections);
-	saver.AddProperties("decrypt");
-	
-	saver.AddPBoxs("keygen", keypboxs);
-	saver.AddSBoxes("keygen", keysboxs);
-	saver.AddXors("keygen", keyxors);
-	saver.AddConnections("keygen", keyconnections);
-	saver.AddSubkeys("keygen", subKeys);
-	
-	saver.AddProperties(properties);
-	//saver.AddProperties("save", numRounds.getText(), blockSize.getText(), keySize.getText(), "counter", "zero padding", "0", "0");
-	
-	
-	
         //pass in the lists into a conversion function then store them in cipherwrapper
         //assign conversion function returned lists to 
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
-        RunConfirm confirm = new RunConfirm(saver);         //create runconfirm controller objet
+        RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();
@@ -1313,13 +1305,58 @@ public class MainLayout extends AnchorPane{
     /**
     * @author Alex
     */    
-    public void listpboxes() {
-        for (int i = 0; i < pboxs.size(); i++) {
-            System.out.println(pboxs.get(i).getCoords());
-        }
-        for (int i = 0; i < connections.size(); i++) {
-            System.out.println(connections.get(i).getSourceId());
-        }
+    public void generateFunctions() {
+	SaveLoadTool saver = new SaveLoadTool();
+	
+	saver.AddPBoxs("encrypt", pboxs);
+	saver.AddSBoxes("encrypt", sboxs);
+	saver.AddXors("encrypt", xors);
+	saver.AddConnections("encrypt", connections);
+	
+	
+	saver.AddPBoxs("decrypt", decpboxs);
+	saver.AddSBoxes("decrypt", decsboxs);
+	saver.AddXors("decrypt", decxors);
+	saver.AddConnections("decrypt", decconnections);
+	
+	saver.AddPBoxs("keygen", keypboxs);
+	saver.AddSBoxes("keygen", keysboxs);
+	saver.AddXors("keygen", keyxors);
+	saver.AddConnections("keygen", keyconnections);
+	saver.AddSubkeys("keygen", subKeys);
+	saver.AddProperties("1", "1", "1", "counter", "zero padding", "0", "-1");
+	//saver.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	
+	System.out.println("Saving");
+	saver.saveAsXml("./../CodeBlocksBackEnd/bin/debug/Save.xml");
+	saver.saveMultipleAsXml("./../CodeBlocksBackEnd/bin/debug/CipherEncrypt.xml", "./../CodeBlocksBackEnd/bin/debug/CipherDecrypt.xml", 
+		"./../CodeBlocksBackEnd/bin/debug/CipherKeygen.xml", "./../CodeBlocksBackEnd/bin/debug/CipherProperties.xml");
+	
+	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
+	ProcessBuilder launcher;
+	try {
+	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "/CodeBlocksBackEnd", directory.getCanonicalPath() + "/save.xml");
+	    launcher.directory(directory);
+	    
+	    try {
+		System.out.println(launcher.directory().getCanonicalPath());
+		launcher.start();
+	    } catch (Exception e) {
+		//do nothing
+		e.printStackTrace();
+	    } finally {
+		File maincpp = new File(launcher.directory().getCanonicalPath() + "/main.cpp");
+		File blockcpp = new File( launcher.directory().getCanonicalPath() + "/block.cpp" );
+		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
+		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
+		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "C:\\Program Files\\boost\\boost_1_55_0", "-o", "cipher.exe");
+		}
+	    }
+	    
+	} catch (Exception e) {
+	    
+	}
+	
     }
     
     

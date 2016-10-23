@@ -53,8 +53,8 @@ public class SaveWrapper {
 	return this.decryptionCipher;
     }
     
-    public void setDecryptionCipher(CipherWrapper DencryptionCipher) {
-	this.decryptionCipher = DencryptionCipher;
+    public void setDecryptionCipher(CipherWrapper DecryptionCipher) {
+	this.decryptionCipher = DecryptionCipher;
     }
     
     @XmlElementDecl(namespace="", name="keygen")

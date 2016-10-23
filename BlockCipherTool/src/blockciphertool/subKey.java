@@ -38,7 +38,7 @@ public class subKey extends DragNode{
     }
     
     public void setId(int newId) {
-        String keyString = "k" + String.valueOf(newId);
+        String keyString = String.valueOf(newId);
         setId(keyString);
         main_parent.updateKeyIdCounter();
     }

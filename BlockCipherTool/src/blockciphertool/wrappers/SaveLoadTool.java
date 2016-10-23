@@ -34,41 +34,17 @@ public class SaveLoadTool {
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
-	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
+	    temp.AddProperties("1", "16", "16", "counter", "zero padding", "1", "2");
 	    saveWrapper.setEncryptionCipher(temp);
 	} else if( wrapperType.equals( "decrypt" ) ) {
 	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
-	    temp.AddProperties("2", "64", "16", "counter", "zero padding", "1", "2");
+	    temp.AddProperties("1", "16", "16", "counter", "zero padding", "1", "2");
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
 	    
-	}
-    }
-    public void AddProperties(String wrapperType, String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
-	if ( wrapperType.equals( "encrypt" ) ) {
-	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
-	    if (temp == null) {
-		temp = new CipherWrapper();
-	    }
-	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
-	    saveWrapper.setEncryptionCipher(temp);
-	} else if( wrapperType.equals( "decrypt" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
-	    if (temp == null) {
-		temp = new CipherWrapper();
-	    }
-	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
-	    saveWrapper.setDecryptionCipher(temp);
-	} else if( wrapperType.equals( "save" ) ) {
-	    CipherWrapper temp = saveWrapper.getEncryptionCipher();
-	    if (temp == null) {
-		temp = new CipherWrapper();
-	    }
-	    temp.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
-	    saveWrapper.setProperties(temp.getProperties());
 	}
     }
     
@@ -88,7 +64,7 @@ public class SaveLoadTool {
 	    temp.AddPBoxs(pboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    CipherWrapper temp = saveWrapper.getKeygen();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
@@ -113,7 +89,7 @@ public class SaveLoadTool {
 	    temp.AddSBoxes(sboxs);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    CipherWrapper temp = saveWrapper.getKeygen();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
@@ -138,7 +114,7 @@ public class SaveLoadTool {
 	    temp.AddXors(xors);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    CipherWrapper temp = saveWrapper.getKeygen();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
@@ -163,7 +139,7 @@ public class SaveLoadTool {
 	    temp.AddConnections(connections);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    CipherWrapper temp = saveWrapper.getKeygen();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
@@ -188,7 +164,7 @@ public class SaveLoadTool {
 	    temp.AddKeys(subkeys);
 	    saveWrapper.setDecryptionCipher(temp);
 	} else if( wrapperType.equals( "keygen" ) ) {
-	    CipherWrapper temp = saveWrapper.getDecryptionCipher();
+	    CipherWrapper temp = saveWrapper.getKeygen();
 	    if (temp == null) {
 		temp = new CipherWrapper();
 	    }
@@ -200,6 +176,18 @@ public class SaveLoadTool {
     
     public void AddProperties(PropertiesWrapper Properties) {
 	this.saveWrapper.setProperties(Properties);
+    }
+    
+    public void AddProperties(String NumRounds, String BlockSize, String KeySize, String ChainMode, String Padding, String StartId, String EndId ) {
+	PropertiesWrapper properties = this.saveWrapper.getProperties();
+	properties.setNumberOfRounds(NumRounds);
+	properties.setBlockSize(BlockSize);
+	properties.setKeySize(KeySize);
+	properties.setChainMode(ChainMode);
+	properties.setPadding(Padding);
+	properties.setStartId(StartId);
+	properties.setEndId(EndId);
+	this.saveWrapper.setProperties(properties);
     }
     
     public void loadAsXml(String filename) {

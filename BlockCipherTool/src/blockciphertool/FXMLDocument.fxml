@@ -206,82 +206,7 @@
                                                          <children>
                                                             <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="305.0" prefWidth="198.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="14.0">
                                                                <content>
-                                                                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="192.0">
-                                                                     <children>
-                                                                        <Accordion prefHeight="303.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                           <panes>
-                                                                              <TitledPane prefHeight="203.0" text="Number of Rounds">
-                                                                                 <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0">
-                                                                                       <children>
-                                                                                          <TextField fx:id="numRounds2" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
-                                                                              <TitledPane text="Key Size">
-                                                                                 <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
-                                                                                       <children>
-                                                                                          <TextField fx:id="keySize2" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
-                                                                              <TitledPane layoutX="10.0" layoutY="60.0" text="Chain Mode">
-                                                                                 <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
-                                                                                       <children>
-                                                                                          <Group>
-                                                                                             <children>
-                                                                                                <RadioButton fx:id="dc1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
-                                                                                                   <toggleGroup>
-                                                                                                      <ToggleGroup fx:id="chainMode2" />
-                                                                                                   </toggleGroup></RadioButton>
-                                                                                                <RadioButton fx:id="dc2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode2" />
-                                                                                                <RadioButton fx:id="dc3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode2" />
-                                                                                                <RadioButton fx:id="dc4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode2" />
-                                                                                                <RadioButton fx:id="dc5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode2" />
-                                                                                                <RadioButton fx:id="dc6" layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode2" />
-                                                                                             </children>
-                                                                                          </Group>
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
-                                                                              <TitledPane layoutX="10.0" layoutY="85.0" minHeight="-Infinity" minWidth="-Infinity" text="Padding">
-                                                                                 <content>
-                                                                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                                                       <children>
-                                                                                          <Group>
-                                                                                             <children>
-                                                                                                <RadioButton fx:id="dp1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding">
-                                                                                                   <toggleGroup>
-                                                                                                      <ToggleGroup fx:id="padding2" />
-                                                                                                   </toggleGroup></RadioButton>
-                                                                                                <RadioButton fx:id="dp2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$padding2" />
-                                                                                                <RadioButton fx:id="dp3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$padding2" />
-                                                                                                <RadioButton fx:id="dp4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$padding2" />
-                                                                                                <RadioButton fx:id="dp5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923" toggleGroup="$padding2" />
-                                                                                             </children>
-                                                                                          </Group>
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
-                                                                              <TitledPane text="Block Size">
-                                                                                 <content>
-                                                                                    <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0">
-                                                                                       <children>
-                                                                                          <TextField fx:id="blockSize2" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
-                                                                           </panes>
-                                                                        </Accordion>
-                                                                     </children>
-                                                                  </AnchorPane>
+                                                                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="192.0" />
                                                                </content>
                                                             </ScrollPane>
                                                          </children>
@@ -376,7 +301,7 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#listpboxes" prefHeight="55.0" prefWidth="250.0" text="Generate" GridPane.columnIndex="2">
+                        <Button mnemonicParsing="false" onAction="#generateFunctions" prefHeight="55.0" prefWidth="250.0" text="Generate" GridPane.columnIndex="2">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>

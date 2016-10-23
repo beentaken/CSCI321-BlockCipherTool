@@ -120,7 +120,7 @@ public class CipherWrapper {
 		
 	for (int i=0; i<pboxs.size(); i++) {
 	    String outputData[];
-	    outputData = pboxs.get(i).getOptions().getLookupTable().split(",");
+	    outputData = pboxs.get(i).getOptions().getLookupTable().split(";\n");
 	    
 	    pboxWrapper pbox = new pboxWrapper();
 	    pbox.setId(pboxs.get(i).getId());
@@ -133,7 +133,7 @@ public class CipherWrapper {
 	    List<output> wrapperOutputs = new ArrayList<output>();
 	    for (int j=0; j<inputs.size(); j++) {
 	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
+	       input.setConnectorID( inputs.get(j).getSourceId() );
 	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
 	       wrapperInputs.add(input);
 	    }
@@ -141,7 +141,7 @@ public class CipherWrapper {
 	    for (int j=0; j<outputs.size(); j++) {
 		
 		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
+		output.setConnectorID(outputs.get(j).getSourceId() );
 		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
 		output.setOutputData(outputData[i]);
 		wrapperOutputs.add(output);
@@ -174,7 +174,7 @@ public class CipherWrapper {
 	
 	for (int i=0; i<sboxs.size(); i++) {
 	    String outputData[];
-	    outputData = sboxs.get(i).getOptions().getLookupTable().split(",\n");
+	    outputData = sboxs.get(i).getOptions().getLookupTable().split(";\n");
 
 	    
 	    sboxWrapper sbox = new sboxWrapper();
@@ -189,14 +189,14 @@ public class CipherWrapper {
 	    List<output> wrapperOutputs = new ArrayList<output>();
 	    for (int j=0; j<inputs.size(); j++) {
 	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
+	       input.setConnectorID( inputs.get(j).getSourceId() );
 	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
 	       wrapperInputs.add(input);
 	    }
 	   
 	    for (int j=0; j<outputs.size(); j++) {
 		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
+		output.setConnectorID(outputs.get(j).getSourceId() );
 		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
 		wrapperOutputs.add(output);
 	    }
@@ -253,14 +253,14 @@ public class CipherWrapper {
 	    List<output> wrapperOutputs = new ArrayList<output>();
 	    for (int j=0; j<inputs.size(); j++) {
 	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
+	       input.setConnectorID( inputs.get(j).getSourceId() );
 	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
 	       wrapperInputs.add(input);
 	    }
 	   
 	    for (int j=0; j<outputs.size(); j++) {
 		output output = new output();
-		output.setConnectorID(outputs.get(j).getLinkID() );
+		output.setConnectorID(outputs.get(j).getSourceId() );
 		output.setSize( Integer.parseInt( outputs.get(j).getConnectionSize() ) );
 		wrapperOutputs.add(output);
 	    }
@@ -296,7 +296,7 @@ public class CipherWrapper {
 	    List<input> wrapperInputs = new ArrayList<input>();
 	    for (int j=0; j<inputs.size(); j++) {
 	       input input = new input();
-	       input.setConnectorID( inputs.get(j).getLinkID() );
+	       input.setConnectorID( inputs.get(j).getSourceId() );
 	       input.setSize( Integer.parseInt( inputs.get(j).getConnectionSize() ) );
 	       wrapperInputs.add(input);
 	    }
