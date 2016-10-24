@@ -112,15 +112,14 @@
                                                                                        <children>
                                                                                           <Group>
                                                                                              <children>
-                                                                                                <RadioButton fx:id="c1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
+                                                                                                <RadioButton fx:id="c1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchChainMode" selected="true" text="Electronic Codebook">
                                                                                                    <toggleGroup>
                                                                                                       <ToggleGroup fx:id="chainMode" />
                                                                                                    </toggleGroup></RadioButton>
-                                                                                                <RadioButton fx:id="c2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode" />
-                                                                                                <RadioButton fx:id="c3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode" />
-                                                                                                <RadioButton fx:id="c4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode" />
-                                                                                                <RadioButton fx:id="c5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode" />
-                                                                                                <RadioButton fx:id="c6" layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" onAction="#switchChainMode" text="Cipher Block Chaining" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" onAction="#switchChainMode" text="Cipher Feedback" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#switchChainMode" text="Output Feedback" toggleGroup="$chainMode" />
+                                                                                                <RadioButton fx:id="c5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#switchChainMode" text="Counter" toggleGroup="$chainMode" />
                                                                                              </children>
                                                                                           </Group>
                                                                                        </children>
@@ -133,14 +132,14 @@
                                                                                        <children>
                                                                                           <Group>
                                                                                              <children>
-                                                                                                <RadioButton fx:id="p1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding">
+                                                                                                <RadioButton fx:id="p1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchPadding" selected="true" text="Zero padding">
                                                                                                    <toggleGroup>
                                                                                                       <ToggleGroup fx:id="padding" />
                                                                                                    </toggleGroup></RadioButton>
-                                                                                                <RadioButton fx:id="p2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$padding" />
-                                                                                                <RadioButton fx:id="p3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$padding" />
-                                                                                                <RadioButton fx:id="p4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$padding" />
-                                                                                                <RadioButton fx:id="p5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p2" layoutX="14.0" layoutY="31.0" mnemonicParsing="false" onAction="#switchPadding" text="PKCS7" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p3" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" onAction="#switchPadding" text="ISO 10126" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p4" layoutX="14.0" layoutY="65.0" mnemonicParsing="false" onAction="#switchPadding" text="ISO/IEC 7816-4" toggleGroup="$padding" />
+                                                                                                <RadioButton fx:id="p5" layoutX="14.0" layoutY="82.0" mnemonicParsing="false" onAction="#switchPadding" text="ANSI X.923" toggleGroup="$padding" />
                                                                                              </children>
                                                                                           </Group>
                                                                                        </children>
@@ -309,7 +308,7 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Cryptanalysis" GridPane.columnIndex="3">
+                        <Button mnemonicParsing="false" onAction="#cryptanalysis" prefHeight="55.0" prefWidth="250.0" text="Cryptanalysis" GridPane.columnIndex="3">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -317,7 +316,7 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="250.0" text="Performance" GridPane.columnIndex="4">
+                        <Button mnemonicParsing="false" onAction="#performance" prefHeight="55.0" prefWidth="250.0" text="Performance" GridPane.columnIndex="4">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>

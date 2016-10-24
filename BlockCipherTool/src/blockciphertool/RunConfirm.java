@@ -79,8 +79,10 @@ public class RunConfirm extends AnchorPane{
 	    encryptionFilename = input.getText();
 	    cipherKey = key.getText();
 	    
-	    fixthis;
-	    //encryptionMode = get this from toggles
+            if (encrypt.isSelected())
+                encryptionMode = "1";
+            else 
+                encryptionMode = "2";
 	    
 	    launcher = new ProcessBuilder( "cipher.exe", encryptionMode, blocksize, encryptionFilename, chainMode, cipherKey  );
 	    launcher.directory(directory);

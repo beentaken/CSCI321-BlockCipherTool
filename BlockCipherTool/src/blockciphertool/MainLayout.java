@@ -45,6 +45,7 @@ import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -73,13 +74,16 @@ public class MainLayout extends AnchorPane{
     @FXML Tab decrypt_tab;
     @FXML Tab key_tab;
     
+    //toggle groups
+    @FXML ToggleGroup chainMode;
+    @FXML ToggleGroup padding;
+    
     //Chain Mode Radio Buttons
     @FXML RadioButton c1;
     @FXML RadioButton c2;
     @FXML RadioButton c3;
     @FXML RadioButton c4;
     @FXML RadioButton c5;
-    @FXML RadioButton c6;
     
     //Padding Radio Buttons
     @FXML RadioButton p1;
@@ -87,6 +91,9 @@ public class MainLayout extends AnchorPane{
     @FXML RadioButton p3;
     @FXML RadioButton p4;
     @FXML RadioButton p5;
+    
+    int padNum;
+    int chainNum;
     
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
@@ -183,6 +190,8 @@ public class MainLayout extends AnchorPane{
         eKeyExists = false;
         dKeyExists = false;
         tabMode = tabType.encrypt;
+        chainNum = 1;
+        padNum = 1;
     }
     
     /**
@@ -1292,10 +1301,9 @@ public class MainLayout extends AnchorPane{
         //assign conversion function returned lists to 
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
-        RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
-	
-	fixthis;
-	//RunConfirm confirm = new RunConfirm(blockSize.getText(), chainMode, padding);  get this from toggles
+        //RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
+        
+	RunConfirm confirm = new RunConfirm(blockSize.getText(), String.valueOf(chainNum), String.valueOf(padNum));  //get this from toggles
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();
@@ -1441,4 +1449,37 @@ public class MainLayout extends AnchorPane{
         System.out.println(tabMode);
     }
     
+    /**
+    * @author Alex
+    */    
+    @FXML
+    public void switchPadding() {
+        if (p1.isSelected())
+            padNum = 1;
+        else if (p2.isSelected())
+            padNum = 2;
+        else if (p3.isSelected())
+            padNum = 3;
+        else if (p4.isSelected())
+            padNum = 4;
+        else if (p5.isSelected())
+            padNum = 5;
+    }
+    
+    /**
+    * @author Alex
+    */    
+    @FXML
+    public void switchChainMode() {
+        if (c1.isSelected())
+            chainNum = 1;
+        else if (c2.isSelected())
+            chainNum = 2;
+        else if (c3.isSelected())
+            chainNum = 3;
+        else if (c4.isSelected())
+            chainNum = 4;
+        else if (c5.isSelected())
+            chainNum = 5;
+    }
 }
