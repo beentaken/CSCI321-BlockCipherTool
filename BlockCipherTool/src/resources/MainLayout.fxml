@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<fx:root fx:id="root_pane" minHeight="200.0" minWidth="200.0" stylesheets="@application.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <SplitPane fx:id="base_pane" dividerPositions="0.7979576951130561" prefHeight="654.0" prefWidth="1373.0">
+          <items>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                 <children>
+                    <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="1063.0">
+                       <content>
+                          <AnchorPane fx:id="main_window" prefHeight="624.0" prefWidth="1061.0" />
+                       </content></ScrollPane>
+                 </children>
+              </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="652.0" prefWidth="226.0">
+                 <children>
+                    <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="305.0" prefWidth="244.0">
+                       <content>
+                          <VBox fx:id="node_list" prefHeight="303.0" prefWidth="242.0" />
+                       </content></ScrollPane>
+                    <ScrollPane layoutX="14.0" layoutY="333.0" prefHeight="305.0" prefWidth="244.0">
+                      <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="303.0" prefWidth="242.0">
+                             <children>
+                              <Accordion layoutX="12.0" layoutY="16.0" prefHeight="278.0" prefWidth="218.0">
+                                <panes>
+                                  <TitledPane animated="false" text="Number of Rounds">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="200.0">
+                                             <children>
+                                                  <TextField fx:id="numRounds" layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Block Size">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TextField fx:id="blockSize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" prefWidth="191.0" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Key Size">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TextField layoutX="13.0" layoutY="14.0" onAction="#keySize" prefHeight="25.0" prefWidth="191.0" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                    <TitledPane animated="false" layoutX="10.0" layoutY="60.0" text="Chain Mode">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Electronic Codebook">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="chainMode" />
+                                                   </toggleGroup></RadioButton>
+                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="Cipher Block Chaining" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Propagating CBC" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="Cipher Feedback" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="Output Feedback" toggleGroup="$chainMode" />
+                                                <RadioButton layoutX="14.0" layoutY="99.0" mnemonicParsing="false" text="Counter" toggleGroup="$chainMode" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" layoutX="10.0" layoutY="85.0" text="Padding">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <RadioButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" text="ANSI X.923">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="Padding" />
+                                                   </toggleGroup></RadioButton>
+                                                <RadioButton layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="PKCS7" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="31.0" mnemonicParsing="false" text="ISO 10126" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="65.0" mnemonicParsing="false" text="ISO/IEC 7816-4" toggleGroup="$Padding" />
+                                                <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding" toggleGroup="$Padding" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                </panes>
+                              </Accordion>
+                             </children>
+                          </AnchorPane>
+                      </content>
+                    </ScrollPane>
+                 </children>
+              </AnchorPane>
+          </items>
+        </SplitPane>
+    </children>
+</fx:root>

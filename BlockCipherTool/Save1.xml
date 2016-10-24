@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cipher>
+    <pbox ID="99fef86d-c867-4df0-9e9d-c7fd367d20eb">
+        <X>452</X>
+        <Y>170</Y>
+    </pbox>
+    <sbox ID="b005974c-1e5f-460e-ad28-3112c2f20edb">
+        <X>800</X>
+        <Y>165</Y>
+    </sbox>
+    <xor ID="77c25268-52a0-4870-9536-b36a0181ba2b">
+        <X>633</X>
+        <Y>268</Y>
+    </xor>
+</cipher>

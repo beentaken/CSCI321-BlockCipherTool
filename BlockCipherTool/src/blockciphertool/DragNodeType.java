@@ -1,0 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package blockciphertool;
+
+/**
+ *
+ * @author Alex
+ */
+public enum DragNodeType {
+    Start,
+    pbox,
+    sbox,
+    xor,
+    end,
+    key,
+    subkey,
+    yellow,
+    purple,
+    grey,
+}

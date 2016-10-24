@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<decrypt>
+    <properties>
+        <blockSize>64</blockSize>
+        <chainMode>counter</chainMode>
+        <endID>2</endID>
+        <keySize>16</keySize>
+        <numberOfRounds>2</numberOfRounds>
+        <padding>zero padding</padding>
+        <startID>1</startID>
+    </properties>
+</decrypt>

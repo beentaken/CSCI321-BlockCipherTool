@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<encrypt>
-    <properties/>
-</encrypt>
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<decrypt>
-    <properties/>
-</decrypt>
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<keygen>
-    <properties/>
-</keygen>
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <propertiesWrapper>
     <blockSize>1</blockSize>
     <chainMode>counter</chainMode>
