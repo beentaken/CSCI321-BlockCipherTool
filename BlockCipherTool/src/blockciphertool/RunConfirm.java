@@ -6,6 +6,7 @@
 package blockciphertool;
 
 import blockciphertool.wrappers.CipherWrapper;
+import blockciphertool.wrappers.PropertiesWrapper;
 import blockciphertool.wrappers.SaveLoadTool;
 import java.io.File;
 import javafx.fxml.FXML;
@@ -32,9 +33,11 @@ public class RunConfirm extends AnchorPane{
     @FXML Button run;
     @FXML Button cancel;
     
-     private SaveLoadTool save = null;
-    
-     
+    String encryptionMode;
+    String encryptionFilename;
+    String cipherKey;
+    String blocksize;
+    String chainMode;
     /**
     * @author Alex
     */     
@@ -45,8 +48,9 @@ public class RunConfirm extends AnchorPane{
     /**
     * @author Alex
     */     
-    public RunConfirm(SaveLoadTool Save){
-        this.save = Save;
+    public RunConfirm(String BlockSize, String ChainMode){
+	this.blocksize = BlockSize;
+	this.chainMode = ChainMode;
     }
     
     
@@ -69,9 +73,11 @@ public class RunConfirm extends AnchorPane{
 	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
 	ProcessBuilder launcher;
 	try {
-		//Process should be  "full path to cipher.exe", "get mode from toggle buttons", "blocksize from properties" ,
-		    //"filename of file to encrypt", "chain from props", "padding from props", "key to use in plaintext"
-	    launcher = new ProcessBuilder( directory.getCanonicalPath() + "/Cipher.exe", directory.getCanonicalPath() + "/save.xml");
+	
+	    encryptionFilename = input.getText();
+	    cipherKey = key.getText();
+	    //encryptionMode = 
+	    launcher = new ProcessBuilder( "cipher.exe", encryptionMode, blocksize, encryptionFilename, chainMode, cipherKey  );
 	    launcher.directory(directory);
 	    
 	    try {

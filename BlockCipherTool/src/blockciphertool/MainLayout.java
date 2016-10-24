@@ -1293,6 +1293,9 @@ public class MainLayout extends AnchorPane{
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
         RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
+	
+	
+	//RunConfirm confirm = new RunConfirm(blockSize.getText(), chainMode);
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();

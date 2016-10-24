@@ -97,15 +97,6 @@
                                                                                     </AnchorPane>
                                                                                  </content>
                                                                               </TitledPane>
-                                                                              <TitledPane text="Key Size">
-                                                                                 <content>
-                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
-                                                                                       <children>
-                                                                                          <TextField fx:id="keySize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </content>
-                                                                              </TitledPane>
                                                                               <TitledPane layoutX="10.0" layoutY="60.0" text="Chain Mode">
                                                                                  <content>
                                                                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
@@ -131,7 +122,7 @@
                                                                                  <content>
                                                                                     <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                        <children>
-                                                                                          <Group>
+                                                                                          <Group fx:id="paddingToggleButtons">
                                                                                              <children>
                                                                                                 <RadioButton fx:id="p1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Zero padding">
                                                                                                    <toggleGroup>
@@ -152,6 +143,15 @@
                                                                                     <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0">
                                                                                        <children>
                                                                                           <TextField fx:id="blockSize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </content>
+                                                                              </TitledPane>
+                                                                              <TitledPane text="Key Size">
+                                                                                 <content>
+                                                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0">
+                                                                                       <children>
+                                                                                          <TextField fx:id="keySize" layoutX="13.0" layoutY="14.0" prefHeight="25.0" />
                                                                                        </children>
                                                                                     </AnchorPane>
                                                                                  </content>
