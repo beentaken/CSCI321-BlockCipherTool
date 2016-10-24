@@ -38,6 +38,7 @@ import blockciphertool.wrappers.SaveLoadTool;
 import blockciphertool.wrappers.pboxWrapper;
 import blockciphertool.wrappers.sboxWrapper;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Node;
@@ -1292,6 +1293,9 @@ public class MainLayout extends AnchorPane{
         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
         RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
+	
+	fixthis;
+	//RunConfirm confirm = new RunConfirm(blockSize.getText(), chainMode, padding);  get this from toggles
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();
@@ -1339,7 +1343,6 @@ public class MainLayout extends AnchorPane{
 	    launcher.directory(directory);
 	    
 	    try {
-		System.out.println(launcher.directory().getCanonicalPath());
 		launcher.start();
 	    } catch (Exception e) {
 		//do nothing
@@ -1349,16 +1352,80 @@ public class MainLayout extends AnchorPane{
 		File blockcpp = new File( launcher.directory().getCanonicalPath() + "/block.cpp" );
 		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
 		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
-		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "C:\\Program Files\\boost\\boost_1_55_0", "-o", "cipher.exe");
+		    String filelocation = "C:\\Users\\Gigabyte\\Documents\\Crypto C++ Code";
+		    launcher.directory(new File(filelocation));
+		    System.out.println(launcher.directory().getCanonicalPath());
+		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "\"C:\\Program Files\\Boost\\boost_1_62_0\"", "-o", "cipher.exe");
+		    launcher.start();
 		}
 	    }
 	    
 	} catch (Exception e) {
-	    
+
 	}
+	
 	
     }
     
+    /**
+    * @author Nick
+    */    
+    public void cryptanalysis() {
+	File directory = new File("./../CodeBlocksBackEnd/bin/debug/analysyis/");
+	ProcessBuilder launcher;
+	try {
+	    System.out.println(blockSize.getText());
+	    PrintWriter writer = new PrintWriter(directory.getCanonicalPath() + "/input.txt", "UTF-8");
+	    writer.println(blockSize.getText() + " 1");
+	    writer.close();
+		    
+	    
+	    launcher = new ProcessBuilder("BenchAnalysis.exe", " < ", "input.txt");
+	    launcher.directory(directory);
+	    
+	    try {
+		launcher.start();
+	    } catch (Exception e) {
+		//do nothing
+		e.printStackTrace();
+	    } finally {
+
+	    }
+	    
+	} catch (Exception e) {
+
+	}
+    }
+    
+    /**
+    * @author Nick
+    */    
+    public void performance() {
+	File directory = new File("./../CodeBlocksBackEnd/bin/debug/analysyis/");
+	ProcessBuilder launcher;
+	try {
+	    System.out.println(blockSize.getText());
+	    PrintWriter writer = new PrintWriter(directory.getCanonicalPath() + "/input.txt", "UTF-8");
+	    writer.println(blockSize.getText() + " 2");
+	    writer.close();
+		    
+	    
+	    launcher = new ProcessBuilder("BenchAnalysis.exe", " < ", "input.txt");
+	    launcher.directory(directory);
+	    
+	    try {
+		launcher.start();
+	    } catch (Exception e) {
+		//do nothing
+		e.printStackTrace();
+	    } finally {
+
+	    }
+	    
+	} catch (Exception e) {
+
+	}
+    }
     
     /**
     * @author Alex
