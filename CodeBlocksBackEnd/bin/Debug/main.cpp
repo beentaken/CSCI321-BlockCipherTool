@@ -704,11 +704,11 @@ int main(int argc, char** argv)
 
     if (ED==1)
     {
-        encryptMain(filename, blocksize, mode, paddingMode, keys);
+        encryptMain(filename, blocksize, mode, paddingMode, mainKey);
     }
     else if (ED==2)
     {
-        decryptMain(filename, blocksize, mode, paddingMode, keys);
+        decryptMain(filename, blocksize, mode, paddingMode, mainKey);
     }
 
 
