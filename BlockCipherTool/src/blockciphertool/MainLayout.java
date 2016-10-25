@@ -52,6 +52,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Unmarshaller;
 
 /**
@@ -1321,7 +1322,7 @@ public class MainLayout extends AnchorPane{
     }
     
     /**
-    * @author Alex
+    * @author Nick
     */    
     public void generateFunctions() {
 	SaveLoadTool saver = new SaveLoadTool();
@@ -1514,7 +1515,7 @@ public class MainLayout extends AnchorPane{
         try {
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
-            Encryption = (CipherWrapper) unmarshaller.unmarshal(file);
+            Encryption = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
 	} catch (Exception e) {
 	    System.out.println("failed to generate Encryption Cipher from file");
 	}
@@ -1534,7 +1535,7 @@ public class MainLayout extends AnchorPane{
         try {
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
-            Decryption = (CipherWrapper) unmarshaller.unmarshal(file);
+            Decryption = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
 	} catch (Exception e) {
 	    System.out.println("failed to generate Decryption Cipher from file");
 	}
@@ -1552,9 +1553,14 @@ public class MainLayout extends AnchorPane{
 	try {
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
-            key = (CipherWrapper) unmarshaller.unmarshal(file);
+            key = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
+            //System.out.println(key.getPboxs().get(0).getId());
+            
+            
+            
 	} catch (Exception e) {
 	    System.out.println("failed to generate key from file");
+            System.out.println(e);
 	}
 	
     }

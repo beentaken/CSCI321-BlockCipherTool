@@ -23,6 +23,7 @@
                   <MenuItem fx:id="propLoad" mnemonicParsing="false" onAction="#loadProperties" text="Load Properties" />
                   <MenuItem mnemonicParsing="false" text="Save" />
                   <MenuItem mnemonicParsing="false" text="Save As..." />
+                  <MenuItem mnemonicParsing="false" onAction="#loadPlug" text="Plug-ins..." />
               <MenuItem mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>
