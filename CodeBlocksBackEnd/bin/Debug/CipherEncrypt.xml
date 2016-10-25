@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <encrypt>
+    <pboxs ID="1">
+        <inputs num="1">
+            <input connectorID="0" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="1" size="8">0, 1, 2, 3, 4, 5, 6, 7</output>
+        </outputs>
+        <X>288</X>
+        <Y>213</Y>
+    </pboxs>
+    <xors ID="2">
+        <inputs num="2">
+            <input connectorID="1" size="8"/>
+            <input connectorID="k1" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="2" size="8"/>
+        </outputs>
+        <X>479</X>
+        <Y>232</Y>
+    </xors>
+    <connections ID="3">
+        <from>
+            <fromId>0</fromId>
+        </from>
+        <to>
+            <toId>1</toId>
+        </to>
+    </connections>
+    <connections ID="4">
+        <from>
+            <fromId>1</fromId>
+        </from>
+        <to>
+            <toId>2</toId>
+        </to>
+    </connections>
+    <connections ID="5">
+        <from>
+            <fromId>2</fromId>
+        </from>
+        <to>
+            <toId>-1</toId>
+        </to>
+    </connections>
+    <connections ID="6">
+        <from>
+            <fromId>k1</fromId>
+        </from>
+        <to>
+            <toId>2</toId>
+        </to>
+    </connections>
     <properties/>
 </encrypt>

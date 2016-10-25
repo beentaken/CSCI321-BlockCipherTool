@@ -37,7 +37,10 @@ import javafx.stage.Stage;
 import blockciphertool.wrappers.SaveLoadTool;
 import blockciphertool.wrappers.pboxWrapper;
 import blockciphertool.wrappers.sboxWrapper;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -1363,11 +1366,21 @@ public class MainLayout extends AnchorPane{
 		File blockcpp = new File( launcher.directory().getCanonicalPath() + "/block.cpp" );
 		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
 		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
-		    String filelocation = "C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code";
+                    System.out.println("compiling c++ code");
+		    String filelocation = "C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\";
 		    launcher.directory(new File(filelocation));
 		    System.out.println(launcher.directory().getCanonicalPath());
-		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "\"C:\\Program Files(x86)\\boost\\boost_1_55_0\"", "-o", "cipher.exe");
-		    launcher.start();
+                    
+
+                    
+                    
+                    
+		    launcher = new ProcessBuilder("C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\compile.bat");
+		    System.out.println("starting");
+                    Process p = launcher.start();
+                    System.out.println("finishing");
+                    
+
 		}
 	    }
 	    
@@ -1377,6 +1390,7 @@ public class MainLayout extends AnchorPane{
 	
 	
     }
+
     
     /**
     * @author Nick

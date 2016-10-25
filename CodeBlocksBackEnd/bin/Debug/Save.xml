@@ -1,13 +1,152 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <encrypt>
+    <pboxs ID="1">
+        <inputs num="1">
+            <input connectorID="0" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="1" size="8">0, 1, 2, 3, 4, 5, 6, 7</output>
+        </outputs>
+        <X>288</X>
+        <Y>213</Y>
+    </pboxs>
+    <xors ID="2">
+        <inputs num="2">
+            <input connectorID="1" size="8"/>
+            <input connectorID="k1" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="2" size="8"/>
+        </outputs>
+        <X>479</X>
+        <Y>232</Y>
+    </xors>
+    <connections ID="3">
+        <from>
+            <fromId>0</fromId>
+        </from>
+        <to>
+            <toId>1</toId>
+        </to>
+    </connections>
+    <connections ID="4">
+        <from>
+            <fromId>1</fromId>
+        </from>
+        <to>
+            <toId>2</toId>
+        </to>
+    </connections>
+    <connections ID="5">
+        <from>
+            <fromId>2</fromId>
+        </from>
+        <to>
+            <toId>-1</toId>
+        </to>
+    </connections>
+    <connections ID="6">
+        <from>
+            <fromId>k1</fromId>
+        </from>
+        <to>
+            <toId>2</toId>
+        </to>
+    </connections>
     <properties/>
 </encrypt>
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <decrypt>
+    <pboxs ID="7">
+        <inputs num="1">
+            <input connectorID="0" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="7" size="8">0, 1, 2, 3, 4, 5, 6, 7</output>
+        </outputs>
+        <X>317</X>
+        <Y>193</Y>
+    </pboxs>
+    <xors ID="8">
+        <inputs num="2">
+            <input connectorID="k1" size="8"/>
+            <input connectorID="7" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="8" size="8"/>
+        </outputs>
+        <X>532</X>
+        <Y>193</Y>
+    </xors>
+    <connections ID="9">
+        <from>
+            <fromId>k1</fromId>
+        </from>
+        <to>
+            <toId>8</toId>
+        </to>
+    </connections>
+    <connections ID="10">
+        <from>
+            <fromId>7</fromId>
+        </from>
+        <to>
+            <toId>8</toId>
+        </to>
+    </connections>
+    <connections ID="11">
+        <from>
+            <fromId>0</fromId>
+        </from>
+        <to>
+            <toId>7</toId>
+        </to>
+    </connections>
+    <connections ID="12">
+        <from>
+            <fromId>8</fromId>
+        </from>
+        <to>
+            <toId>-1</toId>
+        </to>
+    </connections>
     <properties/>
 </decrypt>
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <keygen>
+    <pboxs ID="13">
+        <inputs num="1">
+            <input connectorID="0" size="8"/>
+        </inputs>
+        <outputs num="1">
+            <output connectorID="13" size="8">0, 1, 2, 3, 4, 5, 6, 7</output>
+        </outputs>
+        <X>369</X>
+        <Y>73</Y>
+    </pboxs>
+    <connections ID="14">
+        <from>
+            <fromId>0</fromId>
+        </from>
+        <to>
+            <toId>13</toId>
+        </to>
+    </connections>
+    <connections ID="15">
+        <from>
+            <fromId>13</fromId>
+        </from>
+        <to>
+            <toId>1</toId>
+        </to>
+    </connections>
+    <keys ID="1">
+        <inputs num="1">
+            <input connectorID="13" size="8"/>
+        </inputs>
+        <X>543</X>
+        <Y>71</Y>
+    </keys>
     <properties/>
 </keygen>
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>

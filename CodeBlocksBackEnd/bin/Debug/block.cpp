@@ -49,21 +49,22 @@ string Encrypt(string initial, string initialkey) {
 		array1[7] = 7;
 		dynamic_bitset<> result1 = PBoxOneToOne(array1, result0, 8);
 		delete [] array1;
+		dynamic_bitset<> result2 = CustomXOR(result1, resultKey);
 		returnval.erase(returnval.begin(), returnval.end());
 		for (int i = 0; i < initial.length(); i++) {
 			dynamic_bitset<> tmp;
 			for (int l = 0; l < 8; l++) {
-				tmp.push_back(result1[result1.size() - l - 1]);
+				tmp.push_back(result2[result2.size() - l - 1]);
 			}
 			unsigned long temp = tmp.to_ulong();
 			unsigned char ctemp = (unsigned char)temp;
 			returnval.insert(returnval.begin(), ctemp);
-			dynamic_bitset<> rtemp = result1;
-			rtemp.resize(result1.size() - 8);
+			dynamic_bitset<> rtemp = result2;
+			rtemp.resize(result2.size() - 8);
 			for (int l = 0; l < rtemp.size(); l++) {
-				rtemp[rtemp.size() - l - 1] = result1[result1.size() - l - 1];
+				rtemp[rtemp.size() - l - 1] = result2[result2.size() - l - 1];
 			}
-			result1 = rtemp;
+			result2 = rtemp;
 		}
 	}
 
@@ -102,32 +103,33 @@ string Decrypt(string initial, string initialkey) {
 		if (round == 0) {
 			 resultKey = result_1;
 		}
-		unsigned long * array4 = new unsigned long[8];
-		array4[0] = 0;
-		array4[1] = 1;
-		array4[2] = 2;
-		array4[3] = 3;
-		array4[4] = 4;
-		array4[5] = 5;
-		array4[6] = 6;
-		array4[7] = 7;
-		dynamic_bitset<> result4 = PBoxOneToOne(array4, result0, 8);
-		delete [] array4;
+		unsigned long * array7 = new unsigned long[8];
+		array7[0] = 0;
+		array7[1] = 1;
+		array7[2] = 2;
+		array7[3] = 3;
+		array7[4] = 4;
+		array7[5] = 5;
+		array7[6] = 6;
+		array7[7] = 7;
+		dynamic_bitset<> result7 = PBoxOneToOne(array7, result0, 8);
+		delete [] array7;
+		dynamic_bitset<> result8 = CustomXOR(result7, resultKey);
 		returnval.erase(returnval.begin(), returnval.end());
 		for (int i = 0; i < initial.length(); i++) {
 			dynamic_bitset<> tmp;
 			for (int l = 0; l < 8; l++) {
-				tmp.push_back(result4[result4.size() - l - 1]);
+				tmp.push_back(result8[result8.size() - l - 1]);
 			}
 			unsigned long temp = tmp.to_ulong();
 			unsigned char ctemp = (unsigned char)temp;
 			returnval.insert(returnval.begin(), ctemp);
-			dynamic_bitset<> rtemp = result4;
-			rtemp.resize(result4.size() - 8);
+			dynamic_bitset<> rtemp = result8;
+			rtemp.resize(result8.size() - 8);
 			for (int l = 0; l < rtemp.size(); l++) {
-				rtemp[rtemp.size() - l - 1] = result4[result4.size() - l - 1];
+				rtemp[rtemp.size() - l - 1] = result8[result8.size() - l - 1];
 			}
-			result4 = rtemp;
+			result8 = rtemp;
 		}
 	}
 
@@ -149,6 +151,34 @@ string* Keygen(string initial) {
 	result0.resize(initial.length()*8);
 	string * returnval = new string[1];
 	int counter = 0;
+		unsigned long * array13 = new unsigned long[8];
+		array13[0] = 0;
+		array13[1] = 1;
+		array13[2] = 2;
+		array13[3] = 3;
+		array13[4] = 4;
+		array13[5] = 5;
+		array13[6] = 6;
+		array13[7] = 7;
+		dynamic_bitset<> result13 = PBoxOneToOne(array13, result0, 8);
+		delete [] array13;
+		dynamic_bitset<> temporaryres13 = result13;
+		for (int i = 0; i < 1; i++) {
+			dynamic_bitset<> tmp;
+			for (int l = 0; l < 8; l++) {
+				tmp.push_back(temporaryres13[temporaryres13.size() - l - 1]);
+			}
+			unsigned long temp = tmp.to_ulong();
+			unsigned char ctemp = (unsigned char)temp;
+			returnval[counter].insert(returnval[counter].begin(), ctemp);
+			dynamic_bitset<> rtemp = temporaryres13;
+			rtemp.resize(temporaryres13.size() - 8);
+			for (int l = 0; l < rtemp.size(); l++) {
+				rtemp[rtemp.size() - l - 1] = temporaryres13[temporaryres13.size() - l - 1];
+			}
+			temporaryres13 = rtemp;
+		}
+		counter++;
 
 	return returnval;
 }

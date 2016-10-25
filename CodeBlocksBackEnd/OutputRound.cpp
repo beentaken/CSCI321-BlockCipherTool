@@ -755,35 +755,35 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
     if (headerfile.is_open() && hfile.is_open() && codefile.is_open() && cfile.is_open()) {
 
         /**< Header file copy start */
-        for (int i = 0; i < 12; i++) {
+ /*       for (int i = 0; i < 12; i++) {
             getline(hfile, str);
             headerfile << str;
             headerfile << "\n";
         }
 
         /**< Cpp file copy start */
-        for (int i = 0; i < 16; i++) {
+/*        for (int i = 0; i < 16; i++) {
             getline(cfile, str);
             codefile << str;
             codefile << "\n";
         }
 
         /**< Check Node present and outputs related function */
-         if (NodeTypes[2] == true) {
+/*         if (NodeTypes[2] == true) {
             /**< Header file copy XOR*/
-            getline(hfile, str);
+/*            getline(hfile, str);
             headerfile << str;
             headerfile << "\n";
 
             /**< Cpp file copy */
-            for (int i = 0; i < 19; i++) {
+/*            for (int i = 0; i < 19; i++) {
                 getline(cfile, str);
                 codefile << str;
                 codefile << "\n";
             }
         } else {
             /**< Skips the xor block */
-            getline(hfile, str);
+/*            getline(hfile, str);
 
             for (int i = 0; i < 19; i++) {
                 getline(cfile, str);
@@ -792,19 +792,19 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
         if (NodeTypes[1] == true) {
             /**< Header file copy SBOX*/
-            getline(hfile, str);
+/*            getline(hfile, str);
             headerfile << str;
             headerfile << "\n";
 
             /**< Cpp file copy */
-            for (int i = 0; i < 71; i++) {
+/*            for (int i = 0; i < 71; i++) {
                 getline(cfile, str);
                 codefile << str;
                 codefile << "\n";
             }
         } else {
             /**< Skips SBOX block */
-            getline(hfile, str);
+/*            getline(hfile, str);
 
             for (int i = 0; i < 71; i++) {
                 getline(cfile, str);
@@ -813,21 +813,21 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
 
         if (NodeTypes[0] == true) {
             /**< Header file copy PBOX*/
-            for (int i = 0; i < 3; i++) {
+/*            for (int i = 0; i < 3; i++) {
                 getline(hfile, str);
                 headerfile << str;
                 headerfile << "\n";
             }
 
             /**< Cpp file copy */
-            for (int i = 0; i < 121; i++) {
+/*            for (int i = 0; i < 121; i++) {
                 getline(cfile, str);
                 codefile << str;
                 codefile << "\n";
             }
         } else {
             /**< Skip PBox */
-            for (int i = 0; i < 3; i++) {
+/*            for (int i = 0; i < 3; i++) {
                 getline(hfile, str);
             }
 
@@ -855,6 +855,8 @@ void OutputRound::OutputGenerics(bool NodeTypes[]) {
         headerfile.close();
         cfile.close();
         codefile.close();
+
+
     }
 
     /**< Copies main file for modes */

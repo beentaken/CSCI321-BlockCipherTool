@@ -87,7 +87,7 @@ public class NodeLink extends AnchorPane {
         /*double[] arrowShape = new double[] { 0,0,10,20,-10,20 };
         
         arr = new Arrow(node_link, 0.5f, arrowShape);
-        main_parent.getChildren().add(arr);
+        self.getParent().
         arr.update();*/
     }
     

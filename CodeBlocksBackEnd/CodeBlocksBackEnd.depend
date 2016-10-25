@@ -1178,3 +1178,58 @@
 	"boost/limits.hpp"
 	"boost/config.hpp"
 
+1477300198 source:c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\genericfunctions.cpp
+	"GenericFunctions.h"
+	<iostream>
+	<string>
+	<sstream>
+	<algorithm>
+	<boost/dynamic_bitset.hpp>
+
+1477300198 c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\genericfunctions.h
+	<string>
+	<boost/dynamic_bitset.hpp>
+
+1477300198 source:c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\main.cpp
+	<iostream>
+	<string>
+	"OutputRound.h"
+
+1477300198 c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\outputround.h
+	<string>
+	"OutputFunctions.h"
+
+1477300198 c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\outputfunctions.h
+	<string>
+	"XMLParser.h"
+
+1477300198 c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\xmlparser.h
+	<iostream>
+	<string>
+	<vector>
+
+1477300198 source:c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\outputfunctions.cpp
+	"OutputFunctions.h"
+	<iostream>
+	<fstream>
+	<string>
+	<Shlwapi.h>
+	<windows.h>
+
+1477300198 source:c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\xmlparser.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<sstream>
+	<algorithm>
+	<vector>
+	"XMLParser.h"
+
+1477358134 source:c:\users\csit321lm01a\desktop\csci321-blockciphertool\codeblocksbackend\outputround.cpp
+	"OutputRound.h"
+	<iostream>
+	<fstream>
+	<string>
+	<sstream>
+	<algorithm>
+

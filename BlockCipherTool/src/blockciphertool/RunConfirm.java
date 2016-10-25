@@ -72,7 +72,7 @@ public class RunConfirm extends AnchorPane{
     @FXML
     private void runButtonAction() {
 
-	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
+	File directory = new File("C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\");
 	ProcessBuilder launcher;
 	try {
 	

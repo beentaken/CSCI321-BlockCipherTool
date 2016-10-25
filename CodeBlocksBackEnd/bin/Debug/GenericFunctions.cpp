@@ -15,6 +15,96 @@ using namespace std;                /**< Uses standard namespace */
 using namespace boost;              /**< Uses the boost namespace */
 
 /** \brief
+ * CustomXOR takes in two inputs, makes them the same size and the XORs them together.
+ * It uses strings to xor them together
+ *
+ * \param
+ * A is input one
+ *
+ * \param
+ * B is input two
+ *
+ * \return
+ * Returns dynamic bitset that has the result of A XOR B
+ *
+ */
+
+dynamic_bitset<> CustomXOR(dynamic_bitset<> A, dynamic_bitset<> B) {
+    return A^B;
+}
+
+/** \brief
+ * CustomSBoxSearch takes in the SBOX table, the input and the table rows and columns and output size
+ *
+ * \param
+ * Sbox is the table that holds all the values and look ups
+ *
+ * \param
+ * input is the input used to look up the table
+ *
+ * \param
+ * rows is the number of table rows
+ *
+ * \param
+ * cols is the number of table columns
+ *
+ * \param
+ * outputsize is the length of the output
+ *
+ * \return
+ * Returns a dynamic bitset with the value at the table position where the row value and column value meet
+ *
+ */
+
+dynamic_bitset<> CustomSBoxSearch(unsigned long** Sbox, dynamic_bitset<> input, int rows, int cols, int outputsize) {
+    /**< Extract first digit and last digit from the input */
+    int firstdigit = input[input.size()-1];
+    int lastdigit = input[0];
+
+    /**< Create column ID by taking input and leaving out the final and starting digit */
+    int colID = 0;
+    int tens = 1;
+    for (int i = 1; i < (input.size() - 2); i++) {
+        colID = colID + (input[i] * tens);
+        tens = tens * 10;
+    }
+
+    /**< Create row ID by using the final and starting digit of the input */
+    int rowID = (firstdigit * 10) + lastdigit;
+    int rowpos = 0;
+    int colpos = 0;
+
+    /**< Find the row position in the table where the ID is */
+    for (int i = 0; i < rows; i++) {
+        if (Sbox[i][0] == rowID) {
+            rowpos = i;
+        }
+    }
+
+    /**< Find the column position in the table where the col ID is */
+    for (int i = 0; i < cols; i++) {
+        if (Sbox[0][i] == colID) {
+            colpos = i;
+        }
+    }
+
+    /**< Converts the binary in the sbox to a decimal */
+    unsigned long binary = Sbox[rowpos][colpos];
+    unsigned long decimal = 0;
+    for (int i = 0; i < outputsize; i++) {
+        if ((binary % 10) == 1) {
+            decimal += (1 << i);
+        }
+
+        binary /= 10;
+    }
+
+    /**< Return the value at the table position needs decimal*/
+    dynamic_bitset<> res(outputsize, decimal);
+    return res;
+}
+
+/** \brief
  * PBoxOneToOne switches the bits of a PBox with one input and one output
  *
  * \param
@@ -134,6 +224,7 @@ dynamic_bitset<> PBoxSingleOut(unsigned long* inputs, int numofInputs, int input
     /**< Returns result */
     return result;
 }
+
 
 
 
