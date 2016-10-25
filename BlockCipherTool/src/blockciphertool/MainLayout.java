@@ -1547,4 +1547,9 @@ public class MainLayout extends AnchorPane{
         
         
     }
+    
+    @FXML
+    public void loadPlug() {
+        
+    }
 }
