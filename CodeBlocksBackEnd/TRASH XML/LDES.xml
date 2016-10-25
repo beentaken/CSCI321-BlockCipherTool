@@ -1,0 +1,108 @@
+<cipher>
+	<properties>
+		<startId>1<startID>
+		<endId><endID>
+	
+		<numberOfRounds></numberOfRounds>
+		<blockSize></blockSize>
+		<keySize></keySize>
+	
+	</properties>
+
+	<pbox ID=1>
+		<X>240</X>
+		<Y>468</Y>
+		<inputs num=1>
+			<input connectorID=0 size=4></input>
+		</inputs>
+		<outputs num=2>
+			<output connectorID=1 size=2></output>
+			<output connectorID=2 size=2></output>
+		</outputs>	
+	</pbox>
+	
+	<function ID=8>
+		<X>240</X>
+		<Y>468</Y>
+		
+		<pbox ID=2>
+			<X>240</X>
+			<Y>468</Y>
+			<inputs num=1>
+				<input  connectorID=1 size=2/>
+			</inputs>
+			<table row=2 col=4>
+				00,000,01,010,10,101,11,111
+			</table>
+			<outputs num=1>
+				<output connectorID=3 size=3></output>
+			</outputs>
+		</pbox>
+		
+		<xor ID=3>
+			<X>240</X>
+			<Y>468</Y>
+			<inputs num=2>
+				<input connectorID=3 size=3></input>
+				<input connectorID=K size=3></input>
+			</inputs>
+			<outputs num=1>
+				<output connectorID=4 size=3></output>
+			</outputs>
+		</xor>
+		
+		<pbox ID=4>
+			<X>240</X>
+			<Y>468</Y>
+			<inputs num=1>
+				<input connectorID=4 size=3></input>
+			</inputs>
+			<outputs num=1>
+				<output connectorID=5 size=2></output>
+			</outputs>
+			<table row= col=>
+				
+			</table>
+		</pbox>
+		
+		<pbox ID=5>
+			<X>240</X>
+			<Y>468</Y>
+			<inputs num=1>
+				<input connectorID=5 size=2></input>
+			</inputs>
+			<outputs num=1>
+				<output connectorID=6 size=2></output>
+			</outputs>
+			<table row=2 col=4>
+				00, 00, 01, 10, 10, 01, 11, 11
+			</table>
+		</pbox>
+		
+	</function>
+	
+	<xor ID=6>
+		<X>240</X>
+		<Y>468</Y>		
+		<inputs num=2>
+			<input connectorID=6 size=2></input>
+			<input connectorID=2 size=2></input>
+		</inputs>
+		<outputs num=1>
+			<output connectorID=7 size=2></output>
+		</outputs>
+	</xor>
+	
+	<pbox ID=7>
+		<X>240</X>
+		<Y>468</Y>		
+		<inputs num=2>
+			<input connectorID=1 size=2></input>
+			<input connectorID=7 size=2></input>
+		</inputs>
+		<outputs num=1>
+			<output connectorID=0 size=4></output>
+		</outputs>
+	</pbox>
+	
+</cipher>

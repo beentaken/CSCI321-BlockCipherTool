@@ -665,6 +665,7 @@ public class MainLayout extends AnchorPane{
                             NodeLink Link = new NodeLink();
                             Link.setParent(MainLayout.this);
                             Link.setId(idCounter);
+                            Link.addArrow();
 
                             encrypt_pane.getChildren().add(0, Link);
 
@@ -848,6 +849,7 @@ public class MainLayout extends AnchorPane{
                             NodeLink Link = new NodeLink();
                             Link.setParent(MainLayout.this);
                             Link.setId(idCounter);
+                            Link.addArrow();
                             
                             decrypt_pane.getChildren().add(0, Link);
                             
@@ -1016,6 +1018,7 @@ public class MainLayout extends AnchorPane{
                             NodeLink Link = new NodeLink();
                             Link.setParent(MainLayout.this);
                             Link.setId(idCounter);
+                            Link.addArrow();
 
                             key_pane.getChildren().add(0, Link);
 
@@ -1360,10 +1363,10 @@ public class MainLayout extends AnchorPane{
 		File blockcpp = new File( launcher.directory().getCanonicalPath() + "/block.cpp" );
 		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
 		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
-		    String filelocation = "C:\\Users\\Gigabyte\\Documents\\Crypto C++ Code";
+		    String filelocation = "C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code";
 		    launcher.directory(new File(filelocation));
 		    System.out.println(launcher.directory().getCanonicalPath());
-		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "\"C:\\Program Files\\Boost\\boost_1_62_0\"", "-o", "cipher.exe");
+		    launcher = new ProcessBuilder("g++", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-Wall", "-I", "\"C:\\Program Files(x86)\\boost\\boost_1_55_0\"", "-o", "cipher.exe");
 		    launcher.start();
 		}
 	    }
@@ -1379,7 +1382,7 @@ public class MainLayout extends AnchorPane{
     * @author Nick
     */    
     public void cryptanalysis() {
-	File directory = new File("./../CodeBlocksBackEnd/bin/debug/analysyis/");
+	File directory = new File("C:\\Users\\csit321lm01a\\Desktop\\CSCI321-BlockCipherTool\\BlockCipherTool\\dist");
 	ProcessBuilder launcher;
 	try {
 	    System.out.println(blockSize.getText());
@@ -1388,7 +1391,7 @@ public class MainLayout extends AnchorPane{
 	    writer.close();
 		    
 	    
-	    launcher = new ProcessBuilder("BenchAnalysis.exe", " < ", "input.txt");
+	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "\\BenchAnalysis.exe", " < ",  directory.getCanonicalPath() + "\\input.txt");
 	    launcher.directory(directory);
 	    
 	    try {
@@ -1409,7 +1412,7 @@ public class MainLayout extends AnchorPane{
     * @author Nick
     */    
     public void performance() {
-	File directory = new File("./../CodeBlocksBackEnd/bin/debug/analysyis/");
+	File directory = new File("C:\\Users\\csit321lm01a\\Desktop\\CSCI321-BlockCipherTool\\BlockCipherTool\\dist");
 	ProcessBuilder launcher;
 	try {
 	    System.out.println(blockSize.getText());
@@ -1418,7 +1421,7 @@ public class MainLayout extends AnchorPane{
 	    writer.close();
 		    
 	    
-	    launcher = new ProcessBuilder("BenchAnalysis.exe", " < ", "input.txt");
+	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "\\BenchAnalysis.exe", " < ",  directory.getCanonicalPath() + "\\input.txt");
 	    launcher.directory(directory);
 	    
 	    try {

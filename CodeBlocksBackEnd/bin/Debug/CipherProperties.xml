@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<propertiesWrapper>
+    <blockSize>1</blockSize>
+    <chainMode>counter</chainMode>
+    <endID>-1</endID>
+    <keySize>1</keySize>
+    <numberOfRounds>1</numberOfRounds>
+    <padding>zero padding</padding>
+    <startID>0</startID>
+</propertiesWrapper>
