@@ -17,7 +17,10 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Load" />
+                  <MenuItem fx:id="encLoad" mnemonicParsing="false" onAction="#loadEncrypt" text="Load Encrypt" />
+                  <MenuItem fx:id="decLoad" mnemonicParsing="false" onAction="#loadDecrypt" text="Load Decrypt" />
+                  <MenuItem fx:id="keyLoad" mnemonicParsing="false" onAction="#loadKey" text="Load Key" />
+                  <MenuItem fx:id="propLoad" mnemonicParsing="false" onAction="#loadProperties" text="Load Properties" />
                   <MenuItem mnemonicParsing="false" text="Save" />
                   <MenuItem mnemonicParsing="false" text="Save As..." />
               <MenuItem mnemonicParsing="false" text="Exit" />
@@ -224,7 +227,7 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="334.0" prefWidth="377.0">
                                  <children>
-                                    <SplitPane fx:id="keybase_pane" dividerPositions="0.7979576951130561" prefHeight="654.0" prefWidth="1373.0">
+                                    <SplitPane fx:id="keybase_pane" dividerPositions="0.7979576951130561" prefHeight="654.0" prefWidth="1373.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <items>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>

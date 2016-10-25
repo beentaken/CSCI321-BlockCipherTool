@@ -50,6 +50,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 
 /**
  *
@@ -1498,5 +1499,52 @@ public class MainLayout extends AnchorPane{
             chainNum = 4;
         else if (c5.isSelected())
             chainNum = 5;
+    }
+    
+    @FXML
+    public void loadEncrypt() {
+        Stage stage = new Stage();
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+	File file = fileChooser.showOpenDialog(stage);
+	System.out.println("loading Encrypt");
+        
+        
+    }
+    
+    @FXML 
+    public void loadDecrypt() {
+        Stage stage = new Stage();
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+	File file = fileChooser.showOpenDialog(stage);
+	System.out.println("loading Decrypt");
+        
+        
+    }
+    
+    @FXML 
+    public void loadKey() {
+        Stage stage = new Stage();
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+	File file = fileChooser.showOpenDialog(stage);
+	System.out.println("loading Key Generator");
+        
+    }
+    
+    @FXML 
+    public void loadProperties() {
+        Stage stage = new Stage();
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
+	File file = fileChooser.showOpenDialog(stage);
+	System.out.println("loading Properties");
+        
+        
     }
 }
