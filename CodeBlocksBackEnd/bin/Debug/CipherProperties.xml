@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <propertiesWrapper>
-    <blockSize>1</blockSize>
-    <chainMode>counter</chainMode>
+    <blockSize>8</blockSize>
+    <chainMode>Cipher Feedback</chainMode>
     <endID>-1</endID>
     <keySize>1</keySize>
-    <numberOfRounds>1</numberOfRounds>
-    <padding>zero padding</padding>
+    <numberOfRounds>5</numberOfRounds>
+    <padding>PKCS7</padding>
     <startID>0</startID>
 </propertiesWrapper>

@@ -51,6 +51,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -67,12 +69,9 @@ public class MainLayout extends AnchorPane{
     @FXML VBox node_list;
     @FXML VBox dnode_list;
     @FXML VBox key_list;
-    @FXML TextField numRounds;
+    @FXML TextField roundNum;
     @FXML TextField blockSize;
     @FXML TextField keySize;
-    @FXML TextField numRounds2;
-    @FXML TextField blockSize2;
-    @FXML TextField keySize2;
     @FXML TextField keyNum;
     @FXML Tab encrypt_tab;
     @FXML Tab decrypt_tab;
@@ -1343,8 +1342,8 @@ public class MainLayout extends AnchorPane{
 	saver.AddXors("keygen", keyxors);
 	saver.AddConnections("keygen", keyconnections);
 	saver.AddSubkeys("keygen", subKeys);
-	saver.AddProperties("1", "1", "1", "counter", "zero padding", "0", "-1");
-	//saver.AddProperties(NumRounds, BlockSize, KeySize, ChainMode, Padding, StartId, EndId);
+	
+	saver.AddProperties(roundNum.getText(), blockSize.getText(), keySize.getText(), String.valueOf(chainNum), String.valueOf(padNum), "0", "-1");
 	
 	System.out.println("Saving");
 	saver.saveAsXml("./../CodeBlocksBackEnd/bin/debug/Save.xml");
@@ -1510,7 +1509,15 @@ public class MainLayout extends AnchorPane{
 	File file = fileChooser.showOpenDialog(stage);
 	System.out.println("loading Encrypt");
         
-        
+	CipherWrapper Encryption = new CipherWrapper();
+	
+        try {
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+            Encryption = (CipherWrapper) unmarshaller.unmarshal(file);
+	} catch (Exception e) {
+	    System.out.println("failed to generate Encryption Cipher from file");
+	}
     }
     
     @FXML 
@@ -1522,7 +1529,15 @@ public class MainLayout extends AnchorPane{
 	File file = fileChooser.showOpenDialog(stage);
 	System.out.println("loading Decrypt");
         
-        
+	CipherWrapper Decryption = new CipherWrapper();
+	
+        try {
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+            Decryption = (CipherWrapper) unmarshaller.unmarshal(file);
+	} catch (Exception e) {
+	    System.out.println("failed to generate Decryption Cipher from file");
+	}
     }
     
     @FXML 
@@ -1533,7 +1548,15 @@ public class MainLayout extends AnchorPane{
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
 	File file = fileChooser.showOpenDialog(stage);
 	System.out.println("loading Key Generator");
-        
+        CipherWrapper key = new CipherWrapper();
+	try {
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+            key = (CipherWrapper) unmarshaller.unmarshal(file);
+	} catch (Exception e) {
+	    System.out.println("failed to generate key from file");
+	}
+	
     }
     
     @FXML 
@@ -1543,13 +1566,75 @@ public class MainLayout extends AnchorPane{
 	fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
 	File file = fileChooser.showOpenDialog(stage);
-	System.out.println("loading Properties");
-        
+	System.out.println("loading Properties Generator");
+        PropertiesWrapper props = new PropertiesWrapper();
+	try {
+	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+            props = (PropertiesWrapper) unmarshaller.unmarshal(file);
+	    
+	    System.out.println("BLAH" + props.getNumberOfRounds());
+	    
+	    
+	    roundNum.setText( props.getNumberOfRounds() );
+	    blockSize.setText( props.getBlockSize() );
+	    keySize.setText( props.getKeySize() );
+	    switch (props.getChainMode()) {
+		case "Electronic Codebook": 
+		    c1.setSelected(true);
+		    break;
+		case "Cipher Block Chaining": 
+		    c2.setSelected(true);
+		    break;
+		case "Cipher Feedback": 
+		    c3.setSelected(true);
+		    break;
+		case "Output Feedback": 
+		    c4.setSelected(true);
+		    break;
+		case "Counter": 
+		    c5.setSelected(true);
+		    break;
+		default: 
+		    c1.setSelected(true);
+		    break;
+	    }
+	    
+	    switch (props.getPadding()) {
+	    case "Zero Padding": 
+		p1.setSelected(true);
+		break;
+	    case "PKCS7": 
+		p2.setSelected(true);
+		break;
+	    case "ISO 10126": 
+		p3.setSelected(true);
+		break;
+	    case "ISO/IEC 7816-4": 
+		p4.setSelected(true);
+		break;
+	    case "ANSI x.923": 
+		p5.setSelected(true);
+		break;
+	    default: 
+		p1.setSelected(true);
+		break;
+	    }
+	    
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    System.out.println("failed to generate properties from file");
+	} finally {
+	    System.out.println(props.getBlockSize());
+	    System.out.println(props.getNumberOfRounds());
+	    System.out.println(props.getKeySize());
+	}
         
     }
     
     @FXML
     public void loadPlug() {
-        
+
+	
     }
 }
