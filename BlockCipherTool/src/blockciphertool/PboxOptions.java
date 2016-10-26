@@ -187,6 +187,10 @@ public class PboxOptions extends AnchorPane{
         }
     }
     
+    public void setData(String Data) {
+         LookupData = Data;
+    }
+    
     /*readFile Was not written by me, aquired online via http://java-buddy.blogspot.com.au/2012/05/read-text-file-with-javafx-filechooser.html*/
     private String readFile(File file){
         StringBuilder stringBuffer = new StringBuilder();

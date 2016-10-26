@@ -136,6 +136,10 @@ public class XorOptions extends AnchorPane{
         outNodeLinks = outLinks;
     }
     
+    public void setData(String Datasize) {
+        xorSizeData = Datasize;
+    }
+    
     public static class connection {
  
         private SimpleIntegerProperty linknum;

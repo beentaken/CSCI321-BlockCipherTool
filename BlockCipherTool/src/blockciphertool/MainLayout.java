@@ -1559,13 +1559,17 @@ public class MainLayout extends AnchorPane{
             key = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
             //System.out.println(key.getPboxs().get(0).getId());
             
-            /*for (ListIterator <pboxWrapper> iterPbox = key.getPboxs().listIterator(); iterPbox.hasNext();) {
+            for (ListIterator <pboxWrapper> iterPbox = key.getPboxs().listIterator(); iterPbox.hasNext();) {
+                pboxWrapper pwrap = iterPbox.next();
                 PboxNode pnode = new PboxNode();
-                pnode.setId(iterPbox.next().getId());
+                pnode.setId(pwrap.getId());
                 if (idCounter < Integer.valueOf(pnode.getId()))
                     idCounter = Integer.valueOf(pnode.getId()) + 1;
-                pnode.set
-            }*/
+                pnode.getOptions().setData(pwrap.getTable().getRowData().get(0).getRowData());
+                
+                keypboxs.add(pnode);
+                key_pane.getChildren().add(pnode);
+            }
             
             
 	} catch (Exception e) {

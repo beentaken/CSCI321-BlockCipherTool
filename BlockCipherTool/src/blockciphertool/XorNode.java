@@ -63,4 +63,7 @@ public class XorNode extends DragNode{
         stage.showAndWait();
     }
     
+    public void setOptions(XorOptions xOptions) {
+        this.options = xOptions;
+    }
 }

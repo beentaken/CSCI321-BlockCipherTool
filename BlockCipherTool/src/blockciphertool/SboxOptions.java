@@ -158,6 +158,10 @@ public class SboxOptions extends AnchorPane{
         outNodeLinks = outLinks;
     }
     
+    public void setData(String Data) {
+         LookupData = Data;
+    }
+    
     @FXML
     private void LoadLookupFromFile() {
         Stage stage = new Stage();

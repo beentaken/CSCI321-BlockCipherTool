@@ -59,4 +59,8 @@ public class PboxNode extends DragNode{
     public PboxOptions getOptions() {
 	return this.options;
     }
+    
+    public void setOptions(PboxOptions pOptions) {
+        this.options = pOptions;
+    }
 }

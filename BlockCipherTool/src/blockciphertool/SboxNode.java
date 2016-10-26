@@ -45,6 +45,10 @@ public class SboxNode extends DragNode{
 	return this.options;
     }
     
+    public void setOptions(SboxOptions sOptions) {
+        this.options = sOptions;
+    }
+    
     public void options() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/sboxOptions.fxml"));
         fxmlLoader.setController(options);
