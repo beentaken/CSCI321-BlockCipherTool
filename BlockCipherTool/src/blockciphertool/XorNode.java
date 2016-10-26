@@ -66,4 +66,8 @@ public class XorNode extends DragNode{
     public void setOptions(XorOptions xOptions) {
         this.options = xOptions;
     }
+
+    public XorOptions getOptions() {
+	return this.options;
+    }
 }

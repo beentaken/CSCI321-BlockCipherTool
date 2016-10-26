@@ -173,6 +173,29 @@ public class NodeLink extends AnchorPane {
         targetId = target.getNodeID();
     }
     
+    public void bindEnds2 (DragNode source, DragNode target) {
+        node_link.startXProperty().bind(
+                        Bindings.add(source.layoutXProperty(), (source.getWidth() / 2.0) - 100));
+        
+        node_link.startYProperty().bind(
+                        Bindings.add(source.layoutYProperty(), (source.getWidth() / 2.0) + 17));
+
+        node_link.endXProperty().bind(
+                        Bindings.add(target.layoutXProperty(), (target.getWidth() / 2.0) - 100));
+
+        node_link.endYProperty().bind(
+                        Bindings.add(target.layoutYProperty(), (target.getWidth() / 2.0) + 17));
+        
+        source.registerLink (getId());
+        target.registerLink (getId());
+        
+        sourceNode = source;
+        targetNode = target;
+        
+        sourceId = source.getNodeID();
+        targetId = target.getNodeID();
+    }
+    
     public void setParent(MainLayout main) {
         main_parent = main;
     }

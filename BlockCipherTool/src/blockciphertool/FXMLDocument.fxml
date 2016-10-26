@@ -185,7 +185,7 @@
                                        <items>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
-                                                <ScrollPane layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                                                <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" pannable="true" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                    <content>
                                                       <AnchorPane fx:id="decrypt_pane" prefHeight="644.0" prefWidth="1104.0" />
                                                    </content>
@@ -232,7 +232,7 @@
                                        <items>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
-                                                <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                                                <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="1063.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                    <content>
                                                       <AnchorPane fx:id="key_pane" minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="1061.0" />
                                                    </content>

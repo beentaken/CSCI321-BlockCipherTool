@@ -7,6 +7,8 @@ package blockciphertool;
 
 import blockciphertool.wrappers.CipherConnectionWrapper;
 import blockciphertool.wrappers.CipherFunctionWrapper;
+import blockciphertool.wrappers.CipherKeyWrapper;
+import blockciphertool.wrappers.CipherSubkeyWrapper;
 import blockciphertool.wrappers.CipherWrapper;
 import blockciphertool.wrappers.CipherXorWrapper;
 import blockciphertool.wrappers.PropertiesWrapper;
@@ -69,7 +71,7 @@ import javax.xml.bind.Unmarshaller;
  * @author Alex, Nick, Chris
  */
 public class MainLayout extends AnchorPane{
-    
+
     @FXML SplitPane base_pane;
     @FXML SplitPane decbase_pane;
     @FXML SplitPane keybase_pane;
@@ -86,55 +88,55 @@ public class MainLayout extends AnchorPane{
     @FXML Tab encrypt_tab;
     @FXML Tab decrypt_tab;
     @FXML Tab key_tab;
-    
+
     //toggle groups
     @FXML ToggleGroup chainMode;
     @FXML ToggleGroup padding;
-    
+
     //Chain Mode Radio Buttons
     @FXML RadioButton c1;
     @FXML RadioButton c2;
     @FXML RadioButton c3;
     @FXML RadioButton c4;
     @FXML RadioButton c5;
-    
+
     //Padding Radio Buttons
     @FXML RadioButton p1;
     @FXML RadioButton p2;
     @FXML RadioButton p3;
     @FXML RadioButton p4;
     @FXML RadioButton p5;
-    
+
     int padNum;
     int chainNum;
-    
+
     String pluginText;
     String SaveLocation;
-    
+
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
     private DragIcon mKeyDragOverIcon = null;
-    
+
     public enum tabType {
         encrypt, decrypt, key
     }
     private tabType tabMode;
-    
+
     //event handlers for encrypt pane
     private EventHandler<DragEvent> mIconDragOverRoot=null;
     private EventHandler<DragEvent> mIconDragDropped=null;
     private EventHandler<DragEvent> mIconDragOverLeftPane=null;
-    
+
     //event handlers form dragging in decrypt pane
     private EventHandler<DragEvent> mDecIconDragOverRoot=null;
     private EventHandler<DragEvent> mDecIconDragDropped=null;
     private EventHandler<DragEvent> mDecIconDragOverLeftPane=null;
-    
+
     //event handlers form dragging in key pane
     private EventHandler<DragEvent> mKeyIconDragOverRoot=null;
     private EventHandler<DragEvent> mKeyIconDragDropped=null;
     private EventHandler<DragEvent> mKeyIconDragOverLeftPane=null;
-    
+
     //for encrypt cipher
     private List<PboxNode> pboxs;
     private List<SboxNode> sboxs;
@@ -142,14 +144,14 @@ public class MainLayout extends AnchorPane{
     private List<XorNode> xors;
     private List<NodeLink> connections;
     private PropertiesWrapper properties;
-    
+
     //for decrypt cipher
     private List<PboxNode> decpboxs;
     private List<SboxNode> decsboxs;
     //private List<CipherFunctionWrapper> decfunctions;
     private List<XorNode> decxors;
     private List<NodeLink> decconnections;
-    
+
     //for key generator
     private List<PboxNode> keypboxs;
     private List<SboxNode> keysboxs;
@@ -157,26 +159,26 @@ public class MainLayout extends AnchorPane{
     private List<XorNode> keyxors;
     private List<NodeLink> keyconnections;
     private List<subKey> subKeys;
-    
+
     private int idCounter;
     private int keyIdCounter;
-    
+
     //for encrypt cipher
     private boolean startExists;
     private boolean endExists;
     private boolean eKeyExists;
-    
+
     //for decrypt cipher
     private boolean decstartExists;
     private boolean decendExists;
     private boolean dKeyExists;
-    
+
     //for key generator
     private boolean keystartExists;
-    
 
-    
-    
+
+
+
     /**
     * @author Alex
     */
@@ -195,7 +197,7 @@ public class MainLayout extends AnchorPane{
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        
+
         idCounter = 1;
         keyIdCounter = 1;
         startExists = false;
@@ -209,56 +211,56 @@ public class MainLayout extends AnchorPane{
         chainNum = 1;
         padNum = 1;
     }
-    
+
     /**
     * @author Alex
     */
     public void updateIdCounter() {
         idCounter++;
     }
-    
+
     /**
     * @author Alex
     */
     public void updateKeyIdCounter() {
         keyIdCounter++;
     }
-    
+
     /**
     * @author Alex
     */
     @FXML
     private void initialize() {
 	//nicks code for save/load
-	
-	
-	
+
+
+
 	//SaveLoadTool saveController = new SaveLoadTool();
 	//saveController.saveAsXml("save.xml");
-	
-	
+
+
         //Add one icon that will be used for the drag-drop process
-        //This is added as a child to the root AnchorPane so it can be 
+        //This is added as a child to the root AnchorPane so it can be
         //visible on both sides of the split pane.
         mDragOverIcon = new DragIcon();
-	
+
         mDragOverIcon.setVisible(false);
         mDragOverIcon.setOpacity(0.65);
-        getChildren().add(mDragOverIcon);  
-        
+        getChildren().add(mDragOverIcon);
+
         //same for decrypt
         mDecDragOverIcon = new DragIcon();
-	
+
         mDecDragOverIcon.setVisible(false);
         mDecDragOverIcon.setOpacity(0.65);
-        getChildren().add(mDecDragOverIcon);  
-        
+        getChildren().add(mDecDragOverIcon);
+
         //same for keygen
         mKeyDragOverIcon = new DragIcon();
-	
+
         mKeyDragOverIcon.setVisible(false);
         mKeyDragOverIcon.setOpacity(0.65);
-        getChildren().add(mKeyDragOverIcon);  
+        getChildren().add(mKeyDragOverIcon);
 
         //populate left pane of encrypt tab with multiple colored icons for testing
         for (int i = 0; i < 6; i++) {
@@ -266,7 +268,7 @@ public class MainLayout extends AnchorPane{
             DragIcon icn = new DragIcon();
             addDragDetectionIcon(icn);
             icn.setType(DragNodeType.values()[i]);
-            
+
             switch (i) {
                 case 0:
                     icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
@@ -286,19 +288,19 @@ public class MainLayout extends AnchorPane{
                 case 5:
                     icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
                 break;
-                    
+
             }
-            
+
             node_list.getChildren().add(icn);
         }
-        
+
         //populate left pane of encrypt tab with multiple colored icons for testing
         for (int i = 0; i < 6; i++) {
 
             DragIcon icn = new DragIcon();
             addDecDragDetectionIcon(icn);
             icn.setType(DragNodeType.values()[i]);
-            
+
             switch (i) {
                 case 0:
                     icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
@@ -318,12 +320,12 @@ public class MainLayout extends AnchorPane{
                 case 5:
                     icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
                 break;
-                    
+
             }
-            
+
             dnode_list.getChildren().add(icn);
         }
-        
+
         for (int i = 0; i < 5; i++) {
 
             DragIcon icn = new DragIcon();
@@ -331,7 +333,7 @@ public class MainLayout extends AnchorPane{
             icn.setType(DragNodeType.values()[i]);
             if (i == 4)
                 icn.setType(DragNodeType.values()[i+2]);
-            
+
             switch (i) {
                 case 0:
                     icn.Icon_Tooltip.setText("Start: Node that represents the input for the cipher. (Required in cipher)");
@@ -348,63 +350,63 @@ public class MainLayout extends AnchorPane{
                 case 4:
                     icn.Icon_Tooltip.setText("subKey: Node that represents the  SubKey to be used in the cipher. (Required in cipher)");
                 break;
-                    
+
             }
-            
+
             key_list.getChildren().add(icn);
         }
-        
-        
-        
-        
+
+
+
+
         buildDragHandlers();
         buildDecDragHandlers();
         buildKeyDragHandlers();
-        
+
         pboxs = new ArrayList<PboxNode>();
         sboxs = new ArrayList<SboxNode>();
         xors = new ArrayList<XorNode>();
         connections = new ArrayList<NodeLink>();
         properties = new PropertiesWrapper();
-        
+
         decpboxs = new ArrayList<PboxNode>();
         decsboxs = new ArrayList<SboxNode>();
         decxors = new ArrayList<XorNode>();
         decconnections = new ArrayList<NodeLink>();
-        
+
         keypboxs = new ArrayList<PboxNode>();
         keysboxs = new ArrayList<SboxNode>();
         keyxors = new ArrayList<XorNode>();
         keyconnections = new ArrayList<NodeLink>();
         subKeys = new ArrayList<subKey>();
     }
-    
+
     /**
     * @author Alex
     * Adds Drag detection to the drag nodes in the encrypt tab
     */
     private void addDragDetectionIcon(DragIcon dragIcon) {
-        
+
         dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
-            
+
             @Override
             public void handle(MouseEvent event) {
-                
+
                 base_pane.setOnDragOver(mIconDragOverRoot);
                 encrypt_pane.setOnDragOver(mIconDragOverLeftPane);
                 encrypt_pane.setOnDragDropped(mIconDragDropped);
-                
+
                 DragIcon icn = (DragIcon) event.getSource();
-                
+
                 mDragOverIcon.setType(icn.getType());
                 mDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
-                
+
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
-                
+
                 container.addData ("type", mDragOverIcon.getType().toString());
                 content.put(DragContainer.AddNode, container);
-                
+
                 mDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
                 mDragOverIcon.setVisible(true);
                 mDragOverIcon.setMouseTransparent(true);
@@ -412,33 +414,33 @@ public class MainLayout extends AnchorPane{
             }
         });
     }
-    
+
     /**
     * @author Alex
     * Adds Drag detection to the drag nodes in the decrypt tab
     */
     private void addDecDragDetectionIcon(DragIcon dragIcon) {
-        
+
         dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
-            
+
             @Override
             public void handle(MouseEvent event) {
-                
+
                 decbase_pane.setOnDragOver(mDecIconDragOverRoot);
                 decrypt_pane.setOnDragOver(mDecIconDragOverLeftPane);
                 decrypt_pane.setOnDragDropped(mDecIconDragDropped);
-                
+
                 DragIcon icn = (DragIcon) event.getSource();
-                
+
                 mDecDragOverIcon.setType(icn.getType());
                 mDecDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
-                
+
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
-                
+
                 container.addData ("type", mDecDragOverIcon.getType().toString());
                 content.put(DragContainer.AddNode, container);
-                
+
                 mDecDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
                 mDecDragOverIcon.setVisible(true);
                 mDecDragOverIcon.setMouseTransparent(true);
@@ -446,33 +448,33 @@ public class MainLayout extends AnchorPane{
             }
         });
     }
-    
+
     /**
     * @author Alex
     * Adds Drag detection to the drag nodes in the decrypt tab
     */
     private void addKeyDragDetectionIcon(DragIcon dragIcon) {
-        
+
         dragIcon.setOnDragDetected(new EventHandler <MouseEvent>() {
-            
+
             @Override
             public void handle(MouseEvent event) {
-                
+
                 keybase_pane.setOnDragOver(mKeyIconDragOverRoot);
                 key_pane.setOnDragOver(mKeyIconDragOverLeftPane);
                 key_pane.setOnDragDropped(mKeyIconDragDropped);
-                
+
                 DragIcon icn = (DragIcon) event.getSource();
-                
+
                 mKeyDragOverIcon.setType(icn.getType());
                 mKeyDragOverIcon.relocateToPoint(new Point2D (event.getSceneX(), event.getSceneY()));
-                
+
                 ClipboardContent content = new ClipboardContent();
                 DragContainer container = new DragContainer();
-                
+
                 container.addData ("type", mKeyDragOverIcon.getType().toString());
                 content.put(DragContainer.AddNode, container);
-                
+
                 mKeyDragOverIcon.startDragAndDrop (TransferMode.ANY).setContent(content);
                 mKeyDragOverIcon.setVisible(true);
                 mKeyDragOverIcon.setMouseTransparent(true);
@@ -480,27 +482,27 @@ public class MainLayout extends AnchorPane{
             }
         });
     }
-    
+
     /**
     * @author Alex
     * Event Handlers for encrypt pane
-    */    
+    */
     private void buildDragHandlers() {
         mIconDragOverRoot = new EventHandler<DragEvent>() {
-            
+
             @Override
             public void handle (DragEvent event) {
                 Point2D p = encrypt_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
-                
+
                 if (!encrypt_pane.boundsInLocalProperty().get().contains(p)) {
                     mDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
                     return;
                 }
-                
+
                 event.consume();
             }
         };
-        
+
         mIconDragOverLeftPane = new EventHandler <DragEvent> () {
 
             @Override
@@ -515,16 +517,16 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         };
-        
+
         mIconDragDropped = new EventHandler <DragEvent> () {
 
             @Override
             public void handle(DragEvent event) {
-                
-                DragContainer container = 
+
+                DragContainer container =
                         (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
-                
-                container.addData("scene_coords", 
+
+                container.addData("scene_coords",
                         new Point2D(event.getSceneX(), event.getSceneY()));
 
                 ClipboardContent content = new ClipboardContent();
@@ -534,9 +536,9 @@ public class MainLayout extends AnchorPane{
                 event.setDropCompleted(true);
             }
         };
-        
+
         this.setOnDragDone (new EventHandler <DragEvent> (){
-            
+
             @Override
             public void handle (DragEvent event) {
 
@@ -547,7 +549,7 @@ public class MainLayout extends AnchorPane{
 
                     mDragOverIcon.setVisible(false);
 
-                    DragContainer container = 
+                    DragContainer container =
                             (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 
 
@@ -628,7 +630,7 @@ public class MainLayout extends AnchorPane{
                                     endExists = true;
                                 }
                             break;
-                            
+
                             case key:
                                 if (!eKeyExists) {
                                     Key knode = new Key();
@@ -710,15 +712,13 @@ public class MainLayout extends AnchorPane{
                                 }
                             }
 
-                            if (source != null && target != null)
-                                Link.bindEnds(source, target);
-
                             if (!linkExists) {
-
                                 source.addConnection(Link);
                                 target.addConnection(Link);
                                 connections.add(Link);
                             }
+                            else
+                                encrypt_pane.getChildren().remove(Link);
                         }
                     }
 
@@ -731,7 +731,7 @@ public class MainLayout extends AnchorPane{
 
                     mDecDragOverIcon.setVisible(false);
 
-                    DragContainer container = 
+                    DragContainer container =
                             (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 
 
@@ -812,7 +812,7 @@ public class MainLayout extends AnchorPane{
                                     decendExists = true;
                                 }
                             break;
-                            
+
                             case key:
                                 if (!dKeyExists) {
                                     Key knode = new Key();
@@ -844,34 +844,34 @@ public class MainLayout extends AnchorPane{
                             break;
                             }
 
-                        }       
+                        }
                     }
-                    
+
                     container = (DragContainer) event.getDragboard().getContent(DragContainer.DragNode);
-                    
+
                     if (container != null) {
                         if (container.getValue("type") != null)
                             System.out.println("Moved node " + container.getValue("type"));
                     }
-                    
+
                     container = (DragContainer) event.getDragboard().getContent(DragContainer.AddLink);
-                    
+
                     if (container != null) {
                         String sourceId = container.getValue("source");
                         String targetId = container.getValue("target");
-                        
+
                         if (sourceId != null && targetId != null) {
                             System.out.println(container.getData());
                             NodeLink Link = new NodeLink();
                             Link.setParent(MainLayout.this);
                             Link.setId(idCounter);
                             Link.addArrow();
-                            
+
                             decrypt_pane.getChildren().add(0, Link);
-                            
+
                             DragNode source = null;
                             DragNode target = null;
-                            
+
                             for (Node n: decrypt_pane.getChildren()) {
                                 if (n.getId() == null)
                                     continue;
@@ -880,12 +880,12 @@ public class MainLayout extends AnchorPane{
                                 if (n.getId().equals(targetId))
                                     target = (DragNode) n;
                             }
-                            
+
                             if (source != null && target != null)
                                 Link.bindEnds(source, target);
-                            
+
                             boolean linkExists = false;
-                            
+
                             for (int i = 0; i < decconnections.size() && !linkExists; i++) {
                                 if (decconnections.get(i).getSourceId().equals(source.getId())) {
                                     if(decconnections.get(i).getTargetId().equals(target.getId())) {
@@ -893,19 +893,17 @@ public class MainLayout extends AnchorPane{
                                     }
                                 }
                             }
-                            
-                            if (source != null && target != null)
-                                Link.bindEnds(source, target);
-                            
+
                             if (!linkExists) {
-                                
                                 source.addConnection(Link);
                                 target.addConnection(Link);
                                 decconnections.add(Link);
                             }
+                            else 
+                                decrypt_pane.getChildren().remove(Link);
                         }
                     }
-                    
+
                     event.consume();
 
                 }
@@ -916,7 +914,7 @@ public class MainLayout extends AnchorPane{
 
                     mKeyDragOverIcon.setVisible(false);
 
-                    DragContainer container = 
+                    DragContainer container =
                             (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
 
 
@@ -1063,15 +1061,13 @@ public class MainLayout extends AnchorPane{
                                 }
                             }
 
-                            if (source != null && target != null)
-                                Link.bindEnds(source, target);
-
                             if (!linkExists) {
-
                                 source.addConnection(Link);
                                 target.addConnection(Link);
                                 keyconnections.add(Link);
                             }
+                            else
+                                key_pane.getChildren().remove(Link);
                         }
                     }
 
@@ -1079,38 +1075,38 @@ public class MainLayout extends AnchorPane{
                 }
             }
         });
-        
+
         encrypt_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
-            
+
             @Override
             public void handle (MouseEvent event) {
                 System.out.print(new Point2D(event.getX(), event.getY()));
                 event.consume();
             }
-            
+
         });
     }
-    
+
     /**
     * @author Alex
     * Event Handlers for decrypt pane
-    */    
+    */
     private void buildDecDragHandlers() {
         mDecIconDragOverRoot = new EventHandler<DragEvent>() {
-            
+
             @Override
             public void handle (DragEvent event) {
                 Point2D p = decrypt_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
-                
+
                 if (!decrypt_pane.boundsInLocalProperty().get().contains(p)) {
                     mDecDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
                     return;
                 }
-                
+
                 event.consume();
             }
         };
-        
+
         mDecIconDragOverLeftPane = new EventHandler <DragEvent> () {
 
             @Override
@@ -1125,16 +1121,16 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         };
-        
+
         mDecIconDragDropped = new EventHandler <DragEvent> () {
 
             @Override
             public void handle(DragEvent event) {
-                
-                DragContainer container = 
+
+                DragContainer container =
                         (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
-                
-                container.addData("scene_coords", 
+
+                container.addData("scene_coords",
                         new Point2D(event.getSceneX(), event.getSceneY()));
 
                 ClipboardContent content = new ClipboardContent();
@@ -1144,36 +1140,36 @@ public class MainLayout extends AnchorPane{
                 event.setDropCompleted(true);
             }
         };
-        
-        
-        
+
+
+
         decrypt_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
-            
+
             @Override
             public void handle (MouseEvent event) {
                 System.out.print(new Point2D(event.getX(), event.getY()));
                 event.consume();
             }
-            
+
         });
     }
-    
+
     private void buildKeyDragHandlers() {
         mKeyIconDragOverRoot = new EventHandler<DragEvent>() {
-            
+
             @Override
             public void handle (DragEvent event) {
                 Point2D p = key_pane.sceneToLocal(event.getSceneX(), event.getSceneY());
-                
+
                 if (!key_pane.boundsInLocalProperty().get().contains(p)) {
                     mKeyDragOverIcon.relocateToPoint(new Point2D(event.getSceneX() - 50, event.getSceneY() - 50));
                     return;
                 }
-                
+
                 event.consume();
             }
         };
-        
+
         mKeyIconDragOverLeftPane = new EventHandler <DragEvent> () {
 
             @Override
@@ -1188,16 +1184,16 @@ public class MainLayout extends AnchorPane{
                 event.consume();
             }
         };
-        
+
         mKeyIconDragDropped = new EventHandler <DragEvent> () {
 
             @Override
             public void handle(DragEvent event) {
-                
-                DragContainer container = 
+
+                DragContainer container =
                         (DragContainer) event.getDragboard().getContent(DragContainer.AddNode);
-                
-                container.addData("scene_coords", 
+
+                container.addData("scene_coords",
                         new Point2D(event.getSceneX(), event.getSceneY()));
 
                 ClipboardContent content = new ClipboardContent();
@@ -1207,23 +1203,23 @@ public class MainLayout extends AnchorPane{
                 event.setDropCompleted(true);
             }
         };
-        
-        
-        
+
+
+
         key_pane.setOnMouseClicked(new EventHandler <MouseEvent> (){
-            
+
             @Override
             public void handle (MouseEvent event) {
                 System.out.print(new Point2D(event.getX(), event.getY()));
                 event.consume();
             }
-            
+
         });
     }
-    
+
     /**
     * @author Alex
-    */    
+    */
     public void updateConnections(String id) {
         for (int i=0; i<connections.size(); i++) {
 	    if ( connections.get(i).getId().equals(id) ) {
@@ -1310,18 +1306,18 @@ public class MainLayout extends AnchorPane{
 	    }
 	}
     }
-    
+
     /**
      * @author Nick
      */
     public void runConfirm() throws IOException {
-        
+
         //pass in the lists into a conversion function then store them in cipherwrapper
-        //assign conversion function returned lists to 
-        
+        //assign conversion function returned lists to
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/runConfirm.fxml"));
         //RunConfirm confirm = new RunConfirm();         //create runconfirm controller objet
-        
+
 	RunConfirm confirm = new RunConfirm(blockSize.getText(), String.valueOf(chainNum), String.valueOf(padNum));  //get this from toggles
         fxmlLoader.setController(confirm);
         Parent root = fxmlLoader.load();
@@ -1332,43 +1328,43 @@ public class MainLayout extends AnchorPane{
         stage.setScene(new Scene(root, 620, 400));
         stage.showAndWait();
     }
-    
+
     /**
     * @author Nick
-    */    
+    */
     public void generateFunctions() {
 	SaveLoadTool saver = new SaveLoadTool();
-	
+
 	saver.AddPBoxs("encrypt", pboxs);
 	saver.AddSBoxes("encrypt", sboxs);
 	saver.AddXors("encrypt", xors);
 	saver.AddConnections("encrypt", connections);
-	
-	
+
+
 	saver.AddPBoxs("decrypt", decpboxs);
 	saver.AddSBoxes("decrypt", decsboxs);
 	saver.AddXors("decrypt", decxors);
 	saver.AddConnections("decrypt", decconnections);
-	
+
 	saver.AddPBoxs("keygen", keypboxs);
 	saver.AddSBoxes("keygen", keysboxs);
 	saver.AddXors("keygen", keyxors);
 	saver.AddConnections("keygen", keyconnections);
 	saver.AddSubkeys("keygen", subKeys);
-	
+
 	saver.AddProperties(roundNum.getText(), blockSize.getText(), keySize.getText(), String.valueOf(chainNum), String.valueOf(padNum), "0", "-1");
-	
+
 	System.out.println("Saving");
 	saver.saveAsXml("./../CodeBlocksBackEnd/bin/debug/Save.xml");
-	saver.saveMultipleAsXml("./../CodeBlocksBackEnd/bin/debug/CipherEncrypt.xml", "./../CodeBlocksBackEnd/bin/debug/CipherDecrypt.xml", 
+	saver.saveMultipleAsXml("./../CodeBlocksBackEnd/bin/debug/CipherEncrypt.xml", "./../CodeBlocksBackEnd/bin/debug/CipherDecrypt.xml",
 		"./../CodeBlocksBackEnd/bin/debug/CipherKeygen.xml", "./../CodeBlocksBackEnd/bin/debug/CipherProperties.xml");
-        
+
 	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
 	ProcessBuilder launcher;
 	try {
 	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "/CodeBlocksBackEnd", directory.getCanonicalPath() + "/save.xml");
 	    launcher.directory(directory);
-	    
+
 	    try {
 		launcher.start();
 	    } catch (Exception e) {
@@ -1380,29 +1376,29 @@ public class MainLayout extends AnchorPane{
 		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
 		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
                     System.out.println("compiling c++ code");
-                    
+
 		    launcher = new ProcessBuilder("g++", "-std=c++11", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-I", pluginText, "-o", "cipher.exe");
 		    launcher.directory(new File("C:\\Users\\Chris\\Documents\\Crypto C++ Code\\"));
-		    System.out.println(launcher.directory().getCanonicalPath());                    
+		    System.out.println(launcher.directory().getCanonicalPath());
 		    System.out.println("starting");
                     Process p = launcher.start();
                     System.out.println("finishing");
-                    
+
 
 		}
 	    }
-	    
+
 	} catch (Exception e) {
 
 	}
-	
-	
+
+
     }
 
-    
+
     /**
     * @author Nick
-    */    
+    */
     public void cryptanalysis() {
 	File directory = new File("C:\\Users\\csit321lm01a\\Desktop\\CSCI321-BlockCipherTool\\BlockCipherTool\\dist");
 	ProcessBuilder launcher;
@@ -1411,11 +1407,11 @@ public class MainLayout extends AnchorPane{
 	    PrintWriter writer = new PrintWriter(directory.getCanonicalPath() + "/input.txt", "UTF-8");
 	    writer.println(blockSize.getText() + " 1");
 	    writer.close();
-		    
-	    
+
+
 	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "\\BenchAnalysis.exe", " < ",  directory.getCanonicalPath() + "\\input.txt");
 	    launcher.directory(directory);
-	    
+
 	    try {
 		launcher.start();
 	    } catch (Exception e) {
@@ -1424,15 +1420,15 @@ public class MainLayout extends AnchorPane{
 	    } finally {
 
 	    }
-	    
+
 	} catch (Exception e) {
 
 	}
     }
-    
+
     /**
     * @author Nick
-    */    
+    */
     public void performance() {
 	File directory = new File("C:\\Users\\csit321lm01a\\Desktop\\CSCI321-BlockCipherTool\\BlockCipherTool\\dist");
 	ProcessBuilder launcher;
@@ -1441,11 +1437,11 @@ public class MainLayout extends AnchorPane{
 	    PrintWriter writer = new PrintWriter(directory.getCanonicalPath() + "/input.txt", "UTF-8");
 	    writer.println(blockSize.getText() + " 2");
 	    writer.close();
-		    
-	    
+
+
 	    launcher = new ProcessBuilder(directory.getCanonicalPath() + "\\BenchAnalysis.exe", " < ",  directory.getCanonicalPath() + "\\input.txt");
 	    launcher.directory(directory);
-	    
+
 	    try {
 		launcher.start();
 	    } catch (Exception e) {
@@ -1454,15 +1450,15 @@ public class MainLayout extends AnchorPane{
 	    } finally {
 
 	    }
-	    
+
 	} catch (Exception e) {
 
 	}
     }
-    
+
     /**
     * @author Alex
-    */    
+    */
     @FXML
     public void switchTab() {
         if (encrypt_tab.isSelected())
@@ -1473,10 +1469,10 @@ public class MainLayout extends AnchorPane{
             tabMode = tabType.key;
         System.out.println(tabMode);
     }
-    
+
     /**
     * @author Alex
-    */    
+    */
     @FXML
     public void switchPadding() {
         if (p1.isSelected())
@@ -1490,10 +1486,10 @@ public class MainLayout extends AnchorPane{
         else if (p5.isSelected())
             padNum = 5;
     }
-    
+
     /**
     * @author Alex
-    */    
+    */
     @FXML
     public void switchChainMode() {
         if (c1.isSelected())
@@ -1507,7 +1503,7 @@ public class MainLayout extends AnchorPane{
         else if (c5.isSelected())
             chainNum = 5;
     }
-    
+
     @FXML
     public void loadEncrypt() {
         Stage stage = new Stage();
@@ -1516,19 +1512,132 @@ public class MainLayout extends AnchorPane{
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
 	File file = fileChooser.showOpenDialog(stage);
 	System.out.println("loading Encrypt");
-        
+
 	CipherWrapper Encryption = new CipherWrapper();
-	
+
         try {
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
             Encryption = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
+            
+            for (ListIterator <pboxWrapper> iterPbox = Encryption.getPboxs().listIterator(); iterPbox.hasNext();) {
+                pboxWrapper pwrap = iterPbox.next();
+                PboxNode pnode = new PboxNode();
+                pnode.setType(DragNodeType.pbox);
+                encrypt_pane.getChildren().add(pnode);
+
+                pnode.relocateToPoint(new Point2D(Double.valueOf(pwrap.getX()), Double.valueOf(pwrap.getY())+71));
+
+                pnode.setId(pwrap.getId());
+                if (idCounter < Integer.valueOf(pnode.getId()))
+                    idCounter = Integer.valueOf(pnode.getId()) + 1;
+                pnode.getOptions().setData(pwrap.getOutputs().getOutputs().get(0).getOutputData());
+                pboxs.add(pnode);
+                pnode.setParent(MainLayout.this);
+            }
+            for (ListIterator <sboxWrapper> iterSbox = Encryption.getSboxs().listIterator(); iterSbox.hasNext();) {
+                sboxWrapper swrap = iterSbox.next();
+                SboxNode snode = new SboxNode();
+                snode.setType(DragNodeType.sbox);
+                encrypt_pane.getChildren().add(snode);
+
+                snode.relocateToPoint(new Point2D(Double.valueOf(swrap.getX()), Double.valueOf(swrap.getY())+71));
+
+                snode.setId(swrap.getId());
+                if (idCounter < Integer.valueOf(snode.getId()))
+                    idCounter = Integer.valueOf(snode.getId()) + 1;
+                snode.getOptions().setData(swrap.getTable().getRowData().get(0).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(1).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(2).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(3).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(4).getRowData());
+                sboxs.add(snode);
+                snode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherXorWrapper> iterXor = Encryption.getXors().listIterator(); iterXor.hasNext();) {
+                CipherXorWrapper xwrap = iterXor.next();
+                XorNode xnode = new XorNode();
+                xnode.setType(DragNodeType.xor);
+                encrypt_pane.getChildren().add(xnode);
+
+                xnode.relocateToPoint(new Point2D(Double.valueOf(xwrap.getX()), Double.valueOf(xwrap.getY())+71));
+
+                xnode.setId(xwrap.getId());
+                if (idCounter < Integer.valueOf(xnode.getId()))
+                    idCounter = Integer.valueOf(xnode.getId()) + 1;
+                xnode.getOptions().setData(xwrap.getOutputs().getOutputs().get(0).getOutputData());
+                xors.add(xnode);
+                xnode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherConnectionWrapper> iterCon = Encryption.getConnections().listIterator(); iterCon.hasNext();) {
+                CipherConnectionWrapper cwrap = iterCon.next();
+                NodeLink cnode = new NodeLink();
+                if (cwrap.getFrom().getFromId().equals("0")) {
+                    StartNode snode = new StartNode();
+                    snode.setType(DragNodeType.Start);
+                    encrypt_pane.getChildren().add(snode);
+
+                    snode.relocateToPoint(new Point2D(100.0, 100.0));
+
+                    snode.setId("0");
+                    snode.setParent(MainLayout.this);
+                    startExists = true;
+                }
+                if (cwrap.getTo().getToId().equals("-1")) {
+                    EndNode enode = new EndNode();
+                    enode.setType(DragNodeType.end);
+                    encrypt_pane.getChildren().add(enode);
+
+                    enode.relocateToPoint(new Point2D(1000.0, 500.0));
+
+                    enode.setId("-1");
+                    enode.setParent(MainLayout.this);
+                    endExists = true;
+                }
+                if (cwrap.getFrom().getFromId().equals("k1")) {
+                    Key knode = new Key();
+                    knode.setType(DragNodeType.key);
+                    encrypt_pane.getChildren().add(knode);
+
+                    knode.relocateToPoint(new Point2D(300.0, 100.0));
+
+                    knode.setId("k1");
+                    knode.setParent(MainLayout.this);
+                    eKeyExists = true;
+                }
+                String sourceId = cwrap.getFrom().getFromId();
+                String targetId = cwrap.getTo().getToId();
+                
+                cnode.setParent(MainLayout.this);
+                cnode.setId(cwrap.getId());
+                if (idCounter < Integer.valueOf(cnode.getId()))
+                    idCounter = Integer.valueOf(cnode.getId()) + 1;
+                
+                encrypt_pane.getChildren().add(0, cnode);
+                
+                DragNode source = null;
+                DragNode target = null;
+
+                for (Node n: encrypt_pane.getChildren()) {
+                    if (n.getId() == null)
+                        continue;
+                    if (n.getId().equals(sourceId))
+                        source = (DragNode) n;
+                    if (n.getId().equals(targetId))
+                        target = (DragNode) n;
+                }
+                cnode.bindEnds2(source, target);
+
+                source.addConnection(cnode);
+                target.addConnection(cnode);
+                connections.add(cnode);
+            }
 	} catch (Exception e) {
 	    System.out.println("failed to generate Encryption Cipher from file");
 	}
     }
-    
-    @FXML 
+
+    @FXML
     public void loadDecrypt() {
         Stage stage = new Stage();
 	FileChooser fileChooser = new FileChooser();
@@ -1536,19 +1645,132 @@ public class MainLayout extends AnchorPane{
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML", "*.xml"));
 	File file = fileChooser.showOpenDialog(stage);
 	System.out.println("loading Decrypt");
-        
+
 	CipherWrapper Decryption = new CipherWrapper();
-	
+
         try {
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
             Decryption = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
+            
+            for (ListIterator <pboxWrapper> iterPbox = Decryption.getPboxs().listIterator(); iterPbox.hasNext();) {
+                pboxWrapper pwrap = iterPbox.next();
+                PboxNode pnode = new PboxNode();
+                pnode.setType(DragNodeType.pbox);
+                decrypt_pane.getChildren().add(pnode);
+
+                pnode.relocateToPoint(new Point2D(Double.valueOf(pwrap.getX()), Double.valueOf(pwrap.getY())+71));
+
+                pnode.setId(pwrap.getId());
+                if (idCounter < Integer.valueOf(pnode.getId()))
+                    idCounter = Integer.valueOf(pnode.getId()) + 1;
+                pnode.getOptions().setData(pwrap.getOutputs().getOutputs().get(0).getOutputData());
+                decpboxs.add(pnode);
+                pnode.setParent(MainLayout.this);
+            }
+            for (ListIterator <sboxWrapper> iterSbox = Decryption.getSboxs().listIterator(); iterSbox.hasNext();) {
+                sboxWrapper swrap = iterSbox.next();
+                SboxNode snode = new SboxNode();
+                snode.setType(DragNodeType.sbox);
+                decrypt_pane.getChildren().add(snode);
+
+                snode.relocateToPoint(new Point2D(Double.valueOf(swrap.getX()), Double.valueOf(swrap.getY())+71));
+
+                snode.setId(swrap.getId());
+                if (idCounter < Integer.valueOf(snode.getId()))
+                    idCounter = Integer.valueOf(snode.getId()) + 1;
+                snode.getOptions().setData(swrap.getTable().getRowData().get(0).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(1).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(2).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(3).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(4).getRowData());
+                decsboxs.add(snode);
+                snode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherXorWrapper> iterXor = Decryption.getXors().listIterator(); iterXor.hasNext();) {
+                CipherXorWrapper xwrap = iterXor.next();
+                XorNode xnode = new XorNode();
+                xnode.setType(DragNodeType.xor);
+                decrypt_pane.getChildren().add(xnode);
+
+                xnode.relocateToPoint(new Point2D(Double.valueOf(xwrap.getX()), Double.valueOf(xwrap.getY())+71));
+
+                xnode.setId(xwrap.getId());
+                if (idCounter < Integer.valueOf(xnode.getId()))
+                    idCounter = Integer.valueOf(xnode.getId()) + 1;
+                xnode.getOptions().setData(xwrap.getOutputs().getOutputs().get(0).getOutputData());
+                decxors.add(xnode);
+                xnode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherConnectionWrapper> iterCon = Decryption.getConnections().listIterator(); iterCon.hasNext();) {
+                CipherConnectionWrapper cwrap = iterCon.next();
+                NodeLink cnode = new NodeLink();
+                if (cwrap.getFrom().getFromId().equals("0")) {
+                    StartNode snode = new StartNode();
+                    snode.setType(DragNodeType.Start);
+                    decrypt_pane.getChildren().add(snode);
+
+                    snode.relocateToPoint(new Point2D(100.0, 100.0));
+
+                    snode.setId("0");
+                    snode.setParent(MainLayout.this);
+                    decstartExists = true;
+                }
+                if (cwrap.getTo().getToId().equals("-1")) {
+                    EndNode enode = new EndNode();
+                    enode.setType(DragNodeType.end);
+                    decrypt_pane.getChildren().add(enode);
+
+                    enode.relocateToPoint(new Point2D(1000.0, 500.0));
+
+                    enode.setId("-1");
+                    enode.setParent(MainLayout.this);
+                    decendExists = true;
+                }
+                if (cwrap.getFrom().getFromId().equals("k1")) {
+                    Key knode = new Key();
+                    knode.setType(DragNodeType.key);
+                    decrypt_pane.getChildren().add(knode);
+
+                    knode.relocateToPoint(new Point2D(300.0, 100.0));
+
+                    knode.setId("k1");
+                    knode.setParent(MainLayout.this);
+                    dKeyExists = true;
+                }
+                String sourceId = cwrap.getFrom().getFromId();
+                String targetId = cwrap.getTo().getToId();
+                
+                cnode.setParent(MainLayout.this);
+                cnode.setId(cwrap.getId());
+                if (idCounter < Integer.valueOf(cnode.getId()))
+                    idCounter = Integer.valueOf(cnode.getId()) + 1;
+                
+                decrypt_pane.getChildren().add(0, cnode);
+                
+                DragNode source = null;
+                DragNode target = null;
+
+                for (Node n: decrypt_pane.getChildren()) {
+                    if (n.getId() == null)
+                        continue;
+                    if (n.getId().equals(sourceId))
+                        source = (DragNode) n;
+                    if (n.getId().equals(targetId))
+                        target = (DragNode) n;
+                }
+                cnode.bindEnds2(source, target);
+
+                source.addConnection(cnode);
+                target.addConnection(cnode);
+                decconnections.add(cnode);
+            }
 	} catch (Exception e) {
 	    System.out.println("failed to generate Decryption Cipher from file");
 	}
     }
-    
-    @FXML 
+
+    @FXML
     public void loadKey() {
         Stage stage = new Stage();
 	FileChooser fileChooser = new FileChooser();
@@ -1562,28 +1784,121 @@ public class MainLayout extends AnchorPane{
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
             key = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
             //System.out.println(key.getPboxs().get(0).getId());
-            
+
             for (ListIterator <pboxWrapper> iterPbox = key.getPboxs().listIterator(); iterPbox.hasNext();) {
                 pboxWrapper pwrap = iterPbox.next();
                 PboxNode pnode = new PboxNode();
+                pnode.setType(DragNodeType.pbox);
+                key_pane.getChildren().add(pnode);
+
+                pnode.relocateToPoint(new Point2D(Double.valueOf(pwrap.getX()), Double.valueOf(pwrap.getY())+71));
+
                 pnode.setId(pwrap.getId());
                 if (idCounter < Integer.valueOf(pnode.getId()))
                     idCounter = Integer.valueOf(pnode.getId()) + 1;
-                pnode.getOptions().setData(pwrap.getTable().getRowData().get(0).getRowData());
-                
+                pnode.getOptions().setData(pwrap.getOutputs().getOutputs().get(0).getOutputData());
                 keypboxs.add(pnode);
-                key_pane.getChildren().add(pnode);
+                pnode.setParent(MainLayout.this);
             }
-            
-            
+            for (ListIterator <sboxWrapper> iterSbox = key.getSboxs().listIterator(); iterSbox.hasNext();) {
+                sboxWrapper swrap = iterSbox.next();
+                SboxNode snode = new SboxNode();
+                snode.setType(DragNodeType.sbox);
+                key_pane.getChildren().add(snode);
+
+                snode.relocateToPoint(new Point2D(Double.valueOf(swrap.getX()), Double.valueOf(swrap.getY())+71));
+
+                snode.setId(swrap.getId());
+                if (idCounter < Integer.valueOf(snode.getId()))
+                    idCounter = Integer.valueOf(snode.getId()) + 1;
+                snode.getOptions().setData(swrap.getTable().getRowData().get(0).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(1).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(2).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(3).getRowData() + ";\n" +
+                                           swrap.getTable().getRowData().get(4).getRowData());
+                keysboxs.add(snode);
+                snode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherXorWrapper> iterXor = key.getXors().listIterator(); iterXor.hasNext();) {
+                CipherXorWrapper xwrap = iterXor.next();
+                XorNode xnode = new XorNode();
+                xnode.setType(DragNodeType.xor);
+                key_pane.getChildren().add(xnode);
+
+                xnode.relocateToPoint(new Point2D(Double.valueOf(xwrap.getX()), Double.valueOf(xwrap.getY())+71));
+
+                xnode.setId(xwrap.getId());
+                if (idCounter < Integer.valueOf(xnode.getId()))
+                    idCounter = Integer.valueOf(xnode.getId()) + 1;
+                xnode.getOptions().setData(xwrap.getOutputs().getOutputs().get(0).getOutputData());
+                keyxors.add(xnode);
+                xnode.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherSubkeyWrapper> iterSub = key.getKeys().listIterator(); iterSub.hasNext();) {
+                CipherSubkeyWrapper swrap = iterSub.next();
+                subKey sKey = new subKey();
+                sKey.setType(DragNodeType.subkey);
+                key_pane.getChildren().add(sKey);
+
+                sKey.relocateToPoint(new Point2D(Double.valueOf(swrap.getX()), Double.valueOf(swrap.getY())+71));
+
+                sKey.setId(swrap.getId());
+                if (idCounter < Integer.valueOf(sKey.getId()))
+                    idCounter = Integer.valueOf(sKey.getId()) + 1;
+                subKeys.add(sKey);
+                sKey.setParent(MainLayout.this);
+            }
+            for (ListIterator <CipherConnectionWrapper> iterCon = key.getConnections().listIterator(); iterCon.hasNext();) {
+                CipherConnectionWrapper cwrap = iterCon.next();
+                NodeLink cnode = new NodeLink();
+                if (cwrap.getFrom().getFromId().equals("0")) {
+                    StartNode snode = new StartNode();
+                    snode.setType(DragNodeType.Start);
+                    key_pane.getChildren().add(snode);
+
+                    snode.relocateToPoint(new Point2D(100.0, 100.0));
+
+                    snode.setId("0");
+                    snode.setParent(MainLayout.this);
+                    keystartExists = true;
+                }
+                String sourceId = cwrap.getFrom().getFromId();
+                String targetId = cwrap.getTo().getToId();
+                
+                cnode.setParent(MainLayout.this);
+                cnode.setId(cwrap.getId());
+                
+                if (idCounter < Integer.valueOf(cnode.getId()))
+                    idCounter = Integer.valueOf(cnode.getId()) + 1;
+                
+                key_pane.getChildren().add(0, cnode);
+                
+                DragNode source = null;
+                DragNode target = null;
+
+                for (Node n: key_pane.getChildren()) {
+                    if (n.getId() == null)
+                        continue;
+                    if (n.getId().equals(sourceId))
+                        source = (DragNode) n;
+                    if (n.getId().equals(targetId))
+                        target = (DragNode) n;
+                }
+                cnode.bindEnds2(source, target);
+
+                source.addConnection(cnode);
+                target.addConnection(cnode);
+                keyconnections.add(cnode);
+            }
+
 	} catch (Exception e) {
 	    System.out.println("failed to generate key from file");
             System.out.println(e);
 	}
-	
+
     }
-    
-    @FXML 
+
+    @FXML
     public void loadProperties() {
         Stage stage = new Stage();
 	FileChooser fileChooser = new FileChooser();
@@ -1596,55 +1911,55 @@ public class MainLayout extends AnchorPane{
 	    JAXBContext context = JAXBContext.newInstance("blockciphertool.wrappers");
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
             props = (PropertiesWrapper) unmarshaller.unmarshal(file);
-	    
+
 	    System.out.println("BLAH" + props.getNumberOfRounds());
-	    
-	    
+
+
 	    roundNum.setText( props.getNumberOfRounds() );
 	    blockSize.setText( props.getBlockSize() );
 	    keySize.setText( props.getKeySize() );
 	    switch (props.getChainMode()) {
-		case "Electronic Codebook": 
+		case "Electronic Codebook":
 		    c1.setSelected(true);
 		    break;
-		case "Cipher Block Chaining": 
+		case "Cipher Block Chaining":
 		    c2.setSelected(true);
 		    break;
-		case "Cipher Feedback": 
+		case "Cipher Feedback":
 		    c3.setSelected(true);
 		    break;
-		case "Output Feedback": 
+		case "Output Feedback":
 		    c4.setSelected(true);
 		    break;
-		case "Counter": 
+		case "Counter":
 		    c5.setSelected(true);
 		    break;
-		default: 
+		default:
 		    c1.setSelected(true);
 		    break;
 	    }
-	    
+
 	    switch (props.getPadding()) {
-	    case "Zero Padding": 
+	    case "Zero Padding":
 		p1.setSelected(true);
 		break;
-	    case "PKCS7": 
+	    case "PKCS7":
 		p2.setSelected(true);
 		break;
-	    case "ISO 10126": 
+	    case "ISO 10126":
 		p3.setSelected(true);
 		break;
-	    case "ISO/IEC 7816-4": 
+	    case "ISO/IEC 7816-4":
 		p4.setSelected(true);
 		break;
-	    case "ANSI x.923": 
+	    case "ANSI x.923":
 		p5.setSelected(true);
 		break;
-	    default: 
+	    default:
 		p1.setSelected(true);
 		break;
 	    }
-	    
+
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    System.out.println("failed to generate properties from file");
@@ -1653,9 +1968,9 @@ public class MainLayout extends AnchorPane{
 	    System.out.println(props.getNumberOfRounds());
 	    System.out.println(props.getKeySize());
 	}
-        
+
     }
-    
+
     @FXML
     public void loadPlug() {
         // Window setup with appropriate buttons and text fields
@@ -1668,14 +1983,14 @@ public class MainLayout extends AnchorPane{
         JButton Add = new JButton("Add");
         Pane.add(Add, BorderLayout.EAST);
         Pane.setSize(500, 200);
-        
+
         Plugins.getContentPane().add(Pane, BorderLayout.CENTER);
         Plugins.setSize(500, 200);
-        
+
         Plugins.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Plugins.setLocationRelativeTo(null);
 	Plugins.setVisible(true);
-        
+
         Text.setText(pluginText);
         // Add Button Event Handler on Click
         Add.addActionListener(new ActionListener() {
@@ -1689,7 +2004,7 @@ public class MainLayout extends AnchorPane{
                     Text.setText(myfile.getAbsolutePath());
                     pluginText = Text.getText();
                 }
-                
+
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
