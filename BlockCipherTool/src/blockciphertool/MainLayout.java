@@ -44,6 +44,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
@@ -98,6 +99,8 @@ public class MainLayout extends AnchorPane{
     
     int padNum;
     int chainNum;
+    
+    String pluginText;
     
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
@@ -1556,6 +1559,13 @@ public class MainLayout extends AnchorPane{
             key = (CipherWrapper) JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
             //System.out.println(key.getPboxs().get(0).getId());
             
+            /*for (ListIterator <pboxWrapper> iterPbox = key.getPboxs().listIterator(); iterPbox.hasNext();) {
+                PboxNode pnode = new PboxNode();
+                pnode.setId(iterPbox.next().getId());
+                if (idCounter < Integer.valueOf(pnode.getId()))
+                    idCounter = Integer.valueOf(pnode.getId()) + 1;
+                pnode.set
+            }*/
             
             
 	} catch (Exception e) {
