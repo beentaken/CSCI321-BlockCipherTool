@@ -37,6 +37,8 @@ import javafx.stage.Stage;
 import blockciphertool.wrappers.SaveLoadTool;
 import blockciphertool.wrappers.pboxWrapper;
 import blockciphertool.wrappers.sboxWrapper;
+import java.awt.BorderLayout;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -52,6 +54,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Unmarshaller;
@@ -1375,10 +1383,6 @@ public class MainLayout extends AnchorPane{
 		    launcher.directory(new File(filelocation));
 		    System.out.println(launcher.directory().getCanonicalPath());
                     
-
-                    
-                    
-                    
 		    launcher = new ProcessBuilder("C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\compile.bat");
 		    System.out.println("starting");
                     Process p = launcher.start();
@@ -1650,7 +1654,40 @@ public class MainLayout extends AnchorPane{
     
     @FXML
     public void loadPlug() {
-
-	
+        // Window setup with appropriate buttons and text fields
+        JFrame Plugins = new JFrame("Plugins");
+        JPanel Pane = new JPanel();
+        JLabel Boost = new JLabel("Boost Location: ");
+        Pane.add(Boost, BorderLayout.WEST);
+        final JTextField Text = new JTextField(25);
+        Pane.add(Text, BorderLayout.CENTER);
+        JButton Add = new JButton("Add");
+        Pane.add(Add, BorderLayout.EAST);
+        Pane.setSize(500, 200);
+        
+        Plugins.getContentPane().add(Pane, BorderLayout.CENTER);
+        Plugins.setSize(500, 200);
+        
+        Plugins.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        Plugins.setLocationRelativeTo(null);
+	Plugins.setVisible(true);
+        
+        Text.setText(pluginText);
+        // Add Button Event Handler on Click
+        Add.addActionListener(new ActionListener() {
+           @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                JFileChooser Choose = new JFileChooser();
+                Choose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int returnval = Choose.showOpenDialog(Plugins);
+                if (returnval == JFileChooser.APPROVE_OPTION) {
+                    File myfile = Choose.getSelectedFile();
+                    Text.setText(myfile.getAbsolutePath());
+                    pluginText = Text.getText();
+                }
+                
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
     }
 }
