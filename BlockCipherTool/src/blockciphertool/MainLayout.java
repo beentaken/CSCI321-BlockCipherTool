@@ -66,7 +66,7 @@ import javax.xml.bind.Unmarshaller;
 
 /**
  *
- * @author Alex, Nick
+ * @author Alex, Nick, Chris
  */
 public class MainLayout extends AnchorPane{
     
@@ -109,6 +109,7 @@ public class MainLayout extends AnchorPane{
     int chainNum;
     
     String pluginText;
+    String SaveLocation;
     
     private DragIcon mDragOverIcon = null;
     private DragIcon mDecDragOverIcon = null;
@@ -1361,7 +1362,7 @@ public class MainLayout extends AnchorPane{
 	saver.saveAsXml("./../CodeBlocksBackEnd/bin/debug/Save.xml");
 	saver.saveMultipleAsXml("./../CodeBlocksBackEnd/bin/debug/CipherEncrypt.xml", "./../CodeBlocksBackEnd/bin/debug/CipherDecrypt.xml", 
 		"./../CodeBlocksBackEnd/bin/debug/CipherKeygen.xml", "./../CodeBlocksBackEnd/bin/debug/CipherProperties.xml");
-	
+        
 	File directory = new File("./../CodeBlocksBackEnd/bin/debug/");
 	ProcessBuilder launcher;
 	try {
@@ -1379,11 +1380,10 @@ public class MainLayout extends AnchorPane{
 		File GenericFunctionscpp = new File( launcher.directory().getCanonicalPath() + "/GenericFunctions.cpp" );
 		if ( maincpp.exists() && blockcpp.exists() && GenericFunctionscpp.exists() ) {
                     System.out.println("compiling c++ code");
-		    String filelocation = "C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\";
-		    launcher.directory(new File(filelocation));
-		    System.out.println(launcher.directory().getCanonicalPath());
                     
-		    launcher = new ProcessBuilder("C:\\Users\\csit321lm01a\\Documents\\Crypto C++ Code\\compile.bat");
+		    launcher = new ProcessBuilder("g++", "-std=c++11", "main.cpp", "block.cpp", "GenericFunctions.cpp", "-I", pluginText, "-o", "cipher.exe");
+		    launcher.directory(new File("C:\\Users\\Chris\\Documents\\Crypto C++ Code\\"));
+		    System.out.println(launcher.directory().getCanonicalPath());                    
 		    System.out.println("starting");
                     Process p = launcher.start();
                     System.out.println("finishing");
